@@ -1,20 +1,24 @@
 package com.ezen.music.domain;
 
-import lombok.*;
+import lombok.Data;
+import lombok.RequiredArgsConstructor;
+import lombok.ToString;
+import org.hibernate.annotations.DynamicUpdate;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import javax.persistence.*;
 import java.sql.Date;
 import java.time.LocalDateTime;
 
+
+
+@Data
+@RequiredArgsConstructor
+@EntityListeners(AuditingEntityListener.class)
 @Entity
-@Getter
-@Setter
-@Builder
-@AllArgsConstructor
-@NoArgsConstructor
-@ToString
+@DynamicUpdate
 public class Member {
 
     @Id
@@ -40,12 +44,13 @@ public class Member {
     @Enumerated(EnumType.ORDINAL)
     private RoleType role;
 
+    @Column(name = "regidate", nullable=false, updatable = false)
     @CreatedDate
-    @Column(name = "regidate", updatable = false)
     private LocalDateTime regidate;
 
-    @LastModifiedDate
+
     @Column(name = "updatedate")
+    @LastModifiedDate
     private LocalDateTime updatedate;
 
     private String image;
