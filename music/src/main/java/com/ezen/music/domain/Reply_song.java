@@ -5,7 +5,7 @@ import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 
 import javax.persistence.*;
-import java.util.Date;
+import java.time.LocalDateTime;
 
 @Entity
 @Getter
@@ -14,16 +14,13 @@ import java.util.Date;
 @AllArgsConstructor
 @NoArgsConstructor
 @ToString
-public class Board {
+public class Reply_song {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long b_id;
+    private Long rs_id;
 
-    @Column(nullable = false, length = 100)
-    private String title;
-
-    @Column(nullable = false, columnDefinition = "TEXT")
+    @Column(nullable = false)
     private String content;
 
     @ManyToOne
@@ -32,9 +29,14 @@ public class Board {
 
     @CreatedDate
     @Column(name = "regidate", updatable = false)
-    private Date regidate;
+    private LocalDateTime regidate;
 
     @LastModifiedDate
     @Column(name = "updatedate")
-    private Date updatedate;
+    private LocalDateTime updatedate;
+
+    @ManyToOne
+    @JoinColumn(name="song_id")
+    private Song song;
+
 }
