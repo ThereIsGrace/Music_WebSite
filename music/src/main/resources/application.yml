@@ -1,0 +1,61 @@
+
+# server port
+server:
+  port: 8094
+logging:
+  level:
+    root: INFO
+  servlet:
+    session:
+      tracking-modes: cookie
+
+
+spring:
+  # MariaDB Configuration (for production)
+  datasource-mariadb:
+    driver-class-name: org.mariadb.jdbc.Driver
+    jdbc-url: jdbc:mariadb://localhost:3306/music
+    username: root
+    password: 12345
+  # H2 Configuration (for testing)
+  datasource-h2:
+    driver-class-name: org.h2.Driver
+    jdbc-url: jdbc:h2:mem:testdb
+    username: sa
+    password:
+
+
+# Hibernate settings
+  jpa:
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.MariaDBDialect
+    hibernate:
+      # JPA Properties
+      ddl-auto: update
+      show-sql: true
+      generate-ddl: true
+
+  # Resource and Devtools Reload
+  devtools:
+    livereload:
+      enabled: true
+    restart:
+      enabled: true
+
+
+
+
+
+
+  data:
+    rest:
+      basePath: /api
+
+#H2 Web Console (H2ConsoleProperties)
+# h2 database web
+  h2:
+    console:
+      enabled: true
+      path: /h2-test
+

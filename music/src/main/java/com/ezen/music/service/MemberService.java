@@ -1,7 +1,7 @@
 package com.ezen.music.service;
 
 import com.ezen.music.domain.Member;
-import com.ezen.music.domain.MemberRepository;
+import com.ezen.music.repository.MemberRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
