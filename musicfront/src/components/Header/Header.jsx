@@ -109,8 +109,8 @@ const StyledHeader = styled.header`
   z-index: 999;
 
   & img {
-    width: 120px;
-    height: 100px;
+    width: 110px;
+    height: 85px;
     margin-left: 0;
   }
 
@@ -189,7 +189,7 @@ const StyledHeader = styled.header`
   }
 
   & .imgContainer {
-    width: 150px;
+    width: 130px;
     height: 64px;
     margin-left: 0;
   }
