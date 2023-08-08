@@ -1,14 +1,11 @@
-import {useEffect} from "react";
 import styled from "styled-components/macro";
 import {Button} from "@/components/Button/Button";
 // import {Input} from "@/components/Input/Input";
 // import {ReactComponent as RightArrow} from "@/assets/Post/right.svg";
 import {useRecoilState} from "recoil";
 import {addressAtom, imageListAtom, postTitleAtom, postContentAtom} from "./postAtoms";
-import {collection, addDoc, doc, updateDoc} from "firebase/firestore";
-import {db} from "@/firebase/app";
 import {useNavigate} from "react-router-dom";
-import {uidAtom} from "../Register/atoms/uidAtom";
+import { idAtom } from "@/pages/Register/atoms/inputValueAtoms";
 
 export function PlaceSearchBox() {
   const navigate = useNavigate(); //변수 할당시켜서 사용
@@ -24,7 +21,7 @@ export function PlaceSearchBox() {
   const [imageList] = useRecoilState(imageListAtom);
   const [postTitle] = useRecoilState(postTitleAtom);
   const [postContent] = useRecoilState(postContentAtom);
-  const [uid] = useRecoilState(uidAtom);
+  const [id] = useRecoilState(idAtom);
   const moveToAnotherPage = useNavigate();
 
   const onSubmit = async (e) => {
@@ -41,15 +38,12 @@ export function PlaceSearchBox() {
           imgUrl: uploadImageUrl,
           location: address,
           title: postTitle,
-          userId: uid,
+          userId: id,
         };
 
         console.log("데이터베이스에 업로드할 데이터: ", uploadData);
 
-        const docRef = await addDoc(collection(db, "Products"), uploadData);
-        await updateDoc(doc(db, "Products", docRef.id), {
-          id: docRef.id,
-        });
+        // ~upload 로직~
         moveToAnotherPage("/");
       } catch (e) {
         console.error("Error adding document: ", e);

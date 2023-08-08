@@ -13,3 +13,4 @@ export * from "@/components/Heading2/Heading2";
 export * from "@/components/Heading3/Heading3";
 export * from "@/components/Image/Image";
 export * from "@/components/RequiredAuth/RequiredAuth";
+export * from "@/components/ScrollToTop/ScrollToTop";

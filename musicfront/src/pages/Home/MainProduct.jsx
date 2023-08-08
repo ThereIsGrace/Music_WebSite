@@ -9,7 +9,7 @@ export function MainProduct() {
         <Heading2>최신 발매</Heading2>
         <UseProductList count={8} />
         <Link to="/PopularProduct">
-          <span className="popularProduct">인기매물 더 보기</span>
+          <span className="popularProduct">최신 곡 더 보기</span>
         </Link>
       </div>
     </StyledProduct>

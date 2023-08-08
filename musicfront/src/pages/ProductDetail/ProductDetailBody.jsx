@@ -3,41 +3,39 @@ import styled from "styled-components";
 import {Link} from "react-router-dom";
 import {UseProductList} from "@/components";
 import {ProductMap} from "@/pages/ProductDetail";
-import test from "@/assets/test.jpg";
 
 export function ProductDetailBody(props) {
   return (
     <StyledProductDetail>
       <section className="productImg">
         <Link to="/">
-          <Image className="mainImg" src={props.product.imgUrl} alt="상품 이미지"></Image>
+          <Image className="mainImg" src={props.prod.imgUrl} alt="상품 이미지"></Image>
         </Link>
       </section>
       <section className="userInfo">
         <div className="userInfoContainer">
           <div className="userInfoImgContainer">
-            <Image className="userImg" src={props.product.profileImageURL} alt="프로필 사진" />
+            <Image className="userImg" src={props.prod.profileImageURL} alt="프로필 사진" />
           </div>
           <div className="spanContainer">
-            <span className="userId">{props.product.name}</span>
-            <span className="userLocation">{props.product.location}</span>
+            <span className="userId">{props.prod.name}</span>
+            <span className="userLocation">{props.prod.location}</span>
           </div>
         </div>
       </section>
       <hr />
       <section className="productDescription">
-        <span className="titleDescription">{props.product.title} </span>
-        <span className="priceDescription">{props.product.price.toLocaleString(navigator.language)}벨 </span>
-        <span className="descriptionDescription">{props.product.description} </span>
+        <span className="titleDescription">{props.prod.title} </span>
+        <span className="descriptionDescription">{props.prod.description} </span>
       </section>
       <hr />
       <section className="popularProduct">
         <div className="textContainer">
-          <span>당근마켓 인기중고</span>
+          <span>인기곡</span>
           <Link to="/PopularProduct">더 구경하기</Link>
         </div>
-        <UseProductList count={6} excludeId={props.id} />
-        <ProductMap address={props.product.location} />
+        <UseProductList count={6} />
+        <ProductMap address={props.prod.location} />
       </section>
     </StyledProductDetail>
   );

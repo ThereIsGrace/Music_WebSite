@@ -3,26 +3,24 @@ import {Button, LinkButton, LoginModal} from "@/pages/Login/index";
 import {Form, Input, Label, Header, Footer, Heading2} from "@/components/index";
 import {useNavigate} from "react-router-dom";
 import {useState} from "react";
-import {signInWithEmailAndPassword} from "firebase/auth";
-import {auth} from "@/firebase/app";
 import {Helmet} from "react-helmet-async";
 
 export function Login() {
-  const [loginEmail, setLoginEmail] = useState("");
+  const [loginId, setLoginId] = useState("");
   const [loginPassword, setLoginPassword] = useState("");
   const [isModalOpen, setIsModalOpen] = useState(false);
   const movePage = useNavigate();
 
   const login = async () => {
     try {
-      const userCredential = await signInWithEmailAndPassword(auth, loginEmail, loginPassword);
+      const userCredential = "로그인";
 
       console.log("로그인 성공!");
       console.log(userCredential.user);
       movePage("/");
     } catch (error) {
       console.log(error.message);
-      console.log("이런 사용자는 존재하지 않음");
+      console.log("회원 정보가 존재하지 않습니다.");
       setIsModalOpen(true);
     }
   };
@@ -34,19 +32,19 @@ export function Login() {
   return (
     <>
       <Helmet>
-        <title>사자-로그인</title>
-        <meta name="description" content="사자마켓-중고 거래 장터 whit.프론트엔도" />
-        <meta name="keywords" content="중고거래, 당근마켓, 멋쟁이사자처럼, 멋쟁이사자처럼프론트엔드" />
+        <title>로그인</title>
+        <meta name="description" content="뮤직 커뮤니티 사이트" />
+        <meta name="keywords" content="음악, 커뮤니티, DJ, TURN THE TABLE" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-        <meta property="og:site_name" content="사자마켓" />
+        <meta property="og:site_name" content="DJ-UP!" />
         <meta property="og:locale" content="ko-KR" />
-        <meta property="og:title" content="사자마켓 로그인페이지" />
+        <meta property="og:title" content="DJ-UP! 로그인페이지" />
         <meta property="og:url" content="" />
         <meta property="og:type" content="website" />
         <meta property="og:image" content="" />
-        <meta property="og:description" content="사자마켓-중고 거래 장터 whit.프론트엔도" />
+        <meta property="og:description" content="음악, 커뮤니티, DJ, TURN THE TABLE" />
       </Helmet>
-      <Header></Header>
+      <Header />
       <StyledMain>
         <Heading2 className="header">로그인</Heading2>
         <Form className="login" legend="로그인">
@@ -58,7 +56,7 @@ export function Login() {
             required
             placeholder="아이디를 입력해주세요."
             onChange={(e) => {
-              setLoginEmail(e.target.value);
+              setLoginId(e.target.value);
             }}
           ></Input>
           <Label name="비밀번호"></Label>
@@ -79,11 +77,11 @@ export function Login() {
         <LinkButton to="/register">회원가입</LinkButton>
         {isModalOpen && (
           <LoginModal isOpen={isModalOpen} onClose={closeModal}>
-            이메일,비밀번호를 확인해주세요.
+            아이디와 비밀번호를 확인해주세요.
           </LoginModal>
         )}
       </StyledMain>
-      <Footer></Footer>
+      <Footer />
     </>
   );
 }

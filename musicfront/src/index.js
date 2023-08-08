@@ -6,7 +6,7 @@ import {GlobalStyle} from "./GlobalStyle";
 import {BrowserRouter} from "react-router-dom";
 import {RecoilRoot} from "recoil";
 import {HelmetProvider} from "react-helmet-async";
-import ScrollToTop from "./components/common/ScrollToTop";
+import {ScrollToTop} from "@/components";
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(

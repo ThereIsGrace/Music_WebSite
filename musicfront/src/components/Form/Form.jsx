@@ -1,7 +1,7 @@
 import PropTypes from 'prop-types';
 import styled from 'styled-components'
 
-export function Form({action="/", method="post", legend, children, ...rest}) {
+export function Form({action, method="post", legend, children, ...rest}) {
   return (
     <StyledForm action={action} method={method} {...rest}>
       <fieldset>

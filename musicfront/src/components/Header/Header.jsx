@@ -2,9 +2,6 @@ import styled from "styled-components";
 import {Link, useNavigate} from "react-router-dom";
 import {Image, Heading1, Button, Input} from "@/components";
 import Logo from "@/assets/Home/logo.png";
-import {onAuthStateChanged} from "firebase/auth";
-import {auth} from "@/firebase/app";
-import {signOut} from "firebase/auth";
 import {atom, useRecoilState} from "recoil";
 import {uidAtom} from "@/pages/Register/atoms/uidAtom";
 import {useEffect} from "react";
@@ -20,24 +17,26 @@ export function Header() {
 
   const navigate = useNavigate();
 
+  // 로그인 상태 확인
   useEffect(() => {
-    const unsub = onAuthStateChanged(auth, (user) => {
+    const unsub = () => {
+      const user = {id:"loggedinId"}; // 로그인 중인 아이디?
       if (user) {
-        const userId = user.uid;
+        const userId = user.id;
         setCheckCurrentUserState(true);
         setUid(userId);
       } else {
         setCheckCurrentUserState(false);
         setUid("");
       }
-    });
-  
+    };
     return unsub;
   }, [checkCurrentUserState, setCheckCurrentUserState, setUid, uid]);
 
+  // log out
   async function handleLogout() {
     try {
-      await signOut(auth);
+      // ~로그아웃 펑션~
       navigate("/");
     } catch (error) {
       console.log(error.message);
@@ -55,9 +54,6 @@ export function Header() {
       <nav>
         <ul>
           <li>
-            <Link to="/">MUSIC</Link>
-          </li>
-          <li>
             <Link to="/">아티스트</Link>
           </li>
           <li>
@@ -68,7 +64,7 @@ export function Header() {
           </li>
         </ul>
       </nav>
-      <Input type="text" placeholder="물품이나 동네를 검색해보세요"></Input>
+      <Input type="text" placeholder="아티스트/앨범/노래 검색하기"></Input>
       <div className="buttonContainer">
         {!checkCurrentUserState && (
           <>
@@ -196,7 +192,8 @@ const StyledHeader = styled.header`
 
   & .logoutBtn {
     color: #6c816d;
-    border-radius: 0;
+    border-radius: 12px;
+    padding: 10px 12px;
 
     &:hover {
       color: #eca997;
@@ -208,7 +205,7 @@ const StyledHeader = styled.header`
     width: 30px;
     margin-right: 0;
     border: 2px solid #6c816d;
-    padding: 10px 12px;
+    padding: 10px 6px;
     border-radius: 12px;
     color: #6c816d;
 

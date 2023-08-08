@@ -15,30 +15,30 @@ export function Footer() {
           <section>
             <div>
               <span tabIndex={0}>
-                <b>대표</b> 김용현, 황도연
+                <b>대표</b> 정재은, 조예찬
               </span>
               <span> | </span>
               <span tabIndex={0}>
-                <b>사업자 번호</b> 375-87-00088
+                <b>사업자 번호</b> 232-47-08081
               </span>
             </div>
             <div>
               <span tabIndex={0}>
-                <b>직업정보제공사업 신고번호</b> 2016-서울서초-0051
+                <b>EZEN컴퓨터아카데미 신고번호</b> 2023-0808-1349
               </span>
             </div>
             <address>
               <div>
                 <span tabIndex={0}>
-                  <b>주소</b> 서울특별시 구로구 디지털로 30길 28, 609호(당근서비스)
+                  <b>주소</b> 경기도 안산시 상록구 광덕1로 375 KR 강우빌딩 5층
                 </span>
               </div>
               <span tabIndex={0}>
-                <b>전화</b> 1544-9796
+                <b>전화</b> 1577-1577
               </span>
               <span> | </span>
               <span tabIndex={0}>
-                <b>고객문의</b> cs@daangnservice.com
+                <b>고객문의</b> music@djupmusic.com
               </span>
             </address>
           </section>

@@ -1,26 +1,11 @@
-import {useState} from "react";
 import {Input} from "@/components/Input/Input";
 import styled from "styled-components/macro";
 import {useRecoilState} from "recoil";
-import {priceAtom, postTitleAtom, postContentAtom} from "./postAtoms";
+import { postTitleAtom, postContentAtom} from "./postAtoms";
 
 export function PostText() {
-  const [priceValue, setPriceValue] = useRecoilState(priceAtom);
   const [postTitle, setPostTitle] = useRecoilState(postTitleAtom);
   const [postContent, setPostContent] = useRecoilState(postContentAtom);
-
-  function addComma(price) {
-    let returnString = price?.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
-    return returnString;
-  }
-  function onChangePoints(e) {
-    const inputText = e.target.value;
-    const {value} = e.target;
-    const fillteredText = inputText.replace(/[^0-9]/g, "");
-    let str = value.replaceAll(",", "");
-    setPriceValue(str);
-    setPriceValue(Number(fillteredText));
-  }
 
   function onTextareaChange(e) {
     const content = e.target.value;
@@ -36,10 +21,6 @@ export function PostText() {
     <TextBox>
       <div className="TextTitleInput">
         <Input value={postTitle} placeholder="글 제목" className="TextTitle" onChange={onTitleChange}></Input>
-        <div className="PriceBox">
-          <span style={{color: priceValue ? "#4d5159" : "#dcdee3"}}>벨</span>
-          <Input value={addComma(priceValue || "")} placeholder="가격" onChange={onChangePoints} className="TextPrice" pattern="\d*"></Input>
-        </div>
       </div>
       <textarea placeholder=" 게시글의 내용을 적어주세요. (판매 금지 물품은 게시가 제한될 수 있어요.)" className="TextareaBox" value={postContent} onChange={onTextareaChange}></textarea>
     </TextBox>
@@ -84,7 +65,7 @@ const TextBox = styled.div`
   }
 
   & .TextTitle {
-    width: 576px;
+    width: 1056px;
     height: 40px;
     border-radius: 8px;
   }

@@ -5,9 +5,9 @@ export function PostSection() {
   return (
     <Section>
       <h1>게시물 작성</h1>
-      <PostImage></PostImage>
-      <PostText></PostText>
-      <PlaceSearchBox></PlaceSearchBox>
+      {/* <PostImage /> */}
+      <PostText />
+      <PlaceSearchBox />
     </Section>
   );
 }

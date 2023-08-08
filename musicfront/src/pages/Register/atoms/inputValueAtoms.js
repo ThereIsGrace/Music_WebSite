@@ -5,6 +5,11 @@ export const emailAtom = atom({
   default: "",
 });
 
+export const idAtom = atom({
+  key: "idAtom",
+  default: "",
+});
+
 export const passwordAtom = atom({
   key: "passwordAtom",
   default: "",

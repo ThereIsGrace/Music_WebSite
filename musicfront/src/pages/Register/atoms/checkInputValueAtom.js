@@ -5,6 +5,11 @@ export const emailVisibleAtom = atom({
   default: false,
 });
 
+export const idVisibleAtom = atom({
+  key: "idVisibleAtom",
+  default: false,
+});
+
 export const passwordVisibleAtom = atom({
   key: "passwordVisibleAtom",
   default: false,

@@ -1,7 +1,7 @@
 // import {RegisterCheckListItem} from '@/pages/Register'
 import {useEffect} from 'react';
 import {useRecoilState} from 'recoil';
-import {checkedAllAtom, checkedTermsAtom, checkedAgeAtom, checkedMarketingAtom} from './atoms/termsAtoms';
+import {checkedAllAtom, checkedTermsAtom, checkedMarketingAtom} from './atoms/termsAtoms';
 import styled from 'styled-components'
 import {Button, Label, Heading3} from "@/components";
 import {ReactComponent as CheckIcon} from "@/assets/Register/checkbutton-off.svg";
@@ -12,26 +12,20 @@ export function RegisterTerms() {
   
   const [checkedAll, setCheckedAll] = useRecoilState(checkedAllAtom);
   const [checkedTerms, setCheckedTerms] = useRecoilState(checkedTermsAtom);
-  const [checkedAge, setCheckedAge] = useRecoilState(checkedAgeAtom);
   const [checkedMarketing, setCheckedMarketing] = useRecoilState(checkedMarketingAtom);
 
   useEffect(()=>{
-    setCheckedAll(checkedTerms && checkedAge && checkedMarketing);
-  }, [checkedTerms, checkedAge, checkedMarketing]);
+    setCheckedAll(checkedTerms && checkedMarketing);
+  }, [checkedTerms, checkedMarketing]);
 
   function handleCheckedAll() {
     setCheckedAll(!checkedAll);
     setCheckedTerms(!checkedAll);
-    setCheckedAge(!checkedAll);
     setCheckedMarketing(!checkedAll);
   }
 
   function handleCheckedTerms() {
     setCheckedTerms(!checkedTerms);
-  };
-  
- function handleCheckedAge() {
-    setCheckedAge(!checkedAge);
   };
   
   function handleCheckedMarketing() {
@@ -51,11 +45,6 @@ export function RegisterTerms() {
         <li className="checkListItem">
           <Button><CheckIcon className={checkedTerms ? 'check fill' : 'check'} onClick={handleCheckedTerms}/></Button>
           <span className="checkOne">(필수) 이용약관 및 동의사항</span>
-          <Button className="detailsButton">약관보기<ChevronRightIcon /></Button>
-        </li>
-        <li className="checkListItem">
-          <Button><CheckIcon className={checkedAge ? 'check fill' : 'check'} onClick={handleCheckedAge}/></Button>
-          <span className="checkOne">(필수) 본인은 만 14세 이상입니다</span>
           <Button className="detailsButton">약관보기<ChevronRightIcon /></Button>
         </li>
         <li className="checkListItem">

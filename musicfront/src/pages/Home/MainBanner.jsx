@@ -13,7 +13,7 @@ import { useNavigate } from "react-router-dom";
 export function MainBanner() {
   const navigate = useNavigate();
 
-  const onClickBtn = (e) => {
+  const popularBtn = (e) => {
     e.preventDefault();
     navigate('/PopularProduct');
   }
@@ -22,16 +22,16 @@ export function MainBanner() {
     <StyledBanner>
       <Swiper modules={[Autoplay]} autoplay={({speed: 500}, {disableOnInteraction: false})} loop={true}>
         <SwiperSlide>
-          <a href="/#" onClick={onClickBtn}><Image src={BannerImg} alt="동네가게 배너" /></a>
+          <a href="/#" onClick={popularBtn}><Image src={BannerImg} alt="" /></a>
         </SwiperSlide>
         <SwiperSlide>
-          <Image src={BannerImg2} alt="당근 알바 배너" />
+          <Image src={BannerImg2} alt="" />
         </SwiperSlide>
         <SwiperSlide>
-          <Image src={BannerImg3} alt="부동산 직거래 배너" />
+          <Image src={BannerImg3} alt="" />
         </SwiperSlide>
         <SwiperSlide>
-          <Image src={BannerImg4} alt="중고차 직거래 배너" />
+          <Image src={BannerImg4} alt="" />
         </SwiperSlide>
       </Swiper>
     </StyledBanner>

@@ -11,7 +11,7 @@ export function UseProductDetail(props) {
 
   return (
     <div className="imgContainer">
-      <ProductDetailBody id={product.id} product={product} />
+      <ProductDetailBody prod={product} />
     </div>
   );
 }

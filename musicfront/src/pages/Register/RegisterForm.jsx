@@ -1,18 +1,16 @@
 import { useEffect } from 'react';
 import { useRecoilState } from 'recoil';
-import { emailAtom, passwordAtom, passwordConfirmAtom, nameAtom, mobileAtom, birthdayAtom, profileImageAtom, profileImageURLAtom, currentUserAtom } from './atoms/inputValueAtoms';
+import { emailAtom, idAtom, passwordAtom, passwordConfirmAtom, nameAtom, mobileAtom, birthdayAtom, profileImageAtom, profileImageURLAtom, currentUserAtom } from './atoms/inputValueAtoms';
 import { emailVisibleAtom, passwordVisibleAtom, passwordConfirmVisibleAtom, nameVisibleAtom, mobileVisibleAtom } from './atoms/checkInputValueAtom';
 import { nameWarningAtom, emailWarningAtom, passwordWarningAtom, passwordConfirmWarningAtom, mobileWarningAtom } from './atoms/inputWarningAtoms';
 import styled from 'styled-components'
-import { db, storage } from "@/firebase/app";
-import { ref, uploadBytesResumable, getDownloadURL } from "firebase/storage";
 import {RegisterFormInput} from "@/pages/Register"
 import {Form, Button, Label, Heading3} from "@/components";
-import { collection, getDocs } from 'firebase/firestore';
 
 export function RegisterForm() {
 
   const [email, setEmail] = useRecoilState(emailAtom);
+  const [id, setId] = useRecoilState(idAtom);
   const [password, setPassword] = useRecoilState(passwordAtom);
   const [passwordConfirm, setPasswordConfirm] = useRecoilState(passwordConfirmAtom);
   const [name, setName] = useRecoilState(nameAtom);
@@ -118,77 +116,71 @@ export function RegisterForm() {
   }
 
   function checkExistingUser() {
-    const colRef = collection(db, "users");
+    // 백에 이메일 확인 요청 로직
+  }
 
-    getDocs(colRef)
-    .then((snapshot) => {
-      let existingUsers = [];
-      snapshot.docs.forEach((doc)=>{
-        existingUsers.push({...doc.data(), id: doc.id})
-      })
-      existingUsers.forEach((user)=>{
-        if(email === user.email) {
-          alert("이미 가입이 완료된 이메일입니다!");
-          return;
-        }
-      })
-    })
-    .catch((err) => {
-      console.log(err.message);
-    })
+  function checkExistingUserId() {
+    // 백에 아이디 확인 요청 로직
   }
 
 
   useEffect(() => {
+    // 이미지 업로드 로직
     function uploadFile() {
       const name = new Date().getTime() + profileImage.name;
-      const storageRef = ref(storage, 'profiles/' + name);
-      const uploadTask = uploadBytesResumable(storageRef, profileImage);
+      // const storageRef = ref(storage, 'profiles/' + name);
+      // const uploadTask = uploadBytesResumable(storageRef, profileImage);
+      // uploadTask.on(
+      //   'state_changed',
+      //   (snapshot) => {
+      //     switch (snapshot.state) {
+      //       case 'paused':
+      //         break;
+      //       case 'running':
+      //         break;
+      //         default:
+      //           break;
+      //     }
+      //   },
+      //   (error) => {
+      //     console.log(error);
+      //   },
+      //   () => {
+      //     getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
+      //       setProfileImageURL(downloadURL);
+      //     });
+      //   }
+      // );
 
-      uploadTask.on(
-        'state_changed',
-        (snapshot) => {
-          switch (snapshot.state) {
-            case 'paused':
-              break;
-            case 'running':
-              break;
-              default:
-                break;
-          }
-        },
-        (error) => {
-          console.log(error);
-        },
-        () => {
-          getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
-            setProfileImageURL(downloadURL);
-          });
-        }
-      );
+
     }
     profileImage && uploadFile();
   }, [profileImage]);
 
   useEffect(() => {
     emailValidation(email);
-  }, [email]);
+  });
 
   useEffect(() => {
     passwordValidation(password);
-  }, [password]);
+  });
 
   useEffect(() => {
     passwordConfirmValidation(passwordConfirm);
-  }, [passwordConfirm]);
+  });
 
   useEffect(() => {
     nameValidation(name);
-  }, [name]);
+  });
 
   useEffect(() => {
     mobileValidation(mobile);
-  }, [mobile]);
+  });
+
+  // 이미지 확인용(콘솔)
+  useEffect(() => {
+    console.log();
+  }, [profileImage])
 
   return(
     <StyledSection className="registerTop">
@@ -196,6 +188,9 @@ export function RegisterForm() {
         <RegisterFormInput label="이메일" name="email" type="email" placeholder="예시) frontendo@saja.com" onChange={(e) => {setEmail(e.target.value);}}>
           <Button className="registerButtonShort" onClick={checkExistingUser}>중복확인</Button>
           <span className={emailVisible === true ? "registerWarning showWarning" : "registerWarning"}>{emailWarning}</span>
+        </RegisterFormInput>
+        <RegisterFormInput label="아이디" name="아이디" type="text" placeholder="아이디를 입력해주세요" onChange={(e) => {setId(e.target.value);}}>
+          <Button className="registerButtonShort" onClick={checkExistingUserId}>중복확인</Button>
         </RegisterFormInput>
         <RegisterFormInput label="비밀번호" name="password" type="password" placeholder="비밀번호를 입력해주세요" onChange={(e)=>{setPassword(e.target.value);}}>
           <span className={passwordVisible === true ? "registerWarning showWarning" : "registerWarning"}>{passwordWarning}</span>
@@ -207,7 +202,6 @@ export function RegisterForm() {
           <span className={nameVisible === true ? "registerWarning showWarning" : "registerWarning"}>{nameWarning}</span>
         </RegisterFormInput>
         <RegisterFormInput label="휴대폰" name="mobile" type="text" placeholder="숫자만 입력해주세요" maxLength="11" onChange={handleMobileValidation}>
-          <Button className="registerButtonShort">인증번호 받기</Button>
           <span className={mobileVisible === true ? "registerWarning showWarning" : "registerWarning"}>{mobileWarning}</span>
         </RegisterFormInput>
         <RegisterFormInput label="생년월일" name="year" type="date" onChange={handleBirthdayValue}/>
