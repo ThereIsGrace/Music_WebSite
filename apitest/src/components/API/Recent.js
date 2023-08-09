@@ -26,8 +26,10 @@ export default function Recent() {
       <h2>최신곡</h2>
       {data.map((song) => (
         <p>
-          곡명:{song.name} / 앨범:{song.album.title} / 아티스트:
-          {song.artistList[0].name}{" "}
+          || 노래ID:{song.id} || 곡명:{song.name} || 아티스트:
+          {song.artistList[0].name} || 앨범:
+          {song.album.title} || 앨범ID: {song.album.id} || 앨범이미지URL(1~6):{" "}
+          {song.album.imgList[2].url} || 장르: {song.album.genreStyle} ||{" "}
         </p>
       ))}
     </div>
