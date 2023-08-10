@@ -1,5 +1,5 @@
 import {SidebarTop, Section} from "@/pages/Mypage/";
-import {Header, Footer, UpButton} from "@/components";
+import {Header, Footer} from "@/components";
 import {Helmet} from "react-helmet-async";
 import styled from "styled-components/macro";
 
@@ -23,7 +23,6 @@ export function Mypage() {
       <div>
         <SidebarTop></SidebarTop>
         <Section></Section>
-        <UpButton></UpButton>
       </div>
       <Footer></Footer>
     </Wrap>

@@ -10,7 +10,7 @@ const showLoadingAtom = atom({
 });
 
 export function UseProductList(props) {
-  const {isLoadingState, productsState} = useProducts(props.count);
+  const {isLoadingState, productsState} = useProducts(props.excludeId, props.count);
   const [showLoading, setShowLoading] = useRecoilState(showLoadingAtom);
 
   useEffect(() => {

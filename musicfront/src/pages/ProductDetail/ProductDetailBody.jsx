@@ -26,15 +26,16 @@ export function ProductDetailBody(props) {
       <hr />
       <section className="productDescription">
         <span className="titleDescription">{props.prod.title} </span>
+        <span className="priceDescription">{props.prod.price.toLocaleString(navigator.language)}벨 </span>
         <span className="descriptionDescription">{props.prod.description} </span>
       </section>
       <hr />
       <section className="popularProduct">
         <div className="textContainer">
-          <span>인기곡</span>
+          <span>인기상품</span>
           <Link to="/PopularProduct">더 구경하기</Link>
         </div>
-        <UseProductList count={6} />
+        <UseProductList count={6} excludeId={props.prod.id} />
         <ProductMap address={props.prod.location} />
       </section>
     </StyledProductDetail>

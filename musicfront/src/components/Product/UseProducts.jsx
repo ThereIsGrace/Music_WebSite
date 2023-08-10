@@ -1,10 +1,15 @@
 import {useEffect} from "react";
 import {atom, selector, useRecoilState, useRecoilValue} from "recoil";
 import {app} from "@/firebase/app";
-import {getFirestore, getDoc, doc, collection, getDocs, query, limit} from "firebase/firestore";
+import {getFirestore, getDoc, doc, collection, getDocs, query, limit } from "firebase/firestore";
 
 const productsAtom = atom({
   key: "products",
+  default: [],
+});
+
+const productsExcludeIdAtom = atom({
+  key: "productsExcludeId",
   default: [],
 });
 
@@ -28,8 +33,8 @@ const errorSelector = selector({
   },
 });
 
-export function useProducts(limitCount = 99) {
-  const [productsState, setProductsState] = useRecoilState(productsAtom);
+export function useProducts(excludeId, limitCount = 99) {
+  const [productsState, setProductsState] = useRecoilState(!excludeId ? productsAtom : productsExcludeIdAtom);
   const isLoading = useRecoilValue(isLoadingSelector);
   const error = useRecoilValue(errorSelector);
 
@@ -38,6 +43,10 @@ export function useProducts(limitCount = 99) {
     const productsRef = collection(db, "Products");
 
     let q = query(productsRef, limit(limitCount));
+
+    if (excludeId) {
+      // excludeId를 제외하는 로직
+    }
 
     getDocs(q).then((querySnapshot) => {
       const products = [];
@@ -69,7 +78,7 @@ export function useProducts(limitCount = 99) {
           setProductsState(shuffledProducts);
         });
     });
-  }, [setProductsState, limitCount]);
+  }, [setProductsState, excludeId, limitCount]);
 
   return {isLoading, error, productsState};
 }

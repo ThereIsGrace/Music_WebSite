@@ -4,7 +4,7 @@ import styled from "styled-components";
 export function PopularProductBody() {
   return (
     <StyledPopularProduct>
-      <div className="PopularProductTitle">인기곡</div>
+      <div className="PopularProductTitle">중고거래 인기매물</div>
       <UseProductList />
     </StyledPopularProduct>
   );

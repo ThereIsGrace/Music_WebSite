@@ -4,10 +4,10 @@ import styled from "styled-components/macro";
 export function PostSection() {
   return (
     <Section>
-      <h1>게시물 작성</h1>
-      <PostImage />
-      <PostText />
-      <PlaceSearchBox />
+      <h1>내 물건 팔기</h1>
+      <PostImage></PostImage>
+      <PostText></PostText>
+      <PlaceSearchBox></PlaceSearchBox>
     </Section>
   );
 }
