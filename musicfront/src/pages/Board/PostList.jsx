@@ -33,7 +33,6 @@ const PostListBlock = styled(Responsive)`
   
 `;
 
-
 const WritePostButtonWrapper = styled.div`
   display: flex;
   justify-content: flex-end;

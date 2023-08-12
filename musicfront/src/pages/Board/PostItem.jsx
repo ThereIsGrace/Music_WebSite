@@ -7,7 +7,8 @@ export function PostItem(props){
     return (
       <PostItemBlock>
         <h2>
-          <Link to={`/@${props.record.writer}/${props.record.b_id}`}>{props.record.title}</Link>
+          {/* sb 컨트롤러 만들어서 연결하기 */}
+          <Link to={`/board/${props.record.id}`}>{props.record.title}</Link>
         </h2>
         <SubInfo
           username={props.record.writer}

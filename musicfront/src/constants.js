@@ -1,1 +1,1 @@
-export const SERVER_URL = "http://localhost:8094";
+export const SERVER_URL = "http://localhost:8094/";
