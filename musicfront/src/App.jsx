@@ -13,6 +13,7 @@ function App() {
         <Route path="/post" element={<Post />} />
         <Route path="/popularProduct" element={<PopularProduct />} />
         <Route path="/board" element={<Board />} />
+        {/* <Route path="/board/:id" element={} /> */}
       </Routes>
     </div>
   );

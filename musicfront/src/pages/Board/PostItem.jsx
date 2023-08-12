@@ -1,22 +1,19 @@
-import { Link } from "react-router-dom";
-import { SubInfo } from "@/pages/Board";
+import {Link} from "react-router-dom";
+import {SubInfo} from "@/pages/Board";
 import styled from "styled-components";
 import palette from "@/assets/Styles/palette";
 
-export function PostItem(props){
-    return (
-      <PostItemBlock>
-        <h2>
-          {/* sb 컨트롤러 만들어서 연결하기 */}
-          <Link to={`/board/${props.record.id}`}>{props.record.title}</Link>
-        </h2>
-        <SubInfo
-          username={props.record.writer}
-          publishedDate={new Date(props.record.updatedate)}
-        />
-        {/* <p>{props.record.content}</p> */}
-      </PostItemBlock>
-    )
+export function PostItem(props) {
+  return (
+    <PostItemBlock>
+      <h2>
+        {/* sb 컨트롤러 만들어서 연결하기 */}
+        <Link to={`/board/${props.record.b_id}`}>{props.record.title}</Link>
+      </h2>
+      <SubInfo username={props.record.writer} publishedDate={new Date(props.record.updatedate)} />
+      {/* <p>{props.record.content}</p> */}
+    </PostItemBlock>
+  );
 }
 
 const PostItemBlock = styled.div`
@@ -25,7 +22,6 @@ const PostItemBlock = styled.div`
   /* 맨 위 포스트는 padding-top 없음 */
   &:first-child {
     padding-top: 0;
-    
   }
   & + & {
     border-top: 1px solid ${palette.gray[2]};

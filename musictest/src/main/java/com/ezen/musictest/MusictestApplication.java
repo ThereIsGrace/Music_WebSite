@@ -60,7 +60,61 @@ public class MusictestApplication implements CommandLineRunner {
 				.writer("test04")
 				.build();
 
-		boardRepository.saveAll(Arrays.asList(board1, board2, board3, board4, board5));
+		Board board6
+				= new Board().builder()
+				.title("title5")
+				.content("contentcontentcontentcontentcontentcontent")
+				.writer("test04")
+				.build();
+
+		Board board7
+				= new Board().builder()
+				.title("title5")
+				.content("contentcontentcontentcontentcontentcontent")
+				.writer("test04")
+				.build();
+
+		Board board8
+				= new Board().builder()
+				.title("title5")
+				.content("contentcontentcontentcontentcontentcontent")
+				.writer("test04")
+				.build();
+
+		Board board9
+				= new Board().builder()
+				.title("title5")
+				.content("contentcontentcontentcontentcontentcontent")
+				.writer("test04")
+				.build();
+
+		Board board10
+				= new Board().builder()
+				.title("title5")
+				.content("contentcontentcontentcontentcontentcontent")
+				.writer("test04")
+				.build();
+
+		Board board11
+				= new Board().builder()
+				.title("title5")
+				.content("contentcontentcontentcontentcontentcontent")
+				.writer("test04")
+				.build();
+
+		Board board12
+				= new Board().builder()
+				.title("title5")
+				.content("contentcontentcontentcontentcontentcontent")
+				.writer("test04")
+				.build();
+
+
+		boardRepository.saveAll(Arrays.asList(
+				board1, board2, board3, board4, board5,
+				board6, board7, board8, board9, board10,
+				board11, board12
+		));
 
 		for(Board board : boardRepository.findAll()){
 			logger.info("title: " + board.getTitle());

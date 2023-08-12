@@ -1,10 +1,12 @@
 import {Footer, Header} from "@/components";
 import {PostList} from "@/pages/Board";
-import {useEffect, useState} from "react";
+import {useEffect} from "react";
 import {SERVER_URL} from "@/constants";
+import {useRecoilState} from "recoil";
+import {boardAtom} from "./boardAtom";
 
 export function Board() {
-  const [board, setBoard] = useState([]);
+  const [board, setBoard] = useRecoilState(boardAtom);
 
   const fetchlist = () => {
     fetch(SERVER_URL + "api/boards")
@@ -41,7 +43,7 @@ export function Board() {
   return (
     <>
       <Header />
-      <PostList board={board} />
+      <PostList />
       <Footer />
     </>
   );
