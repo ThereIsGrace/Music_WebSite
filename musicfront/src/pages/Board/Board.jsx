@@ -3,13 +3,15 @@ import {PostList} from "@/pages/Board";
 import {useEffect} from "react";
 import {SERVER_URL} from "@/constants";
 import {useRecoilState} from "recoil";
-import {boardAtom} from "./boardAtom";
+import {boardAtom, pageAtom} from "./boardAtom";
 
 export function Board() {
   const [board, setBoard] = useRecoilState(boardAtom);
+  const [page] = useRecoilState(pageAtom);
+  const pageNum = page - 1;
 
   const fetchlist = () => {
-    fetch(SERVER_URL + "api/boards")
+    fetch(SERVER_URL + "api/boards?size=10&page=" + pageNum)
       .then((response) => response.json())
       .then((data) => setBoard(data._embedded.boards))
       .catch((err) => console.error(err));
@@ -17,7 +19,7 @@ export function Board() {
 
   useEffect(() => {
     fetchlist();
-  }, []);
+  }, [page]);
 
   // Mock data용 useEffect
   // useEffect(()=>{

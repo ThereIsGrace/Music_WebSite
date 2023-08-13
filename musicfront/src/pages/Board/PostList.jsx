@@ -3,6 +3,7 @@ import {PostItem} from "@/pages/Board";
 import {BoardBtn, Responsive} from "@/components";
 import {useRecoilState} from "recoil";
 import {boardAtom} from "./boardAtom";
+import {Paging} from "./Paging";
 
 export function PostList() {
   const [board] = useRecoilState(boardAtom);
@@ -12,10 +13,10 @@ export function PostList() {
   return (
     <PostListBlock>
       {board && board.map((record, index) => <PostItem record={record} id={record.b_id} key={index} />)}
-
+      <Paging />
       <WritePostButtonWrapper>
         {isLoggedIn && (
-          <BoardBtn cyan to="/write">
+          <BoardBtn blue to="/board/write">
             새 글<br />
             작성하기
           </BoardBtn>
