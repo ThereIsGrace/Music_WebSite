@@ -20,7 +20,7 @@ export function Header() {
   // 로그인 상태 확인
   useEffect(() => {
     const unsub = () => {
-      const user = {id:"loggedinId"}; // 로그인 중인 아이디?
+      const user = {id: "loggedinId"}; // 로그인 중인 아이디?
       if (user) {
         const userId = user.id;
         setCheckCurrentUserState(true);
@@ -47,7 +47,7 @@ export function Header() {
     <StyledHeader>
       <Heading1>
         <Link to="/" className="imgContainer">
-          <Image src={Logo} alt="사자 마켓" />
+          <Image src={Logo} alt="DJ-UP!" />
         </Link>
       </Heading1>
 
@@ -60,7 +60,7 @@ export function Header() {
             <Link to="/PopularProduct">인기</Link>
           </li>
           <li>
-            <Link to="/">커뮤니티</Link>
+            <Link to="/board">커뮤니티</Link>
           </li>
         </ul>
       </nav>

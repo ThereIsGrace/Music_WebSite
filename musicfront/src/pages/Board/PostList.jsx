@@ -11,7 +11,6 @@ export function PostList() {
 
   return (
     <PostListBlock>
-      {/*  로딩 중 아니고, 포스트 배열이 존재할 때만 보여줌 */}
       {board && board.map((record, index) => <PostItem record={record} id={record.b_id} key={index} />)}
 
       <WritePostButtonWrapper>
