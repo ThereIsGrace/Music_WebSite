@@ -28,84 +28,84 @@ public class MusictestApplication implements CommandLineRunner {
 		Board board1
 				= new Board().builder()
 				.title("title1")
-				.content("contentcontentcontentcontentcontentcontent")
+				.content("<h3>contentcontentcontentcontentcontentcontent</h3>")
 				.writer("test01")
 				.build();
 
 		Board board2
 				= new Board().builder()
 				.title("title2")
-				.content("contentcontentcontentcontentcontentcontent")
+				.content("<h3>contentcontentcontentcontentcontentcontent</h3>")
 				.writer("test02")
 				.build();
 
 		Board board3
 				= new Board().builder()
 				.title("title3")
-				.content("contentcontentcontentcontentcontentcontent")
+				.content("<h3>contentcontentcontentcontentcontentcontent</h3>")
 				.writer("test02")
 				.build();
 
 		Board board4
 				= new Board().builder()
 				.title("title4")
-				.content("contentcontentcontentcontentcontentcontent")
+				.content("<h3>contentcontentcontentcontentcontentcontent</h3>")
 				.writer("test03")
 				.build();
 
 		Board board5
 				= new Board().builder()
 				.title("title5")
-				.content("contentcontentcontentcontentcontentcontent")
+				.content("<h3>contentcontentcontentcontentcontentcontent</h3>")
 				.writer("test04")
 				.build();
 
 		Board board6
 				= new Board().builder()
 				.title("title5")
-				.content("contentcontentcontentcontentcontentcontent")
+				.content("<h3>contentcontentcontentcontentcontentcontent</h3>")
 				.writer("test04")
 				.build();
 
 		Board board7
 				= new Board().builder()
 				.title("title5")
-				.content("contentcontentcontentcontentcontentcontent")
+				.content("<h3>contentcontentcontentcontentcontentcontent</h3>")
 				.writer("test04")
 				.build();
 
 		Board board8
 				= new Board().builder()
 				.title("title5")
-				.content("contentcontentcontentcontentcontentcontent")
+				.content("<h3>contentcontentcontentcontentcontentcontent</h3>")
 				.writer("test04")
 				.build();
 
 		Board board9
 				= new Board().builder()
 				.title("title5")
-				.content("contentcontentcontentcontentcontentcontent")
+				.content("<h3>contentcontentcontentcontentcontentcontent</h3>")
 				.writer("test04")
 				.build();
 
 		Board board10
 				= new Board().builder()
 				.title("title5")
-				.content("contentcontentcontentcontentcontentcontent")
+				.content("<h3>contentcontentcontentcontentcontentcontent</h3>")
 				.writer("test04")
 				.build();
 
 		Board board11
 				= new Board().builder()
 				.title("title5")
-				.content("contentcontentcontentcontentcontentcontent")
+				.content("<h3>contentcontentcontentcontentcontentcontent</h3>")
 				.writer("test04")
 				.build();
 
 		Board board12
 				= new Board().builder()
 				.title("title5")
-				.content("contentcontentcontentcontentcontentcontent")
+				.content("<h3>contentcontentcontentcontentcontentcontent</h3>")
 				.writer("test04")
 				.build();
 

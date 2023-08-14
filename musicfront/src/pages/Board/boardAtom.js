@@ -5,7 +5,12 @@ export const boardAtom = atom({
   default: [],
 });
 
-export const pageAtom = atom({
-  key: "pageAtom",
+export const pageNumAtom = atom({
+  key: "pageNumAtom",
+  default: 0,
+});
+
+export const totalItemCountAtom = atom({
+  key: "totalItemCountAtom",
   default: 0,
 });

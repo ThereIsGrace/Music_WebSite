@@ -3,40 +3,30 @@ import {PostList} from "@/pages/Board";
 import {useEffect} from "react";
 import {SERVER_URL} from "@/constants";
 import {useRecoilState} from "recoil";
-import {boardAtom, pageAtom} from "./boardAtom";
+import {boardAtom, pageNumAtom, totalItemCountAtom} from "./boardAtom";
+import {Helmet} from "react-helmet-async";
 
 export function Board() {
   const [board, setBoard] = useRecoilState(boardAtom);
-  const [page] = useRecoilState(pageAtom);
-  const pageNum = page - 1;
+  const [pageNum] = useRecoilState(pageNumAtom);
+  const [, setTotalCount] = useRecoilState(totalItemCountAtom);
+  const page = pageNum - 1;
 
   const fetchlist = () => {
-    fetch(SERVER_URL + "api/boards?size=10&page=" + pageNum)
+    fetch(SERVER_URL + "api/boards?page=" + page)
       .then((response) => response.json())
       .then((data) => setBoard(data._embedded.boards))
+      .catch((err) => console.error(err));
+
+    fetch(SERVER_URL + "api/boards")
+      .then((response) => response.json())
+      .then((data) => setTotalCount(data.page.totalElements))
       .catch((err) => console.error(err));
   };
 
   useEffect(() => {
     fetchlist();
-  }, [page]);
-
-  // Mock data용 useEffect
-  // useEffect(()=>{
-  // 	let arr = [];
-  // 	for (let i = 0; i < 10; i++) {
-  // 		const record= {
-  // 			b_id: i,
-  // 			title: "titletest"+i,
-  // 			writer: "test"+i,
-  // 			content: "contenttestcontenttestcontenttestcontenttestcontenttest"+i,
-  // 			updatedate: "2023-08-11"
-  // 		};
-  // 		arr.push(record);
-  // 	};
-  // 	setBoard(arr);
-  // 	fetchlist();
-  // }, [])
+  }, [pageNum]);
 
   useEffect(() => {
     console.log(board);
@@ -44,6 +34,19 @@ export function Board() {
 
   return (
     <>
+      <Helmet>
+        <title>DJ-UP! 자유게시판</title>
+        <meta name="description" content="뮤직 커뮤니티 사이트" />
+        <meta name="keywords" content="음악, 커뮤니티, DJ, TURN THE TABLE" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <meta property="og:site_name" content="DJ-UP" />
+        <meta property="og:locale" content="ko-KR" />
+        <meta property="og:title" content="DJ-UP! 자유게시판" />
+        <meta property="og:url" content="" />
+        <meta property="og:type" content="website" />
+        <meta property="og:image" content="" />
+        <meta property="og:description" content="뮤직 커뮤니티 사이트" />
+      </Helmet>
       <Header />
       <PostList />
       <Footer />

@@ -1,5 +1,5 @@
 import {Link} from "react-router-dom";
-import {SubInfo} from "@/pages/Board";
+import {SubInfo} from "@/components";
 import styled from "styled-components";
 import palette from "@/assets/Styles/palette";
 

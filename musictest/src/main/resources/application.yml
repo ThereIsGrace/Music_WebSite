@@ -77,9 +77,11 @@ spring:
           tokenUri: https://kauth.kakao.com/oauth/token
           userInfoUri: https://kapi.kakao.com/v2/user/me
           userNameAttribute: id
+  # REST API
   data:
     rest:
       basePath: /api
+      default-page-size: 10
 
 # cors ??
 

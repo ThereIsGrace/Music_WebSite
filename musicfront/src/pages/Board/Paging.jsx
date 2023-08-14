@@ -1,21 +1,22 @@
 import Pagination from "react-js-pagination";
 import styled from "styled-components";
-import {pageAtom} from "./boardAtom";
+import { pageNumAtom, totalItemCountAtom } from "./boardAtom";
 import {useRecoilState} from "recoil";
 import {useNavigate} from "react-router-dom";
 
 export const Paging = () => {
-  const [page, setPage] = useRecoilState(pageAtom);
+  const [pageNum, setPageNum] = useRecoilState(pageNumAtom);
+  const [totalCount] = useRecoilState(totalItemCountAtom);
   const navigate = useNavigate();
 
-  const handlePageChange = (page) => {
-    setPage(page);
-    navigate("/board?page=" + page);
+  const handlePageChange = (pageNum) => {
+    setPageNum(pageNum);
+    navigate("/board?page=" + pageNum);
   };
 
   return (
     <StyledPaginate>
-      <Pagination activePage={page} itemsCountPerPage={10} totalItemsCount={450} pageRangeDisplayed={10} prevPageText={"‹"} nextPageText={"›"} onChange={handlePageChange} />
+      <Pagination activePage={pageNum} itemsCountPerPage={10} totalItemsCount={totalCount} pageRangeDisplayed={10} prevPageText={"‹"} nextPageText={"›"} onChange={handlePageChange} />
     </StyledPaginate>
   );
 };
