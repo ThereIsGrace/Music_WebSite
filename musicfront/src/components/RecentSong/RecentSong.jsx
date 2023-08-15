@@ -3,7 +3,7 @@ import {Link} from "react-router-dom";
 import styled from "styled-components";
 import {Image} from "@/components";
 
-export function Song(props) {
+export function RecentSong(props) {
   const song = props.song;
   console.log(song);
   return (

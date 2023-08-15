@@ -1,12 +1,13 @@
 import React, {useEffect} from "react";
-import {Product, Image, useSongs} from "@/components";
+import {Image, useRecentSongs} from "@/components";
 import raccoon from "@/assets/Logo/raccoon.gif";
 import styled from "styled-components";
 import {useRecoilState} from "recoil";
 import {showLoadingAtom} from "@/components/_atom/aboutRendering";
+import {RecentSong} from "./RecentSong";
 
-export function UseSongList(props) {
-  const {isLoadingState, songsState} = useSongs(props.excludeId, props.count, props.mode);
+export function UseRecentSongList(props) {
+  const {isLoadingState, songsState} = useRecentSongs(props.count);
   const [showLoading, setShowLoading] = useRecoilState(showLoadingAtom);
 
   useEffect(() => {
@@ -27,7 +28,7 @@ export function UseSongList(props) {
   return (
     <div className="productContainer">
       {songsState.map((song, index) => (
-        <Product key={index} song={song} />
+        <RecentSong key={index} song={song} />
       ))}
     </div>
   );

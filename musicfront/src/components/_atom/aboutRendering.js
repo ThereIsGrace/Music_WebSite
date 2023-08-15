@@ -44,3 +44,34 @@ export const popularSongsExcludeIdAtom = atom({
   key: "popularSongsExcludeId",
   default: [],
 });
+
+export const isLoadingPopularSelector = selector({
+  key: "popularIsLoading",
+  get: ({get}) => {
+    const stores = get(popularSongsAtom);
+    return stores.length === 0;
+  },
+});
+
+export const recentSongsAtom = atom({
+  key: "recentSongs",
+  default: [],
+});
+
+export const recentSongsExcludeIdAtom = atom({
+  key: "recentSongsExcludeId",
+  default: [],
+});
+
+export const isLoadingRecentSelector = selector({
+  key: "recentIsLoading",
+  get: ({get}) => {
+    const stores = get(recentSongsAtom);
+    return stores.length === 0;
+  },
+});
+
+export const keywordAtom = atom({
+  key: "keyword",
+  default: "",
+});
