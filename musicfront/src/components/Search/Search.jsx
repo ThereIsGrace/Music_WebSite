@@ -13,10 +13,15 @@ export function Search() {
 
   useEffect(() => {
     console.log(keyword);
+    console.log(window.location.pathname);
   });
 
   const pressKey = (e) => {
     if (e.keyCode === 13) {
+      if (window.location.pathname === "/search") {
+        window.location.reload();
+        // queryString 활용
+      }
       nav("/search");
     }
   };
