@@ -1,4 +1,4 @@
-import {MainBanner, MainProduct, LineBanner, MainStore} from "@/pages/Home";
+import {MainBanner, MainSong, LineBanner, MainStore} from "@/pages/Home";
 import {Helmet} from "react-helmet-async";
 import {Header, Footer, StoreButton} from "@/components";
 
@@ -20,7 +20,7 @@ export function Home() {
       </Helmet>
       <Header />
       <MainBanner />
-      <MainProduct />
+      <MainSong />
       <LineBanner />
       <MainStore />
       <StoreButton />

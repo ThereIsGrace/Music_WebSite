@@ -1,15 +1,15 @@
 import styled from "styled-components";
 import {Link} from "react-router-dom";
-import {UseProductList, Heading2} from "@/components";
+import {Heading2, UseRecentSongList} from "@/components";
 
-export function MainProduct() {
+export function MainSong() {
   return (
     <StyledProduct>
       <div className="inner">
         <Heading2>최신 발매</Heading2>
-        <UseProductList count={8} />
+        <UseRecentSongList count={8} />
         <Link to="/popular">
-          <span className="popular">최신 곡 더 보기</span>
+          <span className="popular">인기 곡 더 보기</span>
         </Link>
       </div>
     </StyledProduct>
@@ -41,7 +41,7 @@ const StyledProduct = styled.div`
     justify-items: center;
   }
 
-  & .popularProduct {
+  & .popular {
     margin-top: 55px;
     display: block;
     text-align: center;
