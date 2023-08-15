@@ -1,12 +1,12 @@
 import React, {useEffect} from "react";
-import {Product, useProducts, Image} from "@/components";
+import {Product, Image, useSongs} from "@/components";
 import raccoon from "@/assets/Logo/raccoon.gif";
 import styled from "styled-components";
 import {useRecoilState} from "recoil";
 import {showLoadingAtom} from "@/components/_atom/aboutRendering";
 
-export function UseProductList(props) {
-  const {isLoadingState, productsState} = useProducts(props.excludeId, props.count);
+export function UseSongList(props) {
+  const {isLoadingState, songsState} = useSongs(props.excludeId, props.count, props.mode);
   const [showLoading, setShowLoading] = useRecoilState(showLoadingAtom);
 
   useEffect(() => {
@@ -19,15 +19,15 @@ export function UseProductList(props) {
   if (isLoadingState || showLoading) {
     return (
       <StyledLoadingImgContainer role="alert">
-        <Image src={raccoon} alt="로딩 중임..." />
+        <Image src={raccoon} alt="로딩로딩로딩" />
       </StyledLoadingImgContainer>
     );
   }
 
   return (
     <div className="productContainer">
-      {productsState.map((product, index) => (
-        <Product key={index} prod={product} />
+      {songsState.map((song, index) => (
+        <Product key={index} song={song} />
       ))}
     </div>
   );

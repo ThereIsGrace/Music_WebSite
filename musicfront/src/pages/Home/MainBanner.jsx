@@ -8,21 +8,23 @@ import BannerImg4 from "@/assets/Home/mainBanner4.png";
 import {Swiper, SwiperSlide} from "swiper/react";
 import {Autoplay} from "swiper";
 import "swiper/css";
-import { useNavigate } from "react-router-dom";
+import {useNavigate} from "react-router-dom";
 
 export function MainBanner() {
   const navigate = useNavigate();
 
   const popularBtn = (e) => {
     e.preventDefault();
-    navigate('/PopularProduct');
-  }
+    navigate("/popular");
+  };
 
   return (
     <StyledBanner>
       <Swiper modules={[Autoplay]} autoplay={({speed: 500}, {disableOnInteraction: false})} loop={true}>
         <SwiperSlide>
-          <a href="/#" onClick={popularBtn}><Image src={BannerImg} alt="" /></a>
+          <a href="/#" onClick={popularBtn}>
+            <Image src={BannerImg} alt="" />
+          </a>
         </SwiperSlide>
         <SwiperSlide>
           <Image src={BannerImg2} alt="" />

@@ -2,8 +2,12 @@ import React, {useEffect} from "react";
 import {Product, useProducts, Image} from "@/components";
 import raccoon from "@/assets/Logo/raccoon.gif";
 import styled from "styled-components";
-import {useRecoilState} from "recoil";
-import {showLoadingAtom} from "@/components/_atom/aboutRendering";
+import {atom, useRecoilState} from "recoil";
+
+const showLoadingAtom = atom({
+  key: "showLoadingPopularRaccoon",
+  default: true,
+});
 
 export function UseProductList(props) {
   const {isLoadingState, productsState} = useProducts(props.excludeId, props.count);

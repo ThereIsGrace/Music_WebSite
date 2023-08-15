@@ -18,3 +18,6 @@ export * from "@/components/Responsive/Responsive";
 export * from "@/components/Pagination/Pagination";
 export * from "@/components/ScrollToTop/ScrollToTop";
 export * from "@/components/SubInfo/SubInfo";
+export * from "@/components/Song/Song";
+export * from "@/components/Song/UseSongList";
+export * from "@/components/Song/UseSongs";

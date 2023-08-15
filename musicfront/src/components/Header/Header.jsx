@@ -57,7 +57,7 @@ export function Header() {
             <Link to="/">아티스트</Link>
           </li>
           <li>
-            <Link to="/PopularProduct">인기</Link>
+            <Link to="/popular">인기</Link>
           </li>
           <li>
             <Link to="/board">커뮤니티</Link>

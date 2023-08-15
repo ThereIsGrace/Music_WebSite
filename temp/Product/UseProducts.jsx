@@ -1,8 +1,37 @@
 import {useEffect} from "react";
-import {useRecoilState, useRecoilValue} from "recoil";
+import {atom, selector, useRecoilState, useRecoilValue} from "recoil";
 import {app} from "@/firebase/app";
-import {getFirestore, getDoc, doc, collection, getDocs, query, limit} from "firebase/firestore";
-import {errorSelector, isLoadingSelector, productsAtom, productsExcludeIdAtom} from "@/components/_atom/aboutRendering";
+import {getFirestore, getDoc, doc, collection, getDocs, query, limit } from "firebase/firestore";
+
+const productsAtom = atom({
+  key: "products",
+  default: [],
+});
+
+const productsExcludeIdAtom = atom({
+  key: "productsExcludeId",
+  default: [],
+});
+
+const isLoadingSelector = selector({
+  key: "productsIsLoading",
+  get: ({get}) => {
+    const stores = get(productsAtom);
+    return stores.length === 0;
+  },
+});
+
+const errorSelector = selector({
+  key: "productsError",
+  get: ({get}) => {
+    const stores = get(productsAtom);
+    if (stores.length === 0) {
+      return "Error fetching stores";
+    } else {
+      return null;
+    }
+  },
+});
 
 export function useProducts(excludeId, limitCount = 99) {
   const [productsState, setProductsState] = useRecoilState(!excludeId ? productsAtom : productsExcludeIdAtom);

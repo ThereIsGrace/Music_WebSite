@@ -4,6 +4,6 @@ export * from "@/pages/Mypage/Mypage";
 export * from "@/pages/Post/Post";
 export * from "@/pages/Register/Register";
 export * from "@/pages/ProductDetail/ProductDetail";
-export * from "@/pages/PopularProduct/PopularProduct";
+export * from "@/pages/PopularSong/PopularSong";
 export * from "@/pages/Board/Board";
 export * from "@/pages/BoardDetail/BoardDetail";
