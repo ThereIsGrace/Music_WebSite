@@ -39,7 +39,7 @@ public class SecurityConfig {
                         .antMatchers("/api/v1/manager/**")
                         .access("hasRole('ROLE_MANAGER') or hasRole('ROLE_ADMIN')")
                         .antMatchers("/api/v1/admin")
-                        .access("hasRole('ROLE_ADMIN)")
+                        .access("hasRole('ROLE_ADMIN')")
                         .anyRequest().permitAll())
                 .build();
     }

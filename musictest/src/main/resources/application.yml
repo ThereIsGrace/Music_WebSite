@@ -7,14 +7,14 @@ spring:
   # ??? ?? ??
   datasource:
     driver-class-name: org.mariadb.jdbc.Driver
-    url: jdbc:mariadb://localhost:3306/hotel?useSSL=false&serverTimezone=UTC&useLegacyDatetimeCode=false&allowPublicKeyRetrieval=true
+    url: jdbc:mariadb://localhost:3306/music?useSSL=false&serverTimezone=UTC&useLegacyDatetimeCode=false&allowPublicKeyRetrieval=true
     username: root
     password: 12345
   # JPA ??
   jpa:
     generate-ddl: true
     hibernate:
-      ddl-auto: create-drop
+      ddl-auto: create
     show-sql: true
     properties:
       hibernate:
@@ -31,23 +31,23 @@ spring:
     oauth2.client:
       registration:
         google:
-          clientId: "{?? client-id}"
-          clientSecret: "{?? client-secret}"
+          clientId: "433034212344-jl87b2ah39o9ep5ap1krkmq095o9tqh1.apps.googleusercontent.com"
+          clientSecret: "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"
           scope:
             - email
             - profile
         facebook:
-          clientId: "{???? client-id}"
-          clientSecret: "{???? client-secret}"
+          clientId: "844389587101823"
+          clientSecret: "074c9d27b7b87c5094208bd7a4bd0359"
           scope:
             - email
             - public_profile
         naver:
-          clientId: "kXmZblZzWqemRUxwlfsq"
-          clientSecret: "MWxnRUn_d2"
+          clientId: "AOvKLgPCAHV_1IcY7fqr"
+          clientSecret: "2RKuQ0RCQm"
           clientAuthenticationMethod: post
           authorizationGrantType: authorization_code
-          redirectUri: "{baseUrl}/{action}/oauth2/code/{registrationId}"
+          redirectUri: "http://localhost:8094/login/oauth2/code/naver"
           scope:
             - name
             - nickname

@@ -22,6 +22,8 @@ public class User {
     private String username;
     private String password;
     private String email;
+    private String mobile;
+    private String name;
     private String role;  //ROLE_USER, ROLE_ADMIN
 
     // 일반 로그인인지 OAuth 로그인인지 확실히 알 수 잇기 위해 provider 추가

@@ -13,6 +13,7 @@ import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 @Controller  // View를 리턴하겠다!!
@@ -92,15 +93,16 @@ public class IndexController {
         return "joinForm";
     }
 
-    @PostMapping("/join")
-    public String join(User user) {
+    @PostMapping("/api/register")
+    public @ResponseBody String join(@RequestBody User user) {
+        System.out.println("실행되긴하니");
         System.out.println(user);
         user.setRole("ROLE_USER");
         String rawPassword = user.getPassword();
         String encPassword = bCryptPasswordEncoder.encode(rawPassword);
         user.setPassword(encPassword);
         userRepository.save(user);   //회원가입 잘됨. 비밀번호: 1234 => 시큐리티로 로그인을 할 수 없음. 이유는 패스워드가 암호화가 안 되었기 때문!!
-        return "redirect:/loginForm";
+        return "성공";
     }
 
     @Secured("ROLE_ADMIN")

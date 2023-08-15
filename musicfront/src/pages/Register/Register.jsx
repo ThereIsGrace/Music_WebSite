@@ -11,12 +11,14 @@ import { Helmet } from 'react-helmet-async';
 import { RegisterForm, RegisterTerms, RegisterModal } from '@/pages/Register'
 import { Header, Footer, Heading2, Button } from '@/components'
 import { useState } from 'react';
+import axios from "axios";
+
 
 export function Register() {
 
   const [email, setEmail] = useRecoilState(emailAtom);
   const [emailVisible, setEmailVisible] = useRecoilState(emailVisibleAtom);
-  const [id, setId] = useRecoilState(idAtom);
+  const [username, setUsername] = useRecoilState(idAtom);
   const [idVisible, setIdvisible] = useRecoilState(idVisibleAtom);
   const [password, setPassword] = useRecoilState(passwordAtom);
   const [passwordVisible, setPasswordVisible] = useRecoilState(passwordVisibleAtom);
@@ -44,7 +46,7 @@ export function Register() {
         setModal(true);
         setModalText("이메일을 확인해주세요");
         return;
-      case id === "" || idVisible === true:
+      case username === "" || idVisible === true:
         setModal(true);
         setModalText("아이디를 확인해주세요");
         return;
@@ -85,8 +87,16 @@ export function Register() {
   }
 
   async function registerUser() {
+    let body = {
+      username: username,
+      password: password,
+      email: email,
+      mobile: mobile,
+      name: name 
+    }
+    
     try {
-      addUserCollection(id, name, mobile, email, birthday, profileImageURL)
+      addUserCollection(body)
       navigate("/");
       setModal(false);
     } catch(error) {
@@ -94,8 +104,12 @@ export function Register() {
     }
   }
 
-  async function addUserCollection(id, name, mobile, email, birthday, profileImageURL) {
-    // 백에 member 테이블로 create record 요청 로직
+  async function addUserCollection(body) {
+
+    const request = axios.post('http://localhost:8094/api/board', body)
+    console.log('보내려곻 하능중');
+    console.log(body);
+
   }
 
   return(

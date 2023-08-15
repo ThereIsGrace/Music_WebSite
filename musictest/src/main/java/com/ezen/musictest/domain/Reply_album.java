@@ -24,7 +24,7 @@ public class Reply_album {
 
     @ManyToOne
     @JoinColumn(name="writer")
-    private Member member;
+    private User user;
 
     @CreatedDate
     @Column(name = "regidate", updatable = false)

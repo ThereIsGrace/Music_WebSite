@@ -50,9 +50,9 @@ export function Login() {
         <Form className="login" legend="로그인">
           <Label name="로그인"></Label>
           <Input
-            id="login"
-            name="login"
-            type="login"
+            id="username"
+            name="username"
+            type="username"
             required
             placeholder="아이디를 입력해주세요."
             onChange={(e) => {

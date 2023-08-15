@@ -10,7 +10,7 @@ import {Form, Button, Label, Heading3} from "@/components";
 export function RegisterForm() {
 
   const [email, setEmail] = useRecoilState(emailAtom);
-  const [id, setId] = useRecoilState(idAtom);
+  const [username, setUsername] = useRecoilState(idAtom);
   const [password, setPassword] = useRecoilState(passwordAtom);
   const [passwordConfirm, setPasswordConfirm] = useRecoilState(passwordConfirmAtom);
   const [name, setName] = useRecoilState(nameAtom);
@@ -189,7 +189,7 @@ export function RegisterForm() {
           <Button className="registerButtonShort" onClick={checkExistingUser}>중복확인</Button>
           <span className={emailVisible === true ? "registerWarning showWarning" : "registerWarning"}>{emailWarning}</span>
         </RegisterFormInput>
-        <RegisterFormInput label="아이디" name="아이디" type="text" placeholder="아이디를 입력해주세요" onChange={(e) => {setId(e.target.value);}}>
+        <RegisterFormInput label="아이디" name="username" type="text" placeholder="아이디를 입력해주세요" onChange={(e) => {setUsername(e.target.value);}}>
           <Button className="registerButtonShort" onClick={checkExistingUserId}>중복확인</Button>
         </RegisterFormInput>
         <RegisterFormInput label="비밀번호" name="password" type="password" placeholder="비밀번호를 입력해주세요" onChange={(e)=>{setPassword(e.target.value);}}>
