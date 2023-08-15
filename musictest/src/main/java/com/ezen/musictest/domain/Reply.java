@@ -25,7 +25,7 @@ public class Reply {
 
     @ManyToOne
     @JoinColumn(name="writer")
-    private Member member;
+    private User user;
 
     @CreatedDate
     @Column(name = "regidate", updatable = false)

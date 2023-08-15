@@ -1,7 +1,5 @@
 package com.ezen.musictest.service;
 
-import com.ezen.musictest.domain.Member;
-import com.ezen.musictest.repository.MemberRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
