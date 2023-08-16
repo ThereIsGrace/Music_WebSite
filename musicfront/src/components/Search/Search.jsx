@@ -18,11 +18,11 @@ export function Search() {
 
   const pressKey = (e) => {
     if (e.keyCode === 13) {
+      nav("/search?keyword=" + keyword);
       if (window.location.pathname === "/search") {
         window.location.reload();
         // queryString 활용
       }
-      nav("/search");
     }
   };
 

@@ -38,6 +38,7 @@ export function Header() {
     try {
       // ~로그아웃 펑션~
       navigate("/");
+      window.location.reload();
     } catch (error) {
       console.log(error.message);
     }

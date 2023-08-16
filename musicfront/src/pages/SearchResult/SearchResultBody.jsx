@@ -1,14 +1,13 @@
-import {useRecoilState} from "recoil";
-import {keywordAtom} from "@/components/_atom/aboutRendering";
 import {useEffect, useState} from "react";
+import qs from "qs";
 
 export function SearchResultBody() {
-  const [keyword] = useRecoilState(keywordAtom);
+  const [qskeyword, setQskeyword] = useState("");
   const [data, setData] = useState([]);
   const [renderCount, setRenderCount] = useState(0);
   const [coin, setCoin] = useState(false);
 
-  const search = "https://www.music-flo.com/api/search/v2/search/integration?keyword=" + keyword;
+  const search = "https://www.music-flo.com/api/search/v2/search/integration?keyword=" + qskeyword;
 
   const fetchData = async () => {
     const res = await fetch(search);
@@ -25,17 +24,25 @@ export function SearchResultBody() {
     }
   };
 
+  const query = qs.parse(window.location.search, {
+    ignoreQueryPrefix: true,
+  });
+
   useEffect(() => {
-    console.log(keyword);
     setTimeout(() => {
+      setQskeyword(query.keyword);
       if (data.length === 0) {
         getData();
         setCoin(!coin);
         //   setRenderCount(renderCount + 1);
       }
-      console.log(data);
+      console.log(window.location);
     }, 1000);
   }, [coin]);
+
+  useEffect(() => {
+    console.log(data);
+  }, [data]);
 
   if (data.length === 0) {
     return <div>loading........</div>;
