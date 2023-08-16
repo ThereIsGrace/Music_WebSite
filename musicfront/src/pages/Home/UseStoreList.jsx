@@ -17,6 +17,7 @@ export function UserStoreList({selectedType}) {
     const timer = setTimeout(() => {
       setShowLoading(false);
     }, 1000);
+    console.log("stores: ", stores);
     return () => clearTimeout(timer);
   }, [setShowLoading]);
 
