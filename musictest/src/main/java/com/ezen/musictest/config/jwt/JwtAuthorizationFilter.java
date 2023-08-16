@@ -28,7 +28,9 @@ public class JwtAuthorizationFilter extends BasicAuthenticationFilter {
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain chain) throws IOException, ServletException {
+        System.out.println("Token Authorization Started!!!");
         String header = request.getHeader(JwtProperties.HEADER_STRING);
+        System.out.println("header:" + header);
         if (header == null || !header.startsWith(JwtProperties.TOKEN_PREFIX)){
             chain.doFilter(request, response);
             return;
@@ -42,7 +44,7 @@ public class JwtAuthorizationFilter extends BasicAuthenticationFilter {
         // loadByUsername이 호출됨
         String username = JWT.require(Algorithm.HMAC512(JwtProperties.SECRET)).build().verify(token)
                 .getClaim("username").asString();
-
+        System.out.println("authorize username:" + username);
         if(username!=null){
             User user = userRepository.findByUsername(username);
 
@@ -57,7 +59,7 @@ public class JwtAuthorizationFilter extends BasicAuthenticationFilter {
             // 강제로 시큐리티의 세션에 접근하여 값 저장
             SecurityContextHolder.getContext().setAuthentication(authentication);
         }
-
+        System.out.println("Doing very well...........");
         chain.doFilter(request, response);
     }
 }

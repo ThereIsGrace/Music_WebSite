@@ -29,3 +29,13 @@ export const mobileVisibleAtom = atom({
   key: "mobileConfirmVisibleAtom",
   default: false,
 });
+
+export const modalAtom = atom({
+  key: "modalAtom",
+  default: false,
+});
+
+export const modalTextAtom = atom({
+  key: "modalTextAtom",
+  default: "",
+});

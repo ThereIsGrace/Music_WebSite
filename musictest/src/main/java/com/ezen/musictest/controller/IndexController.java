@@ -2,6 +2,7 @@ package com.ezen.musictest.controller;
 
 import com.ezen.musictest.config.auth.PrincipalDetails;
 import com.ezen.musictest.domain.User;
+import com.ezen.musictest.dto.LoginRequestDto;
 import com.ezen.musictest.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.annotation.Secured;
@@ -11,10 +12,7 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 
 @Controller  // View를 리턴하겠다!!
 public class IndexController {
@@ -52,18 +50,21 @@ public class IndexController {
     // localhost:8094/
     // localhost:8094
     @GetMapping({"","/"})
-    public String index() {
+    public @ResponseBody String index() {
         // 머스테치 기본폴더 src/main/resources/
         // 뷰리졸버 설정: templates (prefix), .mustache (suffix) 생략가능!!
+        System.out.println("Something");
         return "index";  //src/main/resources/templates/index.mustache
+
     }
 
 
     // OAuth 로그인을 해도 PrincipalDetails
     // 일반 로그인을 해도 PrincipalDetails로 받을 수 있다.
-    @GetMapping("/user")
-    public @ResponseBody String user(@AuthenticationPrincipal PrincipalDetails principalDetails) {
-        System.out.println("PrincipalDetails:" + principalDetails.getUser());
+    @GetMapping("/mypage")
+    public @ResponseBody String user() {
+        System.out.println("User is trying to approach mypage... make him login");
+        //System.out.println("PrincipalDetails:" + principalDetails.getUser());
         return "user";
     }
 
@@ -95,15 +96,15 @@ public class IndexController {
 
     @PostMapping("/api/register")
     public @ResponseBody String join(@RequestBody User user) {
-        System.out.println("실행되긴하니");
         System.out.println(user);
         user.setRole("ROLE_USER");
         String rawPassword = user.getPassword();
         String encPassword = bCryptPasswordEncoder.encode(rawPassword);
         user.setPassword(encPassword);
         userRepository.save(user);   //회원가입 잘됨. 비밀번호: 1234 => 시큐리티로 로그인을 할 수 없음. 이유는 패스워드가 암호화가 안 되었기 때문!!
-        return "성공";
+        return "success";
     }
+
 
     @Secured("ROLE_ADMIN")
     @GetMapping("/info")
@@ -116,5 +117,30 @@ public class IndexController {
     public @ResponseBody String data() {
         return "데이터정보";
     }
+
+    @GetMapping("/checkUsername")
+    public @ResponseBody String checkUser(@RequestParam String username){
+        System.out.println("checkUser() init...........................................");
+        System.out.println(username);
+        User userEntity = (User) userRepository.findByUsername(username);
+        System.out.println(userEntity);
+        if(userEntity!=null){
+            return "true";
+        }
+        return "false";
+    }
+
+    @GetMapping("/checkUseremail")
+    public @ResponseBody String checkUserEmail(@RequestParam String email){
+        System.out.println("checkUserEmail() init...........................................");
+        System.out.println(email);
+        User userEntity = (User) userRepository.findByEmail(email);
+        System.out.println(userEntity);
+        if(userEntity!=null){
+            return "true";
+        }
+        return "false";
+    }
+
 
 }

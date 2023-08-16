@@ -31,13 +31,17 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
     // 인증 요청시에 실행되는 함수 => /login
     @Override
     public Authentication attemptAuthentication(HttpServletRequest request, HttpServletResponse response) throws AuthenticationException {
-        System.out.println("JwtAuthenticationFilter : 진입");
+        System.out.println("JwtAuthenticationFilter : start");
+
 
         //request에 있는 username과 password를 파싱해서 자바 Object로 받기
         ObjectMapper om = new ObjectMapper();
         LoginRequestDto loginRequestDto = null;
         try{
             loginRequestDto = om.readValue(request.getInputStream(), LoginRequestDto.class);
+            System.out.println(loginRequestDto);
+            System.out.println("이 값이 뭘까??:"+request.getInputStream());
+            System.out.println(loginRequestDto.getUsername());
         }catch(Exception e){
             e.printStackTrace();
         }
@@ -81,7 +85,6 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
                 .withClaim("id", principalDetails.getUser().getId())
                 .withClaim("username",principalDetails.getUsername())
                 .sign(Algorithm.HMAC512(JwtProperties.SECRET));
-
         response.addHeader(JwtProperties.HEADER_STRING, JwtProperties.TOKEN_PREFIX+jwtToken);
     }
 }

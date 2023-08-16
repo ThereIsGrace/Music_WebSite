@@ -1,6 +1,6 @@
-import { useRecoilValue, useRecoilState } from "recoil";
+import { useRecoilValue, useRecoilState, useRecoilCallback } from "recoil";
 import { emailAtom, passwordAtom, passwordConfirmAtom, nameAtom, mobileAtom, birthdayAtom, profileImageAtom, profileImageURLAtom, currentUserAtom, idAtom } from './atoms/inputValueAtoms';
-import { emailVisibleAtom, passwordVisibleAtom, passwordConfirmVisibleAtom, nameVisibleAtom, mobileVisibleAtom, idVisibleAtom } from './atoms/checkInputValueAtom';
+import { emailVisibleAtom, passwordVisibleAtom, passwordConfirmVisibleAtom, nameVisibleAtom, mobileVisibleAtom, idVisibleAtom, modalAtom, modalTextAtom } from './atoms/checkInputValueAtom';
 import { checkedTermsAtom, checkedAgeAtom } from './atoms/termsAtoms';
 import { uidAtom } from './atoms/uidAtom';
 import { useNavigate } from 'react-router-dom';
@@ -35,10 +35,12 @@ export function Register() {
   
   const checkedTerms = useRecoilValue(checkedTermsAtom);
 
+  const [vaildReg, setVaildReg] = useState(false);
+
   const navigate = useNavigate();
 
-  const [modal, setModal] = useState(false);
-  const [modalText, setModalText] = useState("");
+  const [modal, setModal] = useRecoilState(modalAtom);
+  const [modalText, setModalText] = useRecoilState(modalTextAtom);
 
   async function handleCheckRegister() {
     switch (true) {
@@ -79,9 +81,11 @@ export function Register() {
         setModalText("이용약관 및 동의사항을 확인해주세요");
         return;
       default:
-        setModal(true);
-        setModalText("회원이 되신 걸 축하드립니다!");
+        console.log(email);
+        setVaildReg(!vaildReg);
+        setModal(false);
         await registerUser();
+        setVaildReg(!vaildReg);
         break;
     }
   }
@@ -97,18 +101,30 @@ export function Register() {
     
     try {
       addUserCollection(body)
-      navigate("/");
-      setModal(false);
+      //navigate("/");
+      //setModal(true);
     } catch(error) {
       console.log(error.message);
     }
   }
 
   async function addUserCollection(body) {
-
-    const request = axios.post('http://localhost:8094/api/board', body)
-    console.log('보내려곻 하능중');
+    console.log('보내려고 하는중');
     console.log(body);
+    axios.post('http://localhost:8094/api/register', body)
+    .then((response) => {
+      console.log("실험중 with 예찬", response);
+      if (response.data === 'success'){
+        setModal(true);
+        setModalText('회원가입에 성공했습니다.');
+      }
+    })
+    .catch(function (error) {
+      
+      console.log("Error",error);
+    })
+
+
 
   }
 
@@ -139,7 +155,7 @@ export function Register() {
       </StyledMain>
       {
         modal &&
-        <RegisterModal onClick={()=>{setModal(false); console.log(modal)}}>
+        <RegisterModal onClick={()=>{setModal(false); console.log(modal); if(vaildReg){navigate("/login"); window.location.reload();}}}>
           {modalText}
         </RegisterModal>
       }

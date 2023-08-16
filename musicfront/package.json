@@ -2,7 +2,6 @@
   "name": "frontendo-saja",
   "version": "0.1.0",
   "private": true,
-  "proxy": "http://localhost:8094",
   "dependencies": {
     "@craco/craco": "^7.1.0",
     "@testing-library/jest-dom": "^5.16.5",
@@ -11,6 +10,7 @@
     "axios": "^1.4.0",
     "babel-plugin-macros": "^3.1.0",
     "firebase": "^9.18.0",
+    "http-proxy-middleware": "^2.0.6",
     "prop-types": "^15.8.1",
     "react": "^18.2.0",
     "react-daum-postcode": "^3.1.1",
@@ -25,6 +25,7 @@
     "swiper": "^9.1.0",
     "web-vitals": "^2.1.4"
   },
+  "proxy": "http://localhost:8094",
   "scripts": {
     "start": "craco start",
     "build": "craco build",

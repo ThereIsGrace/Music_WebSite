@@ -4,19 +4,38 @@ import {Form, Input, Label, Header, Footer, Heading2} from "@/components/index";
 import {useNavigate} from "react-router-dom";
 import {useState} from "react";
 import {Helmet} from "react-helmet-async";
+import axios from "axios";
 
 export function Login() {
-  const [loginId, setLoginId] = useState("");
-  const [loginPassword, setLoginPassword] = useState("");
+  const [username, setUsername] = useState("");
+  const [password, setPassword] = useState("");
   const [isModalOpen, setIsModalOpen] = useState(false);
   const movePage = useNavigate();
 
   const login = async () => {
     try {
-      const userCredential = "로그인";
+      let data = {
+        "username": username,
+        "password": password
+      };
+      console.log(data);
+      
+      axios.post('/login', data)
+      .then((response) => {
+        const {accessToken} = response.data;
 
+        axios.defaults.headers.common["Authorization"] = `Bearer ${accessToken}`;
+
+        if(response.status === 200){
+          console.log("신나는 200");
+          let jwtToken = response.headers.get("Authorization");
+          localStorage.setItem("Authorization", jwtToken);
+          console.log("jwtToken값은:" + jwtToken);
+        }
+      }).catch((error) => {
+        console.log(error);
+      });
       console.log("로그인 성공!");
-      console.log(userCredential.user);
       movePage("/");
     } catch (error) {
       console.log(error.message);
@@ -48,18 +67,18 @@ export function Login() {
       <StyledMain>
         <Heading2 className="header">로그인</Heading2>
         <Form className="login" legend="로그인">
-          <Label name="로그인"></Label>
+          <Label name="username"></Label>
           <Input
             id="username"
             name="username"
-            type="username"
+            type="id"
             required
             placeholder="아이디를 입력해주세요."
             onChange={(e) => {
-              setLoginId(e.target.value);
+              setUsername(e.target.value);
             }}
           ></Input>
-          <Label name="비밀번호"></Label>
+          <Label name="password"></Label>
           <Input
             id="password"
             name="password"
@@ -67,7 +86,7 @@ export function Login() {
             required
             placeholder="비밀번호를 입력해주세요."
             onChange={(e) => {
-              setLoginPassword(e.target.value);
+              setPassword(e.target.value);
             }}
           ></Input>
         </Form>

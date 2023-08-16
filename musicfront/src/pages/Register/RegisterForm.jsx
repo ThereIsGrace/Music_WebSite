@@ -1,11 +1,12 @@
 import { useEffect } from 'react';
 import { useRecoilState } from 'recoil';
 import { emailAtom, idAtom, passwordAtom, passwordConfirmAtom, nameAtom, mobileAtom, birthdayAtom, profileImageAtom, profileImageURLAtom, currentUserAtom } from './atoms/inputValueAtoms';
-import { emailVisibleAtom, passwordVisibleAtom, passwordConfirmVisibleAtom, nameVisibleAtom, mobileVisibleAtom } from './atoms/checkInputValueAtom';
+import { emailVisibleAtom, passwordVisibleAtom, passwordConfirmVisibleAtom, nameVisibleAtom, mobileVisibleAtom, modalAtom, modalTextAtom } from './atoms/checkInputValueAtom';
 import { nameWarningAtom, emailWarningAtom, passwordWarningAtom, passwordConfirmWarningAtom, mobileWarningAtom } from './atoms/inputWarningAtoms';
 import styled from 'styled-components'
 import {RegisterFormInput} from "@/pages/Register"
 import {Form, Button, Label, Heading3} from "@/components";
+import { SERVER_URL } from '@/constants';
 
 export function RegisterForm() {
 
@@ -30,6 +31,9 @@ export function RegisterForm() {
   const [passwordConfirmWarning, setPasswordConfirmWarning] = useRecoilState(passwordConfirmWarningAtom);
   const [mobileWarning, setMobileWarning] = useRecoilState(mobileWarningAtom);
   const [nameWarning, setNameWarning] = useRecoilState(nameWarningAtom);
+
+  const [modal, setModal] = useRecoilState(modalAtom);
+  const [modalText, setModalText] = useRecoilState(modalTextAtom);
 
   function emailValidation(email){
     const emailRegex = /^([\w.%+-]+)@([\w-]+\.)+([\w]{2,})$/i;
@@ -116,11 +120,35 @@ export function RegisterForm() {
   }
 
   function checkExistingUser() {
-    // 백에 이메일 확인 요청 로직
+    // 백에 이메일 확인 요청 로직 
+    fetch(SERVER_URL + "checkUseremail?email=" + email)
+    .then((response) => response.json())
+    .then((json) => {console.log('결과값:'+json);
+      if(json === true){
+        setModal(true);
+        setModalText("이미 가입된 회원입니다.");
+        setEmail(null);
+      }else{
+        setModal(true);
+        setModalText("사용할 수 있는 이메일입니다.");
+      }
+  });
   }
 
   function checkExistingUserId() {
     // 백에 아이디 확인 요청 로직
+    fetch(SERVER_URL + "checkUsername?username=" + username)
+    .then((response) => response.json())
+    .then((json) => {console.log('결과값:'+json);
+      if(json === true){
+        setModal(true);
+        setModalText("사용할 수 없는 아이디입니다.");
+        setUsername(null);
+      }else{
+        setModal(true);
+        setModalText("사용할 수 있는 아이디입니다.")
+      }
+  });
   }
 
 

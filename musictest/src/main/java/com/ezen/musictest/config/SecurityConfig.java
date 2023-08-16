@@ -34,7 +34,7 @@ public class SecurityConfig {
                 .httpBasic().disable()
                 .apply(new MyCustomDsl())
                 .and()
-                .authorizeRequests(authorize -> authorize.antMatchers("/api/v1/user/**")
+                .authorizeRequests(authorize -> authorize.antMatchers("/mypage/**")
                         .access("hasRole('ROLE_USER') or hasRole('ROLE_MANAGER') or hasRole('ROLE_ADMIN')")
                         .antMatchers("/api/v1/manager/**")
                         .access("hasRole('ROLE_MANAGER') or hasRole('ROLE_ADMIN')")
