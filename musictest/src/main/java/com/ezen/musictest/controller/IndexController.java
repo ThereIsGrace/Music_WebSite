@@ -9,12 +9,13 @@ import org.springframework.security.access.annotation.Secured;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
-@Controller  // View를 리턴하겠다!!
+@RestController
 public class IndexController {
 
     @Autowired
@@ -24,7 +25,7 @@ public class IndexController {
     private BCryptPasswordEncoder bCryptPasswordEncoder;
 
     @GetMapping("/test/login")  // 이걸로 구글 로그인을 하면 에러가 남
-    public @ResponseBody String testLogin(Authentication authentication,
+    public String testLogin(Authentication authentication,
                                           @AuthenticationPrincipal PrincipalDetails userDetails) {  //DI(의존성 주입)  //UserDetails와 PrincipalDetails는 같은 타입이므로 치환하면 getUsername이 아니라 getUser가 가능
         System.out.println("/test/login ======================");
         PrincipalDetails principalDetails = (PrincipalDetails) authentication.getPrincipal();
@@ -36,7 +37,7 @@ public class IndexController {
 
 
     @GetMapping("/test/oauth/login")  // 이걸로 구글 로그인을 하면 에러가 남
-    public @ResponseBody String testOauthLogin(
+    public String testOauthLogin(
             Authentication authentication,
             @AuthenticationPrincipal OAuth2User oauth) {  //DI(의존성 주입)  //UserDetails와 PrincipalDetails는 같은 타입이므로 치환하면 getUsername이 아니라 getUser가 가능
         System.out.println("/test/oauth/login ======================");
@@ -59,17 +60,17 @@ public class IndexController {
     }
 
 
-    // OAuth 로그인을 해도 PrincipalDetails
-    // 일반 로그인을 해도 PrincipalDetails로 받을 수 있다.
+    // my page에 접속한 사용자를 위해 user 정보를 반환한다.
     @GetMapping("/mypage")
-    public @ResponseBody String user() {
-        System.out.println("User is trying to approach mypage... make him login");
-        //System.out.println("PrincipalDetails:" + principalDetails.getUser());
-        return "user";
+    public User user() {
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        String username = auth.getName();
+        User userEntity = userRepository.findByUsername(username);
+        return userEntity;
     }
 
     @GetMapping("/admin")
-    public @ResponseBody String admin() {
+    public String admin() {
         return "admin";
     }
 
@@ -83,19 +84,10 @@ public class IndexController {
      * @GetMapping("/login") public @ResponseBody String login() { return "login"; }
      */
 
-    @GetMapping("/loginForm")
-    public String loginForm() {
-        return "loginForm";
-    }
 
 
-    @GetMapping("/joinForm")
-    public String joinForm() {
-        return "joinForm";
-    }
-
-    @PostMapping("/api/register")
-    public @ResponseBody String join(@RequestBody User user) {
+    @PostMapping("/register")
+    public String join(@RequestBody User user) {
         System.out.println(user);
         user.setRole("ROLE_USER");
         String rawPassword = user.getPassword();
@@ -119,8 +111,7 @@ public class IndexController {
     }
 
     @GetMapping("/checkUsername")
-    public @ResponseBody String checkUser(@RequestParam String username){
-        System.out.println("checkUser() init...........................................");
+    public String checkUser(String username){
         System.out.println(username);
         User userEntity = (User) userRepository.findByUsername(username);
         System.out.println(userEntity);
@@ -131,7 +122,7 @@ public class IndexController {
     }
 
     @GetMapping("/checkUseremail")
-    public @ResponseBody String checkUserEmail(@RequestParam String email){
+    public String checkUserEmail(String email){
         System.out.println("checkUserEmail() init...........................................");
         System.out.println(email);
         User userEntity = (User) userRepository.findByEmail(email);

@@ -2,8 +2,28 @@ import {SidebarTop, Section} from "@/pages/Mypage/";
 import {Header, Footer} from "@/components";
 import {Helmet} from "react-helmet-async";
 import styled from "styled-components/macro";
+import axios from "axios";
+import { useEffect } from "react";
+
+const myPage = async () => {
+
+  try {
+    axios.get('/mypage')
+    .then((response) => {
+      console.log(response);
+    }).catch((error) => {
+      console.log(error);
+    });
+    console.log("정보를 잘 받아옴");
+  } catch (error) {
+    console.error(error.message);
+  }
+};
 
 export function Mypage() {
+  useEffect(()=>{
+    myPage();
+  },[])
   return (
     <Wrap>
       <Helmet>

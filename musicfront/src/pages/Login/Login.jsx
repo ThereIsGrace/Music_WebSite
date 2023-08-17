@@ -12,6 +12,7 @@ export function Login() {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const movePage = useNavigate();
 
+
   const login = async () => {
     try {
       let data = {
@@ -26,11 +27,10 @@ export function Login() {
 
         axios.defaults.headers.common["Authorization"] = `Bearer ${accessToken}`;
 
-        if(response.status === 200){
-          console.log("신나는 200");
+        if(response.OK){
           let jwtToken = response.headers.get("Authorization");
           localStorage.setItem("Authorization", jwtToken);
-          console.log("jwtToken값은:" + jwtToken);
+          onSilentRefresh();
         }
       }).catch((error) => {
         console.log(error);
@@ -48,6 +48,23 @@ export function Login() {
     setIsModalOpen(false);
   };
 
+  const onSilentRefresh = () => {
+    axios.post('/', {
+      accessToken: localStorage.getItem("Authorization")
+    })
+        .then((response)=>{
+          const {accessToken} = response.data;
+
+          axios.defaults.headers.common["Authorization"] = `Bearer ${accessToken}`;
+          
+          localStorage.setItem("Authorization",response.data.accessToken);
+          //로그인 연장 후 10분 뒤
+          setInterval(onSilentRefresh, 600000);
+        })
+        .catch(error => {
+            // ... 로그인 실패 처리
+        });
+}
   return (
     <>
       <Helmet>

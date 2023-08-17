@@ -12,6 +12,7 @@ public class CorsConfig {
 
     @Bean
     public CorsFilter corsFilter(){
+        // cors란 간단히 말해 서로 다른 도메인간 통신을 하는 것을 승인하거나 차단하는 것이다.
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         CorsConfiguration config = new CorsConfiguration();
         config.setAllowCredentials(true);
