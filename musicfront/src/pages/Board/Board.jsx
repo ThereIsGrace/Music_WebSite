@@ -1,6 +1,6 @@
 import {Footer, Header} from "@/components";
 import {PostList} from "@/pages/Board";
-import {useEffect} from "react";
+import {useEffect, useState} from "react";
 import {SERVER_URL} from "@/constants";
 import {useRecoilState} from "recoil";
 import {boardAtom, pageNumAtom, totalItemCountAtom} from "./boardAtom";
@@ -10,6 +10,7 @@ export function Board() {
   const [board, setBoard] = useRecoilState(boardAtom);
   const [pageNum] = useRecoilState(pageNumAtom);
   const [, setTotalCount] = useRecoilState(totalItemCountAtom);
+  const [coin, setCoin] = useState(false);
   const page = pageNum - 1;
 
   const fetchlist = () => {
@@ -23,6 +24,10 @@ export function Board() {
       .then((data) => setTotalCount(data.page.totalElements))
       .catch((err) => console.error(err));
   };
+
+  useEffect(() => {
+    if (board.length === 0) fetchlist();
+  }, []);
 
   useEffect(() => {
     fetchlist();

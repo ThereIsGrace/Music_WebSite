@@ -1,6 +1,6 @@
 import styled from "styled-components";
 import {Link, useNavigate} from "react-router-dom";
-import {Image, Heading1, Button, Input, Search} from "@/components";
+import {Image, Heading1, Button, Search} from "@/components";
 import Logo from "@/assets/Home/logo.png";
 import {atom, useRecoilState} from "recoil";
 import {uidAtom} from "@/pages/Register/atoms/uidAtom";
