@@ -2,7 +2,7 @@ import {useEffect, useState} from "react";
 import qs from "qs";
 import styled from "styled-components";
 import raccoon from "@/assets/Logo/raccoon.gif";
-import {SearchedItems} from "@/pages/SearchResult";
+import {Lyrics, LyricsItems, SearchedItems} from "@/pages/SearchResult";
 
 export function SearchResultBody({selectedType}) {
   const [qskeyword, setQskeyword] = useState("");
@@ -76,10 +76,9 @@ export function SearchResultBody({selectedType}) {
   const slicedData = filteredData.slice(0, 10);
 
   return (
-    <div className="storeList">
-      {slicedData.map((date, index) => (
-        <SearchedItems key={index} index={index} data={date} />
-      ))}
+    <div>
+      <div className="list">{selectedType !== "가사" && slicedData.map((date, index) => <SearchedItems key={index} index={index} data={date} />)}</div>
+      <div>{selectedType === "가사" && slicedData.map((date, index) => <LyricsItems key={index + 100} data={date} />)}</div>
     </div>
   );
 }
