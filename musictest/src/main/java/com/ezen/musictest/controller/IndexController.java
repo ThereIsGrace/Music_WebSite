@@ -65,6 +65,7 @@ public class IndexController {
     public User user() {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         String username = auth.getName();
+        System.out.println(username);
         User userEntity = userRepository.findByUsername(username);
         return userEntity;
     }

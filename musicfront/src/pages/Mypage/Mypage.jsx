@@ -8,7 +8,7 @@ import { useEffect } from "react";
 const myPage = async () => {
 
   try {
-    axios.get('/mypage')
+    axios.get('/mypage', {header: localStorage.getItem('Authorization')})
     .then((response) => {
       console.log(response);
     }).catch((error) => {
