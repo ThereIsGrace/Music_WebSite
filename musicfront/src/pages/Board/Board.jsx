@@ -26,8 +26,14 @@ export function Board() {
   };
 
   useEffect(() => {
-    if (board.length === 0) fetchlist();
-  }, []);
+    console.log("불러오는 중");
+    setTimeout(() => {
+      if (board.length === 0) {
+        fetchlist();
+        setCoin(!coin);
+      }
+    }, 1000);
+  }, [coin]);
 
   useEffect(() => {
     fetchlist();
