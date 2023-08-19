@@ -5,7 +5,7 @@ import {errorSelector, isLoadingPopularSelector, popularSongsAtom, popularSongsE
 export function usePopularSongs(excludeId, limitCount = 99) {
   const [songsState, setSongsState] = useRecoilState(!excludeId ? popularSongsAtom : popularSongsExcludeIdAtom);
   const [data, setData] = useState(null);
-  const [renderCount, setRenderCount] = useState(0);
+  const [coin, setCoin] = useState(false);
   const isLoading = useRecoilValue(isLoadingPopularSelector);
   const error = useRecoilValue(errorSelector);
 
@@ -25,13 +25,14 @@ export function usePopularSongs(excludeId, limitCount = 99) {
   };
 
   useEffect(() => {
-    if (data === null && renderCount < 30) {
-      getData();
-      setRenderCount(renderCount + 1);
-    }
-
+    setTimeout(() => {
+      if (data === null) {
+        getData();
+        setCoin(!coin);
+      }
+    }, 800);
     console.log(data);
-  }, [renderCount]);
+  }, [coin]);
 
   useEffect(() => {
     if (data !== null) {

@@ -1,7 +1,6 @@
 import styled from "styled-components";
-import {PageBtn} from "./PageBtn";
+import {PageBtn, pageAtom} from "@/pages/SearchResult";
 import {useRecoilState} from "recoil";
-import {pageAtom} from "@/pages/SearchResult";
 
 export const Page = ({lastPage}) => {
   const [page] = useRecoilState(pageAtom);
