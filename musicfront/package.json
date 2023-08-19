@@ -28,7 +28,8 @@
     "styled-reset": "^4.4.5",
     "swiper": "^9.1.0",
     "typescript": "^5.1.6",
-    "web-vitals": "^2.1.4"
+    "web-vitals": "^2.1.4",
+    "yarn": "^1.22.19"
   },
   "proxy": "http://localhost:8094",
   "scripts": {

@@ -109,11 +109,8 @@ export function Register() {
   }
 
   async function addUserCollection(body) {
-    console.log('보내려고 하는중');
-    console.log(body);
-    axios.post('http://localhost:8094/api/register', body)
+    axios.post('/register', body)
     .then((response) => {
-      console.log("실험중 with 예찬", response);
       if (response.data === 'success'){
         setModal(true);
         setModalText('회원가입에 성공했습니다.');

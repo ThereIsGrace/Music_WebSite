@@ -39,7 +39,6 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
         LoginRequestDto loginRequestDto = null;
         try{
             loginRequestDto = om.readValue(request.getInputStream(), LoginRequestDto.class);
-            System.out.println(loginRequestDto);
             System.out.println("이 값이 뭘까??:"+request.getInputStream());
             System.out.println(loginRequestDto.getUsername());
         }catch(Exception e){

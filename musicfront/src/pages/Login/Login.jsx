@@ -1,10 +1,11 @@
-import styled from "styled-components/macro";
+import styled, { createGlobalStyle } from "styled-components/macro";
 import {Button, LinkButton, LoginModal} from "@/pages/Login/index";
 import {Form, Input, Label, Header, Footer, Heading2} from "@/components/index";
 import {useNavigate} from "react-router-dom";
 import {useState} from "react";
 import {Helmet} from "react-helmet-async";
 import axios from "axios";
+
 
 export function Login() {
   const [username, setUsername] = useState("");
@@ -20,15 +21,17 @@ export function Login() {
         "password": password
       };
       console.log(data);
-      
+      console.log('로그인 시작하려함');
       axios.post('/login', data)
       .then((response) => {
         const {accessToken} = response.data;
 
         axios.defaults.headers.common["Authorization"] = `Bearer ${accessToken}`;
-
-        if(response.OK){
+        console.log('hello2222');
+        if(response.status === 200){
+          console.log('hello');
           let jwtToken = response.headers.get("Authorization");
+          console.log(jwtToken);
           localStorage.setItem("Authorization", jwtToken);
           onSilentRefresh();
         }
@@ -36,7 +39,7 @@ export function Login() {
         console.log(error);
       });
       console.log("로그인 성공!");
-      movePage("/");
+      //movePage("/");
     } catch (error) {
       console.log(error.message);
       console.log("회원 정보가 존재하지 않습니다.");
@@ -49,21 +52,8 @@ export function Login() {
   };
 
   const onSilentRefresh = () => {
-    axios.post('/', {
-      accessToken: localStorage.getItem("Authorization")
-    })
-        .then((response)=>{
-          const {accessToken} = response.data;
-
-          axios.defaults.headers.common["Authorization"] = `Bearer ${accessToken}`;
-          
-          localStorage.setItem("Authorization",response.data.accessToken);
-          //로그인 연장 후 10분 뒤
-          setInterval(onSilentRefresh, 600000);
-        })
-        .catch(error => {
-            // ... 로그인 실패 처리
-        });
+    console.log('silentRefresh시작');
+    
 }
   return (
     <>
