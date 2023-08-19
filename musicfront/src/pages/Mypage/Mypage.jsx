@@ -4,13 +4,17 @@ import {Helmet} from "react-helmet-async";
 import styled from "styled-components/macro";
 import axios from "axios";
 import { useEffect } from "react";
+import axiosInstance from "@/axios_interceptor/axios_interceptor";
 
 const myPage = async () => {
 
   try {
-    axios.get('/mypage', {header: localStorage.getItem('Authorization')})
+    axiosInstance.get('/mypage')
     .then((response) => {
       console.log(response);
+      return response;
+    }).then((data) => {
+      console.log(data);
     }).catch((error) => {
       console.log(error);
     });

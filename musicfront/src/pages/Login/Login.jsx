@@ -5,7 +5,7 @@ import {useNavigate} from "react-router-dom";
 import {useState} from "react";
 import {Helmet} from "react-helmet-async";
 import axios from "axios";
-
+import { setCookie } from "@/utils/cookies";
 
 export function Login() {
   const [username, setUsername] = useState("");
@@ -31,9 +31,19 @@ export function Login() {
         if(response.status === 200){
           console.log('hello');
           let jwtToken = response.headers.get("Authorization");
+          let refreshToken = response.headers.get("refreshToken");
           console.log(jwtToken);
-          localStorage.setItem("Authorization", jwtToken);
-          
+          // 보안을 위해 accessToken과 refreshToken을 쿠키에 저장한다. 
+          setCookie('accessToken', jwtToken, {
+            path: "/",
+            secure: true,
+            sameSite:"none"
+          })
+          setCookie('refreshToken', refreshToken, {
+            path: "/",
+            secure: true,
+            sameSite:"none"
+          })
           onSilentRefresh();
         }
       }).catch((error) => {

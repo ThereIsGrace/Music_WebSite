@@ -2,6 +2,7 @@ package com.ezen.musictest.config.auth;
 
 import com.ezen.musictest.domain.User;
 import lombok.Data;
+import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.oauth2.core.user.OAuth2User;
@@ -11,6 +12,7 @@ import java.util.Collection;
 import java.util.Map;
 
 @Data
+@RequiredArgsConstructor
 public class PrincipalDetails implements UserDetails, OAuth2User {
 
     private User user;     //콤포지션

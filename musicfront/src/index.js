@@ -7,6 +7,7 @@ import {BrowserRouter} from "react-router-dom";
 import {RecoilRoot} from "recoil";
 import {HelmetProvider} from "react-helmet-async";
 import {ScrollToTop} from "@/components";
+import CookiesProvider from "react-cookie/cjs/CookiesProvider";
 // 전역 axios 설정
 import axios from "axios";
 axios.defaults.baseURL = "http://localhost:3000/";
@@ -17,13 +18,15 @@ const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
   <>
     <HelmetProvider>
-      <BrowserRouter>
-        <ScrollToTop />
-        <RecoilRoot>
-          <GlobalStyle />
-          <App />
-        </RecoilRoot>
-      </BrowserRouter>
+      <CookiesProvider>
+        <BrowserRouter>
+          <ScrollToTop />
+            <RecoilRoot>
+              <GlobalStyle />
+            <App />
+          </RecoilRoot>
+        </BrowserRouter>
+      </CookiesProvider>
     </HelmetProvider>
   </>
 );

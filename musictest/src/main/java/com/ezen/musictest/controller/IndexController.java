@@ -62,11 +62,9 @@ public class IndexController {
 
     // my page에 접속한 사용자를 위해 user 정보를 반환한다.
     @GetMapping("/mypage")
-    public User user() {
-        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-        String username = auth.getName();
-        System.out.println(username);
-        User userEntity = userRepository.findByUsername(username);
+    public User user(@AuthenticationPrincipal PrincipalDetails userDetails) {
+        System.out.println("who's user???"+ userDetails.getUser().getUsername());
+        User userEntity = userRepository.findByUsername("test");
         return userEntity;
     }
 

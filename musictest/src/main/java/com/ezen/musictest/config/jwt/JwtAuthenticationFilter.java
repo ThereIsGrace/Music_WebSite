@@ -39,7 +39,6 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
         LoginRequestDto loginRequestDto = null;
         try{
             loginRequestDto = om.readValue(request.getInputStream(), LoginRequestDto.class);
-            System.out.println("이 값이 뭘까??:"+request.getInputStream());
             System.out.println(loginRequestDto.getUsername());
         }catch(Exception e){
             e.printStackTrace();
@@ -54,7 +53,7 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
                         loginRequestDto.getPassword()
                 );
 
-        System.out.println("JwtAuthenticationFilter : 토큰생성완료");
+        System.out.println("JwtAuthenticationFilter : making token done");
 
 
         // authentication() 함수가 호출 되면 인증 프로바이더가 유저 디테일 서비스의
@@ -70,7 +69,9 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
                 authenticationManager.authenticate(authenticationToken);
 
         PrincipalDetails principalDetails = (PrincipalDetails) authentication.getPrincipal();
+        System.out.println("1");
         System.out.println("Authentication : " + principalDetails.getUser().getUsername());
+        System.out.println("2");
         return authentication;
     }
 
@@ -84,6 +85,15 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
                 .withClaim("id", principalDetails.getUser().getId())
                 .withClaim("username",principalDetails.getUsername())
                 .sign(Algorithm.HMAC512(JwtProperties.SECRET));
+
+
+        String refreshToken = JWT.create()
+                .withSubject(principalDetails.getUsername())
+                .withExpiresAt(new Date(System.currentTimeMillis() + JwtProperties.EXPIRATION_TIME))
+                .withClaim("id", principalDetails.getUser().getId())
+                .withClaim("username",principalDetails.getUsername())
+                .sign(Algorithm.HMAC512(JwtProperties.SECRET));
         response.addHeader(JwtProperties.HEADER_STRING, JwtProperties.TOKEN_PREFIX+jwtToken);
+        response.addHeader("refreshToken", JwtProperties.TOKEN_PREFIX+refreshToken);
     }
 }
