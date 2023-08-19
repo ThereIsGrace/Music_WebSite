@@ -18,6 +18,12 @@ const myPage = async () => {
     }).catch((error) => {
       console.log(error);
     });
+
+
+    
+    
+
+
     console.log("정보를 잘 받아옴");
   } catch (error) {
     console.error(error.message);

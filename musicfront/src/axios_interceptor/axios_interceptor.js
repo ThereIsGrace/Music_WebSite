@@ -16,9 +16,12 @@ const axiosInstance = axios.create({
 
 axiosInstance.interceptors.request.use(function(config) {
     console.log('request sent');
-    config.headers.common["Authorization"] = access_token;
-    config.headers.common["Refresh-Token"] = refresh_token;
-    
+  config.headers["Authorization"] = access_token;
+  config.headers["Refresh-Token"] = refresh_token;
+
+    // config.headers["Authorization"] = access_token;
+    // config.headers["Reflash"] = refresh_token;
+
     return config;
 })
 
