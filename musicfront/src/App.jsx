@@ -1,5 +1,5 @@
 import {Routes, Route} from "react-router-dom";
-import {Home, Login, ProductDetail, Register, Mypage, Post, PopularSong, Board, BoardDetail, SearchResult} from "@/pages";
+import {Home, Login, ProductDetail, Register, Mypage, Post, PopularSong, Board, BoardDetail, SearchResult, SongDetail} from "@/pages";
 
 function App() {
   return (
@@ -15,6 +15,7 @@ function App() {
         <Route path="/popular" element={<PopularSong />} />
         <Route path="/board" element={<Board />} />
         <Route path="/board/:id" element={<BoardDetail />} />
+        <Route path="/songDetail/:id" element={<SongDetail />} />
       </Routes>
     </div>
   );
