@@ -29,6 +29,10 @@ public class User {
     // 일반 로그인인지 OAuth 로그인인지 확실히 알 수 잇기 위해 provider 추가
     private String provider;
     private String providerId;
+
+
+    private String refreshToken;
+
     @CreationTimestamp
     private Timestamp createDate;
 

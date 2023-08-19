@@ -7,6 +7,7 @@ import { useEffect } from "react";
 import axiosInstance from "@/axios_interceptor/axios_interceptor";
 
 const myPage = async () => {
+  console.log(localStorage.getItem('Authorization'))
 
   try {
     axiosInstance.get('/mypage')
@@ -28,7 +29,10 @@ const myPage = async () => {
   } catch (error) {
     console.error(error.message);
   }
+
 };
+
+
 
 export function Mypage() {
   useEffect(()=>{

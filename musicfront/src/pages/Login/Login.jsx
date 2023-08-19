@@ -49,7 +49,6 @@ export function Login() {
       }).catch((error) => {
         console.log(error);
       });
-      console.log("로그인 성공!");
       //movePage("/");
     } catch (error) {
       console.log(error.message);
