@@ -3,37 +3,40 @@ import {Header, Footer} from "@/components";
 import {Helmet} from "react-helmet-async";
 import styled from "styled-components/macro";
 import axios from "axios";
-import { useEffect } from "react";
+import {useEffect, useState} from "react";
 import axiosInstance from "@/axios_interceptor/axios_interceptor";
 
 const myPage = async () => {
-
   try {
-    axiosInstance.get('/mypage')
-    .then((response) => {
-      console.log(response);
-      return response;
-    }).then((data) => {
-      console.log(data);
-    }).catch((error) => {
-      console.log(error);
-    });
+    axiosInstance
+      .get("/mypage")
+      .then((response) => {
+        console.log(response);
+        // return response;
+      })
+      .then((data) => {
+        console.log(data);
+        console.log("정보를 잘 받아옴");
+      })
+      .catch((error) => {
+        console.error("instance error: ", error);
+      });
 
-
-    
-    
-
-
-    console.log("정보를 잘 받아옴");
+    console.log("axiosInstance 실행");
   } catch (error) {
-    console.error(error.message);
+    console.error("error in function: ", error.message);
   }
 };
 
 export function Mypage() {
-  useEffect(()=>{
-    myPage();
-  },[])
+  const [coin, setCoin] = useState(false);
+
+  useEffect(() => {
+    setTimeout(() => {
+      myPage();
+      setCoin(!coin);
+    }, 10000);
+  }, [coin]);
   return (
     <Wrap>
       <Helmet>
