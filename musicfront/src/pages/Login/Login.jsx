@@ -33,6 +33,7 @@ export function Login() {
           let jwtToken = response.headers.get("Authorization");
           console.log(jwtToken);
           localStorage.setItem("Authorization", jwtToken);
+          
           onSilentRefresh();
         }
       }).catch((error) => {
