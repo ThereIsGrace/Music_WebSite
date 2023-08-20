@@ -86,14 +86,15 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
                 .withClaim("username",principalDetails.getUsername())
                 .sign(Algorithm.HMAC512(JwtProperties.SECRET));
 
-
-        String refreshToken = JWT.create()
-                .withSubject(principalDetails.getUsername())
-                .withExpiresAt(new Date(System.currentTimeMillis() + JwtProperties.EXPIRATION_TIME))
+        String jwtToken2 = JWT.create()
+                .withSubject(JwtProperties.REFRESH_TOKEN)
+                .withExpiresAt(new Date(System.currentTimeMillis() + JwtProperties.REFRESH_EXPIRATION_TIME))
                 .withClaim("id", principalDetails.getUser().getId())
                 .withClaim("username",principalDetails.getUsername())
                 .sign(Algorithm.HMAC512(JwtProperties.SECRET));
+
+
         response.addHeader(JwtProperties.HEADER_STRING, JwtProperties.TOKEN_PREFIX+jwtToken);
-        response.addHeader("refreshToken", JwtProperties.TOKEN_PREFIX+refreshToken);
+        response.addHeader(JwtProperties.REFRESH_TOKEN, JwtProperties.TOKEN_PREFIX+jwtToken2);
     }
 }

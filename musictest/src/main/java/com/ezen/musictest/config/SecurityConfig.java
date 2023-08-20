@@ -1,6 +1,7 @@
 package com.ezen.musictest.config;
 
 
+import com.ezen.musictest.config.auth.PrincipalDetailsService;
 import com.ezen.musictest.config.jwt.JwtAuthenticationFilter;
 import com.ezen.musictest.config.jwt.JwtAuthorizationFilter;
 import com.ezen.musictest.repository.UserRepository;
@@ -20,6 +21,12 @@ public class SecurityConfig {
 
     @Autowired
     private UserRepository userRepository;
+
+
+    @Autowired
+    private PrincipalDetailsService principalDetailsService;
+
+
 
     @Autowired
     private CorsConfig corsConfig;
@@ -51,7 +58,7 @@ public class SecurityConfig {
             http
                     .addFilter(corsConfig.corsFilter())
                     .addFilter(new JwtAuthenticationFilter(authenticationManager))
-                    .addFilter(new JwtAuthorizationFilter(authenticationManager, userRepository));
+                    .addFilter(new JwtAuthorizationFilter(authenticationManager, userRepository,principalDetailsService));
         }
     }
 }
