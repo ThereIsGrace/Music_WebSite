@@ -1,8 +1,14 @@
 import {Footer, Header} from "@/components";
+import {useEffect} from "react";
 import {Helmet} from "react-helmet-async";
-import {SongDetailBody} from "@/pages/SongDetail";
 
 export const SongDetail = () => {
+  useEffect(() => {
+    const locationPathName = window.location.pathname;
+    const songId = locationPathName.replace("/songDetail/", "");
+    console.log(songId);
+  }, []);
+
   return (
     <>
       <Helmet>
@@ -19,7 +25,6 @@ export const SongDetail = () => {
         <meta property="og:description" content="뮤직 커뮤니티 사이트" />
       </Helmet>
       <Header />
-      <SongDetailBody />
       <Footer />
     </>
   );

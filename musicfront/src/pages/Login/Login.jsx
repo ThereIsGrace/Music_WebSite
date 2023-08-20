@@ -1,11 +1,11 @@
-import styled, { createGlobalStyle } from "styled-components/macro";
-import {Button, LinkButton, LoginModal} from "@/pages/Login/index";
-import {Form, Input, Label, Header, Footer, Heading2} from "@/components/index";
-import {useNavigate} from "react-router-dom";
-import {useState} from "react";
-import {Helmet} from "react-helmet-async";
-import axios from "axios";
+import { Footer, Form, Header, Heading2, Input, Label } from "@/components/index";
+import { Button, LinkButton, LoginModal } from "@/pages/Login/index";
 import { setCookie } from "@/utils/cookies";
+import axios from "axios";
+import { useState } from "react";
+import { Helmet } from "react-helmet-async";
+import { useNavigate } from "react-router-dom";
+import styled from "styled-components/macro";
 
 export function Login() {
   const [username, setUsername] = useState("");
@@ -23,32 +23,32 @@ export function Login() {
       console.log(data);
       console.log('로그인 시작하려함');
       axios.post('/login', data)
-      .then((response) => {
-        const {accessToken} = response.data;
+        .then((response) => {
+          const { accessToken } = response.data;
 
-        axios.defaults.headers.common["Authorization"] = `Bearer ${accessToken}`;
-        console.log('hello2222');
-        if(response.status === 200){
-          console.log('hello');
-          let jwtToken = response.headers.get("Authorization");
-          let refreshToken = response.headers.get("refreshToken");
-          console.log(jwtToken);
-          // 보안을 위해 accessToken과 refreshToken을 쿠키에 저장한다. 
-          setCookie('accessToken', jwtToken, {
-            path: "/",
-            secure: true,
-            sameSite:"none"
-          })
-          setCookie('refreshToken', refreshToken, {
-            path: "/",
-            secure: true,
-            sameSite:"none"
-          })
-          onSilentRefresh();
-        }
-      }).catch((error) => {
-        console.log(error);
-      });
+          axios.defaults.headers.common["Authorization"] = `Bearer ${accessToken}`;
+          console.log('hello2222');
+          if (response.status === 200) {
+            console.log('hello');
+            let jwtToken = response.headers.get("Authorization");
+            let refreshToken = response.headers.get("refreshToken");
+            console.log(jwtToken);
+            // 보안을 위해 accessToken과 refreshToken을 쿠키에 저장한다. 
+            setCookie('accessToken', jwtToken, {
+              path: "/",
+              secure: true,
+              sameSite: "none"
+            })
+            setCookie('refreshToken', refreshToken, {
+              path: "/",
+              secure: true,
+              sameSite: "none"
+            })
+            onSilentRefresh();
+          }
+        }).catch((error) => {
+          console.log(error);
+        });
       console.log("로그인 성공!");
       //movePage("/");
     } catch (error) {
@@ -64,8 +64,12 @@ export function Login() {
 
   const onSilentRefresh = () => {
     console.log('silentRefresh시작');
-    
-}
+
+  }
+  const Oauthlogin = (provider) => {
+    window.location.href = "http://localhost:8094/auth/authorize/" + provider;
+
+  }
   return (
     <>
       <Helmet>
@@ -111,7 +115,16 @@ export function Login() {
         <Button type="button" onClick={login}>
           로그인
         </Button>
-        <LinkButton to="/register">회원가입</LinkButton>
+        <Button onClick={() => { Oauthlogin("google") }} >
+          구글로그인
+        </Button>
+        <Button onClick={() => { Oauthlogin("naver") }} >
+          네이버
+        </Button>
+        <Button onClick={() => { Oauthlogin("facebook") }} >
+          페이스북
+        </Button>
+        <LinkButton LinkButton to="/register">회원가입</LinkButton>
         {isModalOpen && (
           <LoginModal isOpen={isModalOpen} onClose={closeModal}>
             아이디와 비밀번호를 확인해주세요.

@@ -43,8 +43,8 @@ spring:
             - email
             - public_profile
         naver:
-          clientId: "AOvKLgPCAHV_1IcY7fqr"
-          clientSecret: "2RKuQ0RCQm"
+          clientId: "RuFDtPwREu_sy9hg6vPv"
+          clientSecret: "bVJcnE_F7b"
           clientAuthenticationMethod: post
           authorizationGrantType: authorization_code
           redirectUri: "http://localhost:8094/login/oauth2/code/naver"
