@@ -11,9 +11,13 @@ export function RecentSong(props) {
       <Link to={`/songDetail/${song.id}`}>
         <Image src={song.album.imgList[2].url} alt="앨범 이미지"></Image>
       </Link>
-      <span className="title">{song.name}</span>
+      <Link to={`/songDetail/${song.id}`}>
+        <span className="title">{song.name}</span>
+      </Link>
       <span className="artist">{song.artistList[0].name}</span>
-      <span className="album">{song.album.title}</span>
+      <Link to={`/albumDetail/${song.album.id}`}>
+        <span className="album">{song.album.title}</span>
+      </Link>
     </StyledProductContainer>
   );
 }
@@ -40,7 +44,7 @@ const StyledProductContainer = styled.div`
   & .title {
     font-style: normal;
     margin-top: 12px;
-    font-weight: 400;
+    font-weight: 700;
     font-size: 16px;
     line-height: 24px;
     color: #212529;
@@ -57,7 +61,7 @@ const StyledProductContainer = styled.div`
     font-style: normal;
     color: #212529;
     margin-top: 3px;
-    font-weight: 700;
+    font-weight: 500;
     font-size: 15px;
     line-height: 22px;
   }

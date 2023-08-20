@@ -1,12 +1,17 @@
 import {Image} from "@/components";
 import {useEffect, useState} from "react";
 import styled from "styled-components";
+import raccoon from "@/assets/Logo/raccoon.gif";
+import StyledLoadingImgContainer from "@/assets/Styles/StyledLoadingImgContainer";
+import {useRecoilState} from "recoil";
+import {songNameAtom} from "..";
 
 export const SongDetailBody = () => {
   const [songId, setSongId] = useState("");
   const trackAPI = "https://www.music-flo.com/api/meta/v1/track/" + songId;
   const [songDetail, setSongDetail] = useState(null);
   const [coin, setCoin] = useState(false);
+  const [, setSongName] = useRecoilState(songNameAtom);
 
   const fetchData = async () => {
     const res = await fetch(trackAPI);
@@ -36,6 +41,8 @@ export const SongDetailBody = () => {
         setSongId(getSongData);
         getSongDetail();
         setCoin(!coin);
+      } else {
+        setSongName(songDetail.name);
       }
     }, 1000);
     console.log(songDetail);
@@ -43,9 +50,9 @@ export const SongDetailBody = () => {
 
   if (songDetail === null || songDetail === undefined) {
     return (
-      <Loading>
-        <div>로딩로딩로딩로딩</div>
-      </Loading>
+      <StyledLoadingImgContainer role="alert">
+        <Image src={raccoon} alt="로딩로딩로딩" />
+      </StyledLoadingImgContainer>
     );
   }
 
@@ -62,9 +69,11 @@ export const SongDetailBody = () => {
     return (
       <>
         <dt>작사</dt>
-        {filteredArray.map((artist, index) => (
-          <>{index === 0 ? <>{artist.name}</> : <>, {artist.name}</>}</>
-        ))}
+        <dd>
+          {filteredArray.map((artist, index) => (
+            <>{index === 0 ? <>{artist.name}</> : <>, {artist.name}</>}</>
+          ))}
+        </dd>
       </>
     );
   };
@@ -82,9 +91,11 @@ export const SongDetailBody = () => {
     return (
       <>
         <dt>작곡</dt>
-        {filteredArray.map((artist, index) => (
-          <>{index === 0 ? <>{artist.name}</> : <>, {artist.name}</>}</>
-        ))}
+        <dd>
+          {filteredArray.map((artist, index) => (
+            <>{index === 0 ? <>{artist.name}</> : <>, {artist.name}</>}</>
+          ))}
+        </dd>
       </>
     );
   };
@@ -102,9 +113,11 @@ export const SongDetailBody = () => {
     return (
       <>
         <dt>편곡</dt>
-        {filteredArray.map((artist, index) => (
-          <>{index === 0 ? <>{artist.name}</> : <>, {artist.name}</>}</>
-        ))}
+        <dd>
+          {filteredArray.map((artist, index) => (
+            <>{index === 0 ? <>{artist.name}</> : <>, {artist.name}</>}</>
+          ))}
+        </dd>
       </>
     );
   };
@@ -122,20 +135,15 @@ export const SongDetailBody = () => {
             {artistType1()}
             {artistType2()}
             {artistType3()}
+            <dt>가사</dt>
+            <dd></dd>
           </dl>
         </div>
-        <div></div>
         <div className="lyrics">{songDetail.lyrics}</div>
       </div>
     </StyledSongDetail>
   );
 };
-
-const Loading = styled.div`
-  margin: 200px auto 0 auto;
-  width: 300px;
-  height: 400px;
-`;
 
 const StyledSongDetail = styled.div`
   & .productContainer {
@@ -156,7 +164,29 @@ const StyledSongDetail = styled.div`
   & .songContent {
     white-space: pre-wrap;
     margin: 0px auto;
-    width: 800px;
+    width: 600px;
+  }
+
+  & dl dt {
+    float: left;
+    width: 48px;
+    padding-top: 20px;
+    font-weight: 700;
+  }
+
+  & dt {
+    display: block;
+  }
+
+  & dd {
+    display: block;
+    margin-inline-start: 40px;
+    padding-top: 21px;
+    margin-left: 48px;
+  }
+
+  & .lyrics {
+    margin-top: 21px;
   }
 
   & .userInfoContainer {

@@ -1,5 +1,5 @@
 import {Routes, Route} from "react-router-dom";
-import {Home, Login, ProductDetail, Register, Mypage, Post, PopularSong, Board, BoardDetail, SearchResult, SongDetail} from "@/pages";
+import {Home, Login, ProductDetail, Register, Mypage, Post, PopularSong, Board, BoardDetail, SearchResult, SongDetail, RecentSong, AlbumDetail} from "@/pages";
 
 function App() {
   return (
@@ -16,6 +16,8 @@ function App() {
         <Route path="/board" element={<Board />} />
         <Route path="/board/:id" element={<BoardDetail />} />
         <Route path="/songDetail/:id" element={<SongDetail />} />
+        <Route path="/albumDetail/:id" element={<AlbumDetail />} />
+        <Route path="/recent" element={<RecentSong />} />
       </Routes>
     </div>
   );

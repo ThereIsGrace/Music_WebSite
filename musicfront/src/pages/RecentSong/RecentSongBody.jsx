@@ -1,20 +1,16 @@
-import styled from "styled-components";
-import {Link} from "react-router-dom";
 import {Heading2, UseRecentSongList} from "@/components";
+import styled from "styled-components";
 
-export function MainSong() {
+export const RecentSongBody = () => {
   return (
     <StyledProduct>
       <div className="inner">
-        <Heading2>최신 발매</Heading2>
-        <UseRecentSongList count={8} />
-        <Link to="/recent">
-          <span className="recent">최신 곡 더 보기</span>
-        </Link>
+        <Heading2>최신곡</Heading2>
+        <UseRecentSongList />
       </div>
     </StyledProduct>
   );
-}
+};
 
 const StyledProduct = styled.div`
   & .inner {

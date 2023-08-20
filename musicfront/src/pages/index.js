@@ -9,3 +9,5 @@ export * from "@/pages/Board/Board";
 export * from "@/pages/BoardDetail/BoardDetail";
 export * from "@/pages/SearchResult/SearchResult";
 export * from "@/pages/SongDetail/SongDetail";
+export * from "@/pages/RecentSong/RecentSong";
+export * from "@/pages/AlbumDetail/AlbumDetail";
