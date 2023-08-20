@@ -64,12 +64,12 @@ public class IndexController {
     @GetMapping("/mypage")
     public User user(Authentication authentication,
                      @AuthenticationPrincipal PrincipalDetails userDetails) {
-        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        //Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         PrincipalDetails principalDetails = (PrincipalDetails) authentication.getPrincipal();
-        String username = auth.getName();
-        System.out.println(username);
+        //String username = auth.getName();
+        //System.out.println(username);
         System.out.println("authentication:" + principalDetails.getUser());
-        User userEntity = userRepository.findByUsername(username);
+        User userEntity = userRepository.findByUsername(principalDetails.getUsername());
         return userEntity;
     }
 

@@ -37,11 +37,9 @@ public class JwtAuthorizationFilter extends BasicAuthenticationFilter {
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain chain) throws IOException, ServletException {
         System.out.println("Token Authorization Started!!!");
-        String header = request.getHeader("accessToken");
-        String refreshToken = request.getHeader("refreshToken");
-        System.out.println(request.toString());
-        System.out.println("header!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
-        System.out.println("header:" + header);
+        String header = request.getHeader(JwtProperties.HEADER_STRING);
+
+        System.out.println("header:" + request);
         if (header == null || !header.startsWith(JwtProperties.TOKEN_PREFIX)) {
             chain.doFilter(request, response);
             return;
@@ -56,8 +54,6 @@ public class JwtAuthorizationFilter extends BasicAuthenticationFilter {
                 .replace(JwtProperties.TOKEN_PREFIX, "");
 
         if ((refreshJwtToken != null && principalDetailsService.refreshTokenValidation(refreshJwtToken) || accessJwtToken !=null)) {
-
-
             if(!validateToken(accessJwtToken,request) ) {
                 String username = JWT.require(Algorithm.HMAC512(JwtProperties.SECRET)).build().verify(refreshJwtToken)
                         .getClaim("username").asString();

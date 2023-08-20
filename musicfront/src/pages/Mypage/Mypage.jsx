@@ -5,12 +5,29 @@ import styled from "styled-components/macro";
 import axios from "axios";
 import { useEffect } from "react";
 import axiosInstance from "@/axios_interceptor/axios_interceptor";
+import { getCookie, setCookie } from "@/utils/cookies";
+
+const access_token = getCookie('accessToken');
+const refresh_token = getCookie('refreshToken');
+
 
 const myPage = async () => {
-  console.log(localStorage.getItem('Authorization'))
+
+  axiosInstance.get("/mypage")
+  .then((response) => {
+    console.log(response);
+    // return response;
+  })
+  .then((data) => {
+    console.log(data);
+    console.log("정보를 잘 받아옴");
+  })
+  .catch((error) => {
+    console.error("instance error: ", error);
+  });
 
   try {
-    axiosInstance.get('/mypage')
+  /* axiosInstance.get('/mypage')
     .then((response) => {
       console.log(response);
       return response;
@@ -18,12 +35,42 @@ const myPage = async () => {
       console.log(data);
     }).catch((error) => {
       console.log(error);
+    });*/ 
+/*
+    axios.interceptors.request.use(
+      (config) => {
+        // getToken() - 클라이언트에 저장되어 있는 액세스 토큰을 가져오는 함수      
+        console.log('request sent');
+        console.log(config);
+
+        //       console.log(JSON.stringify(config));
+
+
+        config.headers["Authorization"] = access_token;
+        config.headers["refreshToken"] = refresh_token;
+
+        
+
+        return config;
+      },
+      (error) => {
+        console.log(error);
+        return Promise.reject(error);
+      }
+    );
+    axios.get('/mypage')
+      .then((response) => {
+
+      let jwtToken = response.headers.get("Authorization");
+      let jwtToken2 = response.headers.get("refreshToken");
+//      localStorage.setItem("Authorization", jwtToken);
+//      localStorage.setItem("refreshToken", jwtToken2);
+
+    }).catch((error) => {
+      console.log(error);
     });
-
-
     
-    
-
+*/
 
     console.log("정보를 잘 받아옴");
   } catch (error) {

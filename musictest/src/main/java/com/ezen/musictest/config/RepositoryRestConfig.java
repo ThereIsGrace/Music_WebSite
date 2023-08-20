@@ -20,6 +20,6 @@ public class RepositoryRestConfig implements RepositoryRestConfigurer {
     public void configureRepositoryRestConfiguration(RepositoryRestConfiguration config, CorsRegistry cors) {
 //        RepositoryRestConfigurer.super.configureRepositoryRestConfiguration(config, cors);
         config.exposeIdsFor(Board.class);
-        config.exposeIdsFor(User.class);
+        //config.exposeIdsFor(User.class);
     }
 }

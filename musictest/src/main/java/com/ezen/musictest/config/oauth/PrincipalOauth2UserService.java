@@ -29,10 +29,6 @@ public class PrincipalOauth2UserService extends DefaultOAuth2UserService {
 
         OAuth2UserInfo oAuth2UserInfo = null;
 
-
-
-
-
         return super.loadUser(userRequest);
     }
 }

@@ -2,6 +2,7 @@
   "name": "frontendo-saja",
   "version": "0.1.0",
   "private": true,
+  "proxy": "http://localhost:8094",
   "dependencies": {
     "@craco/craco": "^7.1.0",
     "@testing-library/jest-dom": "^5.16.5",
@@ -32,7 +33,6 @@
     "web-vitals": "^2.1.4",
     "yarn": "^1.22.19"
   },
-  "proxy": "http://localhost:8094",
   "scripts": {
     "start": "craco start",
     "build": "craco build",

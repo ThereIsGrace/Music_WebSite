@@ -8,19 +8,26 @@ const refresh_token = getCookie('refreshToken');
 const axiosInstance = axios.create({
     baseURL: SERVER_URL,
     headers: {
-        "content-type": "application/json;charset=UTF-8",
-        accept: "application/json"
-    },
-    withCredentials: true
+      "Accept": "application/json, text/plain, */*",    
+      // 추가  
+      "Access-Control-Allow-Origin": `http://localhost:3000`,
+      'Access-Control-Allow-Credentials':"true",
+  },
+  withCredentials: true,
+
 });
+axiosInstance.defaults.withCredentials = true;
 
 axiosInstance.interceptors.request.use(function(config) {
     console.log('request sent');
-  config.headers["Authorization"] = access_token;
-  config.headers["Refresh-Token"] = refresh_token;
 
-    // config.headers["Authorization"] = access_token;
-    // config.headers["Reflash"] = refresh_token;
+    console.log(config);
+
+    config.headers["Authorization"] = access_token;
+    config.headers["refreshToken"] = refresh_token;
+
+//    config.headers["Authorization"] = localStorage.getItem("Authorization");
+//    config.headers["refreshToken"] = localStorage.getItem("refreshToken");
 
     return config;
 })
@@ -29,22 +36,9 @@ axiosInstance.interceptors.response.use(
     function (response) {
       return response;
     },
-    async function (err) {
-      if (err.response && err.response.data.status === "403 FORBIDDEN") {
-        try {
-          // 기존에 쿠키에 저장된 refresh token을 가져옴
-          // refresh token만 가지고 access token 발급을 요청할 수 있도록 백엔드 팀원분들에게 요청 후 api를 설정함
-          const refreshToken = await getCookie("refresh_token");
-          axios.defaults.headers.common["refresh-token"] = refreshToken;
-          // 토큰을 다시 발급 받는 api 호출 함수 
-          refreshAccessToken();
-        } catch (err) {
-          console.log("error", err.response);
-          window.location.href = "/";
-        }
-        return Promise.reject(err);
-      }
-      return Promise.reject(err);
+    (error) => {
+      console.log(error);
+      return Promise.reject(error);
     }
   );
   

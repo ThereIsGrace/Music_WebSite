@@ -32,9 +32,12 @@ export function Login() {
           console.log('hello');
           let jwtToken = response.headers.get("Authorization");
           let refreshToken = response.headers.get("refreshToken");
-          console.log(jwtToken);
+          console.log(jwtToken); 
+//          localStorage.setItem("Authorization",jwtToken);
+//          localStorage.setItem("refreshToken",jwtToken);
+
           // 보안을 위해 accessToken과 refreshToken을 쿠키에 저장한다. 
-          setCookie('accessToken', jwtToken, {
+          setCookie('Authorization', jwtToken, {
             path: "/",
             secure: true,
             sameSite:"none"
