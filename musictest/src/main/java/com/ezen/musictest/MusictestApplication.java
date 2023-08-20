@@ -31,7 +31,7 @@ public class MusictestApplication implements CommandLineRunner {
 	//mock 데이터
 	@Override
 	public void run(String... args) throws Exception {
-		Board board1
+	/*	Board board1
 				= new Board().builder()
 				.title("title1")
 				.content("<h3>contentcontentcontentcontentcontentcontent</h3>")
@@ -118,13 +118,13 @@ public class MusictestApplication implements CommandLineRunner {
 
 		boardRepository.saveAll(Arrays.asList(
 				board1, board2, board3, board4, board5,
-				board6, board7, board8, board9, board10,
+				board6, board7, board8, bo ard9, board10,
 				board11, board12
 		));
 
 		for(Board board : boardRepository.findAll()){
 			logger.info("title: " + board.getTitle());
-		}
+		}*/
 	}
 
 	public static void main(String[] args) {

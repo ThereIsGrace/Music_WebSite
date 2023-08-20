@@ -6,16 +6,24 @@ import com.auth0.jwt.exceptions.TokenExpiredException;
 import com.ezen.musictest.config.jwt.JwtProperties;
 import com.ezen.musictest.domain.User;
 import com.ezen.musictest.repository.UserRepository;
+import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.Jwts;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
+import io.jsonwebtoken.ExpiredJwtException;
+import io.jsonwebtoken.MalformedJwtException;
+import io.jsonwebtoken.UnsupportedJwtException;
+import java.nio.charset.StandardCharsets;
+import java.security.InvalidParameterException;
+import java.security.Key;
+import java.security.SignatureException;
+import java.util.Date;
 import javax.servlet.http.HttpServletRequest;
 import java.util.Calendar;
-import java.util.Date;
 import java.util.Optional;
 
 @Service
@@ -59,7 +67,6 @@ public class PrincipalDetailsService implements UserDetailsService {
                 .withClaim("id", user.getId())
                 .withClaim("username",user.getUsername())
                 .sign(Algorithm.HMAC512(JwtProperties.SECRET));
-
     }
 
     public String createRefreshToken(User user) {
@@ -70,54 +77,17 @@ public class PrincipalDetailsService implements UserDetailsService {
                 .withClaim("username",user.getUsername())
                 .sign(Algorithm.HMAC512(JwtProperties.SECRET));
     }
-    public void logout(HttpServletRequest request) {
+    public void logout(String token) {
         try {
-          /*  checkHeaderValid(request);
-            String refreshJwtToken = request
+//            checkHeaderValid(request);
+           /* String refreshJwtToken = request
                     .getHeader(JwtProperties.REFRESH_HEADER_PREFIX)
-                    .replace(JwtProperties.TOKEN_PREFIX, "");
-            removeRefreshToken(refreshJwtToken);*/
+                    .replace(JwtProperties.TOKEN_PREFIX, "");*/
+            removeRefreshToken(token);
         } catch (Exception e) {
 
         }
     }
-
-    public void checkHeaderValid(HttpServletRequest request) {
-        /*  String accessJwt = request.getHeader(JwtProperties.HEADER_PREFIX);
-        String refreshJwt = request.getHeader(JwtProperties.REFRESH_HEADER_PREFIX);
-
-        if (accessJwt == null) {
-
-        } else if (refreshJwt == null) {
-        }*/
-    }
-
-
-    public boolean isNeedToUpdateRefreshToken(String token) {
-        try {
-            Date expiresAt = JWT.require(Algorithm.HMAC512(JwtProperties.SECRET))
-                    .build()
-                    .verify(token)
-                    .getExpiresAt();
-
-            Date current = new Date(System.currentTimeMillis());
-            Calendar calendar = Calendar.getInstance();
-            calendar.setTime(current);
-            calendar.add(Calendar.DATE, 1);
-
-            Date after1dayFromToday = calendar.getTime();
-
-            // 1일 이내에 만료
-            if (expiresAt.before(after1dayFromToday)) {
-//                log.info("리프레쉬 토큰 7일 이내 만료");
-                return true;
-            }
-        } catch (TokenExpiredException e) {
-            return true;
-        }
-        return false;
-    }
-
 
     public Boolean refreshTokenValidation(String token) {
 
@@ -131,5 +101,29 @@ public class PrincipalDetailsService implements UserDetailsService {
 
     }
 
+    public Boolean isTokenExpired(String token){
+        System.out.println("test");
+        try {
+            Date expiration = validTokenAndReturnBody(token).getExpiration();
+            return expiration.before(new Date());
+        }catch (Exception e) {
+            return true;
+        }
+
+    }
+
+    // 토큰 해석
+    public Claims validTokenAndReturnBody(String token) {
+        try {
+            return Jwts.parser()
+                    .setSigningKey(JwtProperties.SECRET.getBytes())
+                    .parseClaimsJws(token)
+                    .getBody();
+        }
+        catch(ExpiredJwtException | UnsupportedJwtException | MalformedJwtException | IllegalArgumentException e ) {
+            e.printStackTrace();
+            throw new InvalidParameterException("유효하지 않은 토큰입니다");
+        }
+    }
 
 }

@@ -6,6 +6,7 @@ import com.ezen.musictest.config.auth.PrincipalDetails;
 import com.ezen.musictest.config.auth.PrincipalDetailsService;
 import com.ezen.musictest.domain.User;
 import com.ezen.musictest.repository.UserRepository;
+import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -54,11 +55,11 @@ public class JwtAuthorizationFilter extends BasicAuthenticationFilter {
                 .replace(JwtProperties.TOKEN_PREFIX, "");
 
         if ((refreshJwtToken != null && principalDetailsService.refreshTokenValidation(refreshJwtToken) || accessJwtToken !=null)) {
-            if(!validateToken(accessJwtToken,request) ) {
+            if(principalDetailsService.isTokenExpired(accessJwtToken) ) {
                 String username = JWT.require(Algorithm.HMAC512(JwtProperties.SECRET)).build().verify(refreshJwtToken)
                         .getClaim("username").asString();
-                String id = JWT.require(Algorithm.HMAC512(JwtProperties.SECRET)).build().verify(refreshJwtToken)
-                        .getClaim("id").asString();
+//                String id = JWT.require(Algorithm.HMAC512(JwtProperties.SECRET)).build().verify(refreshJwtToken)
+//                        .getClaim("id").asString();
 
                 User user = new User();
                 user.setUsername(username);
@@ -72,11 +73,12 @@ public class JwtAuthorizationFilter extends BasicAuthenticationFilter {
             String username = JWT.require(Algorithm.HMAC512(JwtProperties.SECRET)).build().verify(accessJwtToken)
                     .getClaim("username").asString();
 
+
             System.out.println("authorize username:" + username);
             if (username != null) {
                 User user = userRepository.findByUsername(username);
 
-                if (principalDetailsService.isNeedToUpdateRefreshToken(refreshJwtToken)) {
+                if (principalDetailsService.isTokenExpired(refreshJwtToken)) {
                     refreshJwtToken = principalDetailsService.createRefreshToken(user);
                     response.addHeader(JwtProperties.REFRESH_TOKEN, JwtProperties.TOKEN_PREFIX + refreshJwtToken);
                     principalDetailsService.setRefreshToken(username, refreshJwtToken);
@@ -96,7 +98,6 @@ public class JwtAuthorizationFilter extends BasicAuthenticationFilter {
 
                 response.addHeader(JwtProperties.HEADER_STRING, JwtProperties.TOKEN_PREFIX + accessJwtToken);
                 response.addHeader(JwtProperties.REFRESH_TOKEN, JwtProperties.TOKEN_PREFIX + refreshJwtToken);
-
             }
         }
         chain.doFilter(request,response);

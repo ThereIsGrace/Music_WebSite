@@ -4,6 +4,8 @@ package com.ezen.musictest.config;
 import com.ezen.musictest.config.auth.PrincipalDetailsService;
 import com.ezen.musictest.config.jwt.JwtAuthenticationFilter;
 import com.ezen.musictest.config.jwt.JwtAuthorizationFilter;
+import com.ezen.musictest.config.jwt.OAuthSuccessHandler;
+import com.ezen.musictest.config.oauth.PrincipalOauth2UserService;
 import com.ezen.musictest.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
@@ -13,11 +15,23 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.oauth2.client.userinfo.OAuth2UserRequest;
+import org.springframework.security.oauth2.client.userinfo.OAuth2UserService;
+import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
+import org.springframework.security.web.authentication.Http403ForbiddenEntryPoint;
+import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
+import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 @Configuration
 @EnableWebSecurity  // 시큐리티 활성화 -> 기본 스프링 필터체인에 등록
-public class SecurityConfig {
+public class SecurityConfig implements WebMvcConfigurer {
+
+    private String connectPath = "/upload/**";
+
+    private String resourcePath = "file:///C:/upload/";
 
     @Autowired
     private UserRepository userRepository;
@@ -26,14 +40,32 @@ public class SecurityConfig {
     @Autowired
     private PrincipalDetailsService principalDetailsService;
 
-
+    @Autowired
+    private PrincipalOauth2UserService PrincipalOauth2UserService;
 
     @Autowired
     private CorsConfig corsConfig;
 
+//    public OAuthSuccessHandler oAuthSuccessHandler;
+
+    /*
+     * Oauth 인증 성공 핸들러
+     * */
+    @Bean
+    public OAuthSuccessHandler oAuth2AuthenticationSuccessHandler() {
+        return new OAuthSuccessHandler(principalDetailsService);
+    }
+
+    @Override
+    public void addResourceHandlers(ResourceHandlerRegistry registry) {
+        registry.addResourceHandler(connectPath).addResourceLocations(resourcePath); //외부이미지 경로
+    }
+
+
+
     @Bean
     SecurityFilterChain filterChain(HttpSecurity http) throws Exception{
-        return http
+        http
                 .csrf().disable()
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 .and()
@@ -48,7 +80,23 @@ public class SecurityConfig {
                         .antMatchers("/api/v1/admin")
                         .access("hasRole('ROLE_ADMIN')")
                         .anyRequest().permitAll())
-                .build();
+                  .oauth2Login()
+                  .redirectionEndpoint()
+                  .baseUri("/login/oauth2/code/*")
+                .and()
+                .userInfoEndpoint()
+                .userService(PrincipalOauth2UserService)
+                .and()
+                .authorizationEndpoint()
+                .baseUri("/auth/authorize")
+                 .and()
+                 .successHandler(oAuth2AuthenticationSuccessHandler())
+                 .and()
+                 .exceptionHandling()
+                 .authenticationEntryPoint(new Http403ForbiddenEntryPoint());
+
+         return http.build();
+
     }
 
     public class MyCustomDsl extends AbstractHttpConfigurer<MyCustomDsl, HttpSecurity>{
@@ -57,7 +105,7 @@ public class SecurityConfig {
             AuthenticationManager authenticationManager = http.getSharedObject(AuthenticationManager.class);
             http
                     .addFilter(corsConfig.corsFilter())
-                    .addFilter(new JwtAuthenticationFilter(authenticationManager))
+                    .addFilter(new JwtAuthenticationFilter(authenticationManager,principalDetailsService))
                     .addFilter(new JwtAuthorizationFilter(authenticationManager, userRepository,principalDetailsService));
         }
     }

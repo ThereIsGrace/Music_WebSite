@@ -3,9 +3,12 @@ package com.ezen.musictest.config.jwt;
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
 import com.ezen.musictest.config.auth.PrincipalDetails;
+import com.ezen.musictest.config.auth.PrincipalDetailsService;
 import com.ezen.musictest.dto.LoginRequestDto;
+import com.ezen.musictest.repository.UserRepository;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+import io.jsonwebtoken.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.boot.autoconfigure.security.oauth2.resource.OAuth2ResourceServerProperties;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -20,15 +23,25 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.security.InvalidParameterException;
 import java.util.Date;
 
 @RequiredArgsConstructor
 public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilter {
 
     private final AuthenticationManager authenticationManager;
+    private PrincipalDetailsService principalDetailsService;
 
     // Authentication 객체 만들어서 리턴 => 의존 : AuthenticationManager;
     // 인증 요청시에 실행되는 함수 => /login
+
+    public JwtAuthenticationFilter(AuthenticationManager authenticationManager, PrincipalDetailsService principalDetailsService) {
+        super(authenticationManager);
+        this.authenticationManager=authenticationManager;
+        this.principalDetailsService = principalDetailsService;
+    }
+
+
     @Override
     public Authentication attemptAuthentication(HttpServletRequest request, HttpServletResponse response) throws AuthenticationException {
         System.out.println("JwtAuthenticationFilter : start");
@@ -79,22 +92,24 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
     protected void successfulAuthentication(HttpServletRequest request, HttpServletResponse response, FilterChain chain, Authentication authResult) throws IOException, ServletException {
         PrincipalDetails principalDetails = (PrincipalDetails) authResult.getPrincipal();
 
-        String jwtToken = JWT.create()
+        String jwtToken = principalDetailsService.createhAccessToken(principalDetails.getUser());
+        /*JWT.create()
                 .withSubject(principalDetails.getUsername())
                 .withExpiresAt(new Date(System.currentTimeMillis() + JwtProperties.EXPIRATION_TIME))
                 .withClaim("id", principalDetails.getUser().getId())
-                .withClaim("username",principalDetails.getUsername())
+                .withClaim("username", principalDetails.getUsername())
                 .sign(Algorithm.HMAC512(JwtProperties.SECRET));
-
-        String jwtToken2 = JWT.create()
+*/
+        String jwtToken2 = principalDetailsService.createRefreshToken(principalDetails.getUser());
+        principalDetailsService.setRefreshToken(principalDetails.getUser().getUsername(),jwtToken2);
+                /*JWT.create()
                 .withSubject(JwtProperties.REFRESH_TOKEN)
                 .withExpiresAt(new Date(System.currentTimeMillis() + JwtProperties.REFRESH_EXPIRATION_TIME))
                 .withClaim("id", principalDetails.getUser().getId())
-                .withClaim("username",principalDetails.getUsername())
+                .withClaim("username", principalDetails.getUsername())
                 .sign(Algorithm.HMAC512(JwtProperties.SECRET));
-
-
-        response.addHeader(JwtProperties.HEADER_STRING, JwtProperties.TOKEN_PREFIX+jwtToken);
-        response.addHeader(JwtProperties.REFRESH_TOKEN, JwtProperties.TOKEN_PREFIX+jwtToken2);
+*/
+        response.addHeader(JwtProperties.HEADER_STRING, JwtProperties.TOKEN_PREFIX + jwtToken);
+        response.addHeader(JwtProperties.REFRESH_TOKEN, JwtProperties.TOKEN_PREFIX + jwtToken2);
     }
 }
