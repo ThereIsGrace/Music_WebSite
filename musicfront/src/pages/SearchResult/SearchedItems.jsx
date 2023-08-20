@@ -4,6 +4,8 @@ import styled from "styled-components";
 import {Image} from "@/components";
 
 export function SearchedItems(props) {
+  const url = "/songDetail/";
+
   useEffect(() => {
     console.log(props.data);
   }, [props]);
@@ -13,9 +15,9 @@ export function SearchedItems(props) {
         props.data.list.map((track) => (
           <div>
             <div>
-              <a href="#">
+              <Link to={url + track.id}>
                 <Image src={track.album.imgList[2].url} />
-              </a>
+              </Link>
             </div>
             <div>{track.name}</div>
           </div>

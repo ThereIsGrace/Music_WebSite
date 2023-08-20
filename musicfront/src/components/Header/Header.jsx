@@ -55,10 +55,10 @@ export function Header() {
       <nav>
         <ul>
           <li>
-            <Link to="/">아티스트</Link>
+            <Link to="/recent">최신곡</Link>
           </li>
           <li>
-            <Link to="/popular">인기</Link>
+            <Link to="/popular">인기곡</Link>
           </li>
           <li>
             <Link to="/board">커뮤니티</Link>
