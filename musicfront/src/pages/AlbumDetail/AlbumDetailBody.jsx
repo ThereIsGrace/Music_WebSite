@@ -6,6 +6,7 @@ import {useRecoilState} from "recoil";
 import {albumNameAtom} from "..";
 import styled from "styled-components";
 import {TrackItem} from "@/pages/AlbumDetail";
+import {Link} from "react-router-dom";
 
 export const AlbumDetailBody = () => {
   const [albumId, setAlbumId] = useState("");
@@ -69,52 +70,47 @@ export const AlbumDetailBody = () => {
   }
 
   return (
-    <StyledAlbumDetail>
-      <div className="albumImg">
-        <Image src={albumDetail.imgList[3].url} />
-      </div>
-      <div className="albumContent">
-        <div className="titleDescription">{albumDetail.name}</div>
-        <div className="artistDescription">{albumDetail.representationArtist.name}</div>
-        <div></div>
-        <StyledTracklist>
-          <table className="track_list_table">
-            <colgroup>
-              <col width="180" data-cell="곡/가사" />
-              <col width="130" data-cell="아티스트" />
-              <col width="150" data-cell="앨범" />
-            </colgroup>
-            <thead>
-              <tr>
-                <th scope="col">번호</th>
-                <th scope="col" className="info">
-                  곡/앨범
-                </th>
-                <th scope="col" className="artist">
-                  아티스트
-                </th>
-              </tr>
-            </thead>
-            <tbody>
-              <TrackItem data={tracklist} />
-            </tbody>
-          </table>
-        </StyledTracklist>
-      </div>
-    </StyledAlbumDetail>
+    <>
+      <StyledAlbumDetail>
+        <div className="albumImg">
+          <Link to={window.location.pathname}>
+            <Image src={albumDetail.imgList[3].url} />
+          </Link>
+        </div>
+        <div className="albumContent">
+          <div className="titleDescription">{albumDetail.title}</div>
+          <div className="artistDescription">{albumDetail.representationArtist.name}</div>
+          <div></div>
+        </div>
+      </StyledAlbumDetail>
+      <StyledTracklist>
+        <table className="track_list_table">
+          <colgroup>
+            <col width="10" data-cell="번호" />
+            <col width="130" data-cell="곡/앨범" />
+            <col width="150" data-cell="아티스트" />
+          </colgroup>
+          <thead>
+            <tr>
+              <th scope="col">번호</th>
+              <th scope="col" className="info">
+                곡/앨범
+              </th>
+              <th scope="col" className="artist">
+                아티스트
+              </th>
+            </tr>
+          </thead>
+          <tbody>
+            <TrackItem data={tracklist} />
+          </tbody>
+        </table>
+      </StyledTracklist>
+    </>
   );
 };
 
 const StyledAlbumDetail = styled.div`
-  & .productContainer {
-    display: grid;
-    grid-template-rows: repeat(2, 1fr);
-    grid-template-columns: repeat(3, 1fr);
-    gap: 14px;
-    justify-items: center;
-    margin-right: 0;
-  }
-
   & .albumImg {
     margin: 200px auto 0 auto;
     width: 350px;
@@ -127,56 +123,10 @@ const StyledAlbumDetail = styled.div`
     width: 600px;
   }
 
-  & dl dt {
-    float: left;
-    width: 48px;
-    padding-top: 20px;
-    font-weight: 700;
-  }
-
-  & dt {
-    display: block;
-  }
-
-  & dd {
-    display: block;
-    margin-inline-start: 40px;
-    padding-top: 21px;
-    margin-left: 48px;
-  }
-
-  & .lyrics {
-    margin-top: 21px;
-  }
-
-  & .userInfoContainer {
-    display: flex;
-    width: 678px;
-    height: 60px;
-    margin: 24px auto;
-    align-items: center;
-  }
-
-  & .userInfoImgContainer {
-    width: 40px;
-    height: 40px;
-    border-radius: 100%;
-    overflow: hidden;
-    margin-right: 8px;
-  }
-
   & .userImg {
     width: 100%;
     height: 100%;
     object-fit: cover;
-  }
-
-  & .spanContainer {
-    line-height: 20px;
-  }
-
-  & .spanContainer span {
-    display: block;
   }
 
   & .userId {
@@ -192,19 +142,6 @@ const StyledAlbumDetail = styled.div`
     font-size: 13px;
     color: #212529;
   }
-
-  /* & .productDescription {
-    width: 678px;
-    height: 84px;
-    margin: 36px auto;
-  }
-
-  & .mainImg {
-    width: 678px;
-    height: 564px;
-    margin-bottom: 25px;
-    border-radius: 8px;
-  } */
 
   & .titleDescription {
     font-style: normal;
@@ -224,50 +161,11 @@ const StyledAlbumDetail = styled.div`
     text-align: center;
   }
 
-  & .descriptionDescription {
-    font-style: normal;
-    font-weight: 400;
-    font-size: 17px;
-    line-height: 30px;
-    display: -webkit-box;
-    -webkit-line-clamp: 2;
-    -webkit-box-orient: vertical;
-    text-overflow: ellipsis;
-    overflow: hidden;
-  }
-
-  & .interestDescription {
-    display: block;
-    font-style: normal;
-    margin-top: 3px;
-    font-size: 12px;
-    line-height: 3 px;
-    color: #868e96;
-  }
-
-  & .popularProduct {
-    width: 678px;
-    height: 100%;
-    margin: 0 auto;
-  }
-
   & .textContainer {
     display: flex;
     width: 678px;
     margin: 0 auto;
     justify-content: space-between;
-  }
-
-  & .textContainer span,
-  a {
-    margin: 36px 0 0 0;
-  }
-
-  & .textContainer span {
-    font-style: normal;
-    font-weight: 600;
-    font-size: 18px;
-    line-height: 26px;
   }
 
   & .textContainer a {
@@ -305,6 +203,15 @@ const StyledTracklist = styled.div`
   text-size-adjust: none;
   text-align: center;
 
+  a {
+    color: black; /* 텍스트 색깔을 까맣게 설정 */
+    text-decoration: none; /* 밑줄 제거 */
+  }
+
+  a:hover {
+    text-decoration: underline; /* 마우스 갖다대면 밑줄 추가 */
+  }
+
   table {
     width: 800px;
     margin: 50px auto;
@@ -317,7 +224,6 @@ const StyledTracklist = styled.div`
     border: 1px solid #ccc;
   }
 
-  .help_list_table,
   .track_list_table {
     width: auto;
     min-width: 60%;
@@ -326,12 +232,11 @@ const StyledTracklist = styled.div`
     border-collapse: collapse;
   }
 
-  .info_wrap.type_lyrics {
+  .info_wrap.type_track {
     display: flex;
   }
 
-  .help_list_table td.info .info_wrap.type_lyrics,
-  .track_list_table td.info .info_wrap.type_lyrics {
+  .track_list_table td.info .info_wrap.type_track {
     max-width: 664px;
     padding-right: 10px;
   }
@@ -345,13 +250,11 @@ const StyledTracklist = styled.div`
     vertical-align: middle;
   }
 
-  .help_list_table td.info,
   .track_list_table td.info {
     padding-left: 5px;
     text-align: left;
   }
 
-  .help_list_table td,
   .track_list_table td {
     position: relative;
     height: 84px;
@@ -363,6 +266,7 @@ const StyledTracklist = styled.div`
     display: -webkit-box;
     display: -ms-flexbox;
     display: flex;
+    margin-top: 20px;
     -webkit-box-orient: vertical;
     -webkit-box-direction: normal;
     -ms-flex-direction: column;
@@ -375,24 +279,20 @@ const StyledTracklist = styled.div`
     height: 100%;
   }
 
+  .trackInTitle {
+    margin-top: 5px;
+    font-weight: 200;
+    font-size: 15px;
+  }
+
   .track_list_table td.info .txt_area .tit-play {
     min-width: 0;
     max-width: 100%;
     text-align: left;
   }
 
-  .track_list_table td.info .info_wrap.type_lyrics .album {
+  .track_list_table td.info .info_wrap.type_track .album {
     display: block;
-    display: -webkit-box;
-    overflow: hidden;
-    height: 40px;
-    text-overflow: ellipsis;
-    word-break: break-all;
-    -webkit-box-orient: vertical;
-    -webkit-line-clamp: 2;
-    padding-top: 3px;
-    line-height: 1.54;
-    white-space: pre-wrap;
   }
 
   colgroup {
@@ -431,9 +331,7 @@ const StyledTracklist = styled.div`
     padding: 0;
     font-family: inherit;
     vertical-align: middle;
-  }
 
-  button {
     text-rendering: auto;
     letter-spacing: normal;
     word-spacing: normal;
@@ -442,7 +340,6 @@ const StyledTracklist = styled.div`
     text-indent: 0px;
     text-shadow: none;
     text-align: center;
-    cursor: default;
     writing-mode: horizontal-tb !important;
   }
 `;

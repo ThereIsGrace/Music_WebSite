@@ -5,6 +5,7 @@ import raccoon from "@/assets/Logo/raccoon.gif";
 import StyledLoadingImgContainer from "@/assets/Styles/StyledLoadingImgContainer";
 import {useRecoilState} from "recoil";
 import {songNameAtom} from "..";
+import {Link} from "react-router-dom";
 
 export const SongDetailBody = () => {
   const [songId, setSongId] = useState("");
@@ -130,6 +131,9 @@ export const SongDetailBody = () => {
       <div className="songContent">
         <div className="titleDescription">{songDetail.name}</div>
         <div className="artistDescription">{songDetail.representationArtist.name}</div>
+        <div className="descriptionDescription">
+          <Link to={"/albumDetail/" + songDetail.album.id}>{songDetail.album.title}</Link>
+        </div>
         <div>
           <dl>
             {artistType1()}
@@ -265,6 +269,7 @@ const StyledSongDetail = styled.div`
   }
 
   & .descriptionDescription {
+    text-align: center;
     font-style: normal;
     font-weight: 400;
     font-size: 17px;
@@ -316,6 +321,10 @@ const StyledSongDetail = styled.div`
     font-size: 15px;
     line-height: 21px;
     color: #ff8a3d;
+  }
+
+  & a {
+    color: black;
   }
 
   & a:hover {

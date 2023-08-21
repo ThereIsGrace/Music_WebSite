@@ -63,4 +63,12 @@ const StyledStore = styled.div`
     column-gap: 32px;
     justify-items: center;
   }
+
+  & .elem {
+    margin-bottom: 50px;
+  }
+
+  & a {
+    color: black;
+  }
 `;

@@ -8,22 +8,27 @@ export const TrackItem = (props) => {
 
   return (
     <>
-      {props.data.map((lyrics) => (
+      {props.data.map((track, index) => (
         <tr>
+          <td>
+            <div>{index + 1}</div>
+          </td>
           <td className="info">
-            <div className="info_wrap type_lyrics">
-              {/* <div className="thumb">
-                      <img src={lyrics.album.imgList[0].url} alt="앨범 이미지" />
-                    </div> */}
+            <div className="info_wrap type_track">
+              <div className="thumb">
+                <img src={track.album.imgList[0].url} alt="앨범 이미지" />
+              </div>
               <div className="txt_area">
-                <button type="button" className="tit-play">
+                <Link to={"/songDetail/" + track.id}>
                   <p className="tit">
                     <span className="tit__inner">
-                      <strong className="tit__text">{/* <em className="search_keyword">{lyrics.name}</em> */}</strong>
+                      <strong className="tit__text">
+                        <em className="search_keyword">{track.name}</em>
+                      </strong>
                     </span>
                   </p>
-                </button>
-                <div className="desc">{/* <p className="album">{lyrics.lyrics}</p> */}</div>
+                </Link>
+                <p className="trackInTitle">{track.album.title}</p>
               </div>
             </div>
           </td>
@@ -31,12 +36,13 @@ export const TrackItem = (props) => {
             <p>
               <span className="artist_link_w">
                 <span>
-                  <span>{/* <span className="artist__link last">{lyrics.artistList[0].name}</span> */}</span>
+                  <span>
+                    <span className="artist__link last">{track.representationArtist.name}</span>
+                  </span>
                 </span>
               </span>
             </p>
           </td>
-          <td className="album">{/* <Link to="#">{lyrics.album.title}</Link> */}</td>
         </tr>
       ))}
     </>
