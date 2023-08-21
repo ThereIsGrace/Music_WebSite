@@ -3,27 +3,24 @@ import {atom, useRecoilState} from "recoil";
 import styled from "styled-components";
 import {Button} from "@/components";
 
-const sbuttonClassAtom = atom({
-  key: "buttonClassAtom",
+const artistbuttonClassAtom = atom({
+  key: "artistbuttonClass",
   default: "stateClass",
 });
 
-const typeList = ["전체", "곡", "앨범", "아티스트", "가사"];
+const typeList = ["곡", "앨범"];
 
-export function TypesTab({onSelectType}) {
+export function ArtistTypesTab({onSelectType}) {
   const [isActive, setIsActive] = useState({
-    전체: true, // 첫 마운트 시 "전체" 버튼 활성화
-    곡: false,
+    곡: true,
     앨범: false,
-    아티스트: false,
-    가사: false,
   });
-  const [, setStateClass] = useRecoilState(sbuttonClassAtom);
+  const [, setArtistStateClass] = useRecoilState(artistbuttonClassAtom);
 
   useEffect(() => {
     const className = isActive ? "active" : "";
-    setStateClass(`stateClass ${className}`);
-  }, [isActive, setStateClass]);
+    setArtistStateClass(`stateClass ${className}`);
+  }, [isActive, setArtistStateClass]);
 
   const handleClick = (type) => {
     const updatedIsActive = {};

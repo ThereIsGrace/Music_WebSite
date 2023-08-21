@@ -11,3 +11,4 @@ export * from "@/pages/SearchResult/SearchResult";
 export * from "@/pages/SongDetail/SongDetail";
 export * from "@/pages/RecentSong/RecentSong";
 export * from "@/pages/AlbumDetail/AlbumDetail";
+export * from "@/pages/ArtistDetail/ArtistDetail";

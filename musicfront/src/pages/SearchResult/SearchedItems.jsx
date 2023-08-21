@@ -39,11 +39,13 @@ export function SearchedItems(props) {
         props.data.list.map((artist) => (
           <div className="elem type_artist">
             <div className="artist_thumnail">
-              <a href="#">
+              <Link to={`/artist/${artist.id}`}>
                 <Image src={artist.imgList[2].url} alt="아티스트_이미지" />
-              </a>
+              </Link>
             </div>
-            <div>{artist.name}</div>
+            <Link to={`/artist/${artist.id}`}>
+              <div>{artist.name}</div>
+            </Link>
           </div>
         ))}
     </>

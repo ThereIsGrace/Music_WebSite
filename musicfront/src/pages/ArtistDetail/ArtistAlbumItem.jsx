@@ -1,34 +1,27 @@
-import React from "react";
+import {Image} from "@/components";
 import {Link} from "react-router-dom";
 import styled from "styled-components";
-import {Image} from "@/components";
 
-export function RecentSong(props) {
-  const song = props.song;
-  console.log(song);
+export const ArtistAlbumItem = (props) => {
   return (
     <StyledProductContainer>
-      <Link to={`/songDetail/${song.id}`}>
-        <Image src={song.album.imgList[2].url} alt="앨범 이미지"></Image>
+      <Link to={`/albumDetail/${props.data.id}`}>
+        <Image src={props.data.imgList[2].url} alt="앨범_이미지"></Image>
       </Link>
-      <Link to={`/songDetail/${song.id}`}>
-        <span className="title">{song.name}</span>
+      <Link to={`/albumDetail/${props.data.id}`}>
+        <span className="title">{props.data.title}</span>
       </Link>
-      <Link to={`/artist/${song.representationArtist.id}`}>
-        <span className="artist">{song.representationArtist.name}</span>
-      </Link>
-      <Link to={`/albumDetail/${song.album.id}`}>
-        <span className="album">{song.album.title}</span>
-      </Link>
+      <span className="artist">{props.data.representationArtist.name}</span>
     </StyledProductContainer>
   );
-}
+};
 
 const StyledProductContainer = styled.div`
   display: inline-flex;
   flex-direction: column;
   width: 212px;
   height: 320px;
+  margin: 0px 10px 0px 10px;
 
   & img {
     border-radius: 12px;
