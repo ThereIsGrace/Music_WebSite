@@ -3,15 +3,20 @@ import {ArtistTrackItem, loadTrackAtom, pageAtom} from "@/pages/ArtistDetail";
 import {useEffect, useState} from "react";
 import {useRecoilState} from "recoil";
 
-export const ArtistTracks = (props) => {
-  const [data, setData] = useState([]);
+export const ArtistTracks = ({data, selectedType, totalPage}) => {
+  const [currentData, setCurrentData] = useState([]);
+  const [prevData, setPrevData] = useState([]);
   const [page, setPage] = useRecoilState(pageAtom);
   const [, setLoadTrack] = useRecoilState(loadTrackAtom);
+  const [isActive, setIsActive] = useState(false);
 
   const loadData = async () => {
-    const newData = props.data.list;
-    setData((prevData) => [...prevData, ...newData]);
-    console.log(data);
+    const newData = data.list;
+    if (newData.length !== 0 && newData !== prevData) {
+      setPrevData(newData);
+      setCurrentData((prev) => [...prev, ...newData]);
+      console.log(currentData);
+    }
   };
 
   const handleButton = () => {
@@ -21,10 +26,14 @@ export const ArtistTracks = (props) => {
 
   useEffect(() => {
     loadData();
-  }, [props]);
+  }, [data]);
+
+  useEffect(() => {
+    setIsActive(!isActive);
+  }, [selectedType]);
 
   return (
-    <>
+    <div className={isActive ? "allTracks active" : "allTracks inactive"}>
       <StyledTracklist>
         <table className="track_list_table">
           <colgroup>
@@ -41,11 +50,12 @@ export const ArtistTracks = (props) => {
               </th>
             </tr>
           </thead>
-          <tbody>{data && data.map((track) => <ArtistTrackItem key={track.id} track={track} />)}</tbody>
+          <tbody>{currentData && currentData.map((track) => <ArtistTrackItem key={track.id} track={track} />)}</tbody>
         </table>
       </StyledTracklist>
-      <button onClick={handleButton}>펼치기</button>
-    </>
+      {/* <button onClick={handleButton}>펼치기</button> */}
+      {totalPage <= page ? <></> : <button onClick={handleButton}>펼치기</button>}
+    </div>
   );
 };
 

@@ -1,17 +1,19 @@
 import styled from "styled-components";
 import {ArtistAlbumItem} from ".";
-import {useEffect} from "react";
+import {useEffect, useState} from "react";
 
-export const ArtistAlbums = (props) => {
+export const ArtistAlbums = ({data, selectedType}) => {
+  const [prevData, setPrevData] = useState([]);
+
   useEffect(() => {
-    console.log(props.data);
+    console.log(data);
   }, []);
 
   return (
     <StyledProduct>
       <div className="productContainer">
-        {props.data.list.map((album) => (
-          <ArtistAlbumItem data={album} />
+        {data.list.map((album) => (
+          <ArtistAlbumItem key={album.id} data={album} />
         ))}
       </div>
       <div></div>

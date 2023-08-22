@@ -43,6 +43,7 @@ export const ArtistDetailBody = () => {
   const [loadTrack, setLoadTrack] = useRecoilState(loadTrackAtom);
   // const [loadAlbum, setLoadAlbum] = useRecoilState(loadAlbumAtom);
   const [selectedType, setSelectedType] = useState("곡");
+  const [totalPageofTrack, setTotalPageofTrack] = useState(0);
 
   const artistAPI = "https://www.music-flo.com/api/meta/v1/artist/" + artistId;
   const artistTrackAPI = "https://www.music-flo.com/api/meta/v1/artist/" + artistId + "/track?size=20&page=" + page;
@@ -102,6 +103,7 @@ export const ArtistDetailBody = () => {
   };
 
   useEffect(() => {
+    console.log("start================================");
     setTimeout(() => {
       if (artistMain === null || artistMain === undefined || artistTrack === null || artistTrack === undefined || artistAlbum === null || artistAlbum === undefined) {
         const getArtistData = getArtistId();
@@ -111,17 +113,22 @@ export const ArtistDetailBody = () => {
         getArtistAlbum();
         setArtistTrack(artistTrackFiltered);
         setCoin(!coin);
+      } else {
+        const totalCount = artistTrack.totalCount;
+        setTotalPageofTrack(Math.trunc(totalCount / 20) + 1);
       }
     }, 1000);
     setAritstTrackFiltered(null);
     console.log(artistMain);
     console.log(artistTrack);
+    console.log(totalPageofTrack);
     console.log(artistAlbum);
   }, [coin]);
 
   useEffect(() => {
     console.log(loadTrack);
     console.log(page);
+
     if (loadTrack === "on") {
       setTimeout(() => {
         getArtistTrack();
@@ -160,8 +167,8 @@ export const ArtistDetailBody = () => {
         <StyledStore>
           <ArtistTypesTab onSelectType={setSelectedType} />
         </StyledStore>
-        {selectedType === "곡" && <ArtistTracks data={artistTrack} />}
-        {selectedType === "앨범" && <ArtistAlbums data={artistAlbum} />}
+        <ArtistTracks data={artistTrack} selectedType={selectedType} totalPage={totalPageofTrack} />
+        <ArtistAlbums data={artistAlbum} selectedType={selectedType} />
       </StyledAlbumDetail>
     </>
   );
@@ -231,6 +238,14 @@ const StyledAlbumDetail = styled.div`
     font-size: 15px;
     line-height: 21px;
     color: #ff8a3d;
+  }
+
+  & .allTracks.inactive {
+    display: none;
+  }
+
+  & .allAlbums.inactive {
+    display: none;
   }
 
   & a:hover {
