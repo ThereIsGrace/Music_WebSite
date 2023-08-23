@@ -1,22 +1,51 @@
 import styled from "styled-components";
-import {ArtistAlbumItem} from ".";
+import {ArtistAlbumItem, loadAlbumAtom, pageAtom2} from ".";
 import {useEffect, useState} from "react";
+import {useRecoilState} from "recoil";
 
-export const ArtistAlbums = ({data, selectedType}) => {
+export const ArtistAlbums = ({data, selectedType, totalPage}) => {
   const [prevData, setPrevData] = useState([]);
+  const [currentData, setCurrentData] = useState([]);
+  const [page2, setPage2] = useRecoilState(pageAtom2);
+  const [, setLoadAlbum] = useRecoilState(loadAlbumAtom);
+  const [isActive, setIsActive] = useState(false);
+
+  const handleButton = () => {
+    setPage2(page2 + 1);
+    setLoadAlbum("on");
+  };
+
+  const loadData = async () => {
+    const newData = data.list;
+    if (newData.length !== 0 && newData !== prevData) {
+      setPrevData(newData);
+      setCurrentData((prev) => [...prev, ...newData]);
+      console.log(currentData);
+    }
+  };
 
   useEffect(() => {
-    console.log(data);
-  }, []);
+    loadData();
+  }, [data]);
+
+  useEffect(() => {
+    if (selectedType === "앨범") {
+      setIsActive(true);
+    } else if (selectedType !== "앨범") {
+      setIsActive(false);
+    }
+  }, [selectedType]);
 
   return (
     <StyledProduct>
-      <div className="productContainer">
-        {data.list.map((album) => (
-          <ArtistAlbumItem key={album.id} data={album} />
-        ))}
+      <div className={isActive ? "allAlbums active" : "allAlbums inactive"}>
+        <div className="productContainer">
+          {currentData.map((album) => (
+            <ArtistAlbumItem key={album.id} data={album} />
+          ))}
+        </div>
+        {totalPage <= page2 ? <></> : <button onClick={handleButton}>펼치기</button>}
       </div>
-      <div></div>
     </StyledProduct>
   );
 };

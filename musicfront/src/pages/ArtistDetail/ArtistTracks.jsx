@@ -29,7 +29,11 @@ export const ArtistTracks = ({data, selectedType, totalPage}) => {
   }, [data]);
 
   useEffect(() => {
-    setIsActive(!isActive);
+    if (selectedType === "곡") {
+      setIsActive(true);
+    } else if (selectedType !== "곡") {
+      setIsActive(false);
+    }
   }, [selectedType]);
 
   return (

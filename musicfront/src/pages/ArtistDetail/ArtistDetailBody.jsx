@@ -31,19 +31,20 @@ export const loadAlbumAtom = atom({
 export const ArtistDetailBody = () => {
   const [artistId, setArtistId] = useState("");
   const [artistMain, setArtistMain] = useState(null);
-  const [artistAlbum, setArtistAblum] = useState(null);
-  // const [artistAlbumFiltered, setArtistAblumFiltered] = useState(null);
+  const [artistAlbum, setArtistAlbum] = useState(null);
+  const [artistAlbumFiltered, setArtistAlbumFiltered] = useState(null);
   const [artistTrack, setArtistTrack] = useState(null);
   const [artistTrackFiltered, setAritstTrackFiltered] = useState(null);
   const [page] = useRecoilState(pageAtom);
   const [page2] = useRecoilState(pageAtom2);
   const [coin, setCoin] = useState(false);
   const [coin2, setCoin2] = useState(false);
-  // const [coin3, setCoin3] = useState(false);
+  const [coin3, setCoin3] = useState(false);
   const [loadTrack, setLoadTrack] = useRecoilState(loadTrackAtom);
-  // const [loadAlbum, setLoadAlbum] = useRecoilState(loadAlbumAtom);
+  const [loadAlbum, setLoadAlbum] = useRecoilState(loadAlbumAtom);
   const [selectedType, setSelectedType] = useState("곡");
   const [totalPageofTrack, setTotalPageofTrack] = useState(0);
+  const [totalPageofAlbum, setTotalPageofAlbum] = useState(0);
 
   const artistAPI = "https://www.music-flo.com/api/meta/v1/artist/" + artistId;
   const artistTrackAPI = "https://www.music-flo.com/api/meta/v1/artist/" + artistId + "/track?size=20&page=" + page;
@@ -96,7 +97,7 @@ export const ArtistDetailBody = () => {
     try {
       const albumResult = await fetchAlbumData();
 
-      setArtistAblum(albumResult.data);
+      setArtistAlbumFiltered(albumResult.data);
     } catch (err) {
       console.error(err);
     }
@@ -112,13 +113,17 @@ export const ArtistDetailBody = () => {
         getArtistTrack();
         getArtistAlbum();
         setArtistTrack(artistTrackFiltered);
+        setArtistAlbum(artistAlbumFiltered);
         setCoin(!coin);
       } else {
-        const totalCount = artistTrack.totalCount;
-        setTotalPageofTrack(Math.trunc(totalCount / 20) + 1);
+        const totalCountT = artistTrack.totalCount;
+        const totalCountA = artistAlbum.totalCount;
+        setTotalPageofTrack(Math.trunc(totalCountT / 20) + 1);
+        setTotalPageofAlbum(Math.trunc(totalCountA / 20) + 1);
       }
     }, 1000);
     setAritstTrackFiltered(null);
+    setArtistAlbumFiltered(null);
     console.log(artistMain);
     console.log(artistTrack);
     console.log(totalPageofTrack);
@@ -145,6 +150,25 @@ export const ArtistDetailBody = () => {
     console.log(artistTrack);
   }, [coin2, page, setLoadTrack]);
 
+  useEffect(() => {
+    console.log(loadAlbum);
+    console.log(page2);
+    if (loadAlbum === "on") {
+      setTimeout(() => {
+        getArtistAlbum();
+        setCoin3(!coin3);
+      }, 1000);
+      if (artistAlbumFiltered.currentPage === page2) {
+        setArtistAlbum(artistAlbumFiltered);
+      }
+      if (artistAlbum.currentPage === page2) {
+        setArtistAlbumFiltered(null);
+        setLoadAlbum("off");
+      }
+    }
+    console.log(artistAlbum);
+  }, [coin3, page2, setLoadAlbum]);
+
   if (artistMain === null || artistMain === undefined || artistTrack === null || artistTrack === undefined || artistAlbum === null || artistAlbum === undefined) {
     return (
       <StyledLoadingImgContainer role="alert">
@@ -168,7 +192,7 @@ export const ArtistDetailBody = () => {
           <ArtistTypesTab onSelectType={setSelectedType} />
         </StyledStore>
         <ArtistTracks data={artistTrack} selectedType={selectedType} totalPage={totalPageofTrack} />
-        <ArtistAlbums data={artistAlbum} selectedType={selectedType} />
+        <ArtistAlbums data={artistAlbum} selectedType={selectedType} totalPage={totalPageofAlbum} />
       </StyledAlbumDetail>
     </>
   );
