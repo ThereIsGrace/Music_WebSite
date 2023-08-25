@@ -141,10 +141,10 @@ export const ArtistDetailBody = () => {
       }, 1000);
       if (artistTrackFiltered.currentPage === page) {
         setArtistTrack(artistTrackFiltered);
+        setLoadTrack("off");
       }
       if (artistTrack.currentPage === page) {
         setAritstTrackFiltered(null);
-        setLoadTrack("off");
       }
     }
     console.log(artistTrack);
@@ -160,10 +160,10 @@ export const ArtistDetailBody = () => {
       }, 1000);
       if (artistAlbumFiltered.currentPage === page2) {
         setArtistAlbum(artistAlbumFiltered);
+        setLoadAlbum("off");
       }
       if (artistAlbum.currentPage === page2) {
         setArtistAlbumFiltered(null);
-        setLoadAlbum("off");
       }
     }
     console.log(artistAlbum);
