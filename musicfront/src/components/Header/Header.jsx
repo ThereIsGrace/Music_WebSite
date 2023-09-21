@@ -5,6 +5,8 @@ import Logo from "@/assets/Home/logo.png";
 import {atom, useRecoilState} from "recoil";
 import {uidAtom} from "@/pages/Register/atoms/uidAtom";
 import {useEffect} from "react";
+import { Container, Nav} from "react-bootstrap";
+import Navbar from "../Navbar";
 
 export const checkCurrentUserStateAtom = atom({
   key: "checkCurrentUserStateAtom",
@@ -48,9 +50,10 @@ export function Header() {
     <StyledHeader>
       <Heading1>
         <Link to="/" className="imgContainer">
-          <Image src={Logo} alt="DJ-UP!" />
+          <Image src={Logo} alt="Music-cat-logo" />
         </Link>
       </Heading1>
+
 
       <nav>
         <ul>
@@ -64,7 +67,7 @@ export function Header() {
             <Link to="/board">커뮤니티</Link>
           </li>
         </ul>
-      </nav>
+      </nav> 
       <Search />
       <div className="buttonContainer">
         {!checkCurrentUserState && (
@@ -76,7 +79,7 @@ export function Header() {
               회원가입
             </Link>
           </>
-        )}
+        )} 
         {checkCurrentUserState && (
           <>
             <Link to="/mypage" className="MypageBtn">
@@ -94,16 +97,18 @@ export function Header() {
 
 const StyledHeader = styled.header`
   background-color: white;
+  color: black;
   display: flex;
   width: 100%;
-  height: 64px;
+  height: 50px;
   justify-content: center;
   top: 0;
-  line-height: 64px;
+  line-height: 50px;
   position: fixed;
   left: 50%;
   transform: translate(-50%, 0);
   z-index: 999;
+  margin: 0;
 
   & img {
     width: 110px;
@@ -137,30 +142,30 @@ const StyledHeader = styled.header`
   }
 
   & .loginButton {
-    color: #6c816d;
+    color: black;
     background-color: white;
     font-size: 14px;
   }
 
   & .joinBtn {
-    border: 2px solid #6c816d;
+    border: 2px solid skyblue;
     border-radius: 12px;
     padding: 10px 12px;
 
     &:hover {
       color: #fff;
-      background-color: #6c816d;
+      background-color:skyblue;
     }
   }
 
   & .registerButton {
-    background-color: #6c816d;
+    background-color: black;
     color: white;
   }
 
   & input {
     width: 400px;
-    height: 40px;
+    height: 30px;
     margin: 0 24px;
     margin-top: 12px;
     border-radius: 6px;
@@ -173,7 +178,7 @@ const StyledHeader = styled.header`
 
   & a {
     text-decoration-line: none;
-    color: #212124;
+    color: black;
     width: 64px;
     height: 24px;
     font-weight: 700;
@@ -182,13 +187,18 @@ const StyledHeader = styled.header`
   }
 
   & a:hover {
-    color: #eca997;
+    color: skyblue;
   }
 
-  & .imgContainer {
-    width: 130px;
-    height: 64px;
+  & .imgContainer{
+    width: 200px;
+    height: 200px;
     margin-left: 0;
+    overflow: hidden;
+  }
+
+  & .imgContainer Image {
+    width: 100%;
   }
 
   & .logoutBtn {
@@ -197,7 +207,7 @@ const StyledHeader = styled.header`
     padding: 10px 12px;
 
     &:hover {
-      color: #eca997;
+      color: skyblue;
     }
   }
 
@@ -205,13 +215,13 @@ const StyledHeader = styled.header`
     font-size: 14px;
     width: 30px;
     margin-right: 0;
-    border: 2px solid #6c816d;
+    border: 2px solid skyblue;
     padding: 10px 6px;
     border-radius: 12px;
-    color: #6c816d;
+    color: skyblue;
 
     &:hover {
-      background-color: #6c816d;
+      background-color: skyblue;
       color: #fff;
     }
   }
