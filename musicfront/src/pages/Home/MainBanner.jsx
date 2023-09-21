@@ -2,6 +2,7 @@ import React from "react";
 import styled from "styled-components";
 import {Image} from "@/components";
 import BannerImg from "@/assets/Home/mainBanner1.png";
+import MusicCat from "@/assets/Home/music-cat.png"
 import BannerImg2 from "@/assets/Home/mainBanner2.png";
 import BannerImg3 from "@/assets/Home/mainBanner3.png";
 import BannerImg4 from "@/assets/Home/mainBanner4.png";
@@ -23,14 +24,29 @@ export function MainBanner() {
       <Swiper modules={[Autoplay]} autoplay={({speed: 500}, {disableOnInteraction: false})} loop={true}>
         <SwiperSlide>
           <a href="/#" onClick={popularBtn}>
-            <Image src={BannerImg} alt="" />
+            <div className="container">
+              <div className="text-container">
+                <h1>그러게 좆같네</h1>
+                <p>족같아</p>
+              </div>
+              <Image src={MusicCat} alt="" style={{width: '300px'}}/>
+            </div>
+            
           </a>
         </SwiperSlide>
         <SwiperSlide>
           <Image src={BannerImg2} alt="" />
+          <div className="text-container">
+                <h4>그러게 좆같네</h4>
+                <p>족같아</p>
+          </div>
         </SwiperSlide>
         <SwiperSlide>
           <Image src={BannerImg3} alt="" />
+          <div className="text-container">
+            <h1>그러게 좆같네</h1>
+            <p>족같아</p>
+          </div>
         </SwiperSlide>
         <SwiperSlide>
           <Image src={BannerImg4} alt="" />
@@ -41,8 +57,12 @@ export function MainBanner() {
 }
 
 const StyledBanner = styled.div`
-  width: clamp(1040px, 100%, 1920px);
-  margin: 80px auto;
+  background: linear-gradient(#4997dc, #4261c0);
+  /* width: clamp(1040px, 100%, 1920px); */
+  margin: auto;
+
+  
+  display: block;
 
   & .swiper {
     width: 100%;
@@ -56,9 +76,11 @@ const StyledBanner = styled.div`
   }
 
   & img {
+    margin-top: 30px;
     display: block;
     width: 100%;
     height: 100%;
+    max-width: 500px;
     object-fit: cover;
   }
 `;
