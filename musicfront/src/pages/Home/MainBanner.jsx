@@ -59,10 +59,7 @@ export function MainBanner() {
 const StyledBanner = styled.div`
   background: linear-gradient(#4997dc, #4261c0);
   /* width: clamp(1040px, 100%, 1920px); */
-  margin: auto;
-
-  
-  display: block;
+  margin-top: 64px;
 
   & .swiper {
     width: 100%;
