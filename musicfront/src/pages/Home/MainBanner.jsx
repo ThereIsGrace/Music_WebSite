@@ -26,8 +26,8 @@ export function MainBanner() {
           <a href="/#" onClick={popularBtn}>
             <div className="container">
               <div className="text-container">
-                <h1>그러게 좆같네</h1>
-                <p>족같아</p>
+                <h1>aaa</h1>
+                <p>aaa</p>
               </div>
               <Image src={MusicCat} alt="" style={{width: '300px'}}/>
             </div>
@@ -37,15 +37,15 @@ export function MainBanner() {
         <SwiperSlide>
           <Image src={BannerImg2} alt="" />
           <div className="text-container">
-                <h4>그러게 좆같네</h4>
-                <p>족같아</p>
+                <h4>aaa</h4>
+                <p>aaa</p>
           </div>
         </SwiperSlide>
         <SwiperSlide>
           <Image src={BannerImg3} alt="" />
           <div className="text-container">
-            <h1>그러게 좆같네</h1>
-            <p>족같아</p>
+            <h1>aaa</h1>
+            <p>aaa</p>
           </div>
         </SwiperSlide>
         <SwiperSlide>
