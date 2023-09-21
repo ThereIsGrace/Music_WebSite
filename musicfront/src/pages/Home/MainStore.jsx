@@ -13,7 +13,7 @@ export function MainStore() {
   return (
     <StyledStore>
       <div className="inner">
-        <Heading2>이걸 뭘로 재활용하지</Heading2>
+        <Heading2>지금 뜨는 커뮤니티</Heading2>
         <UserStoresType onSelectType={handleSelectType} />
         <UserStoreList selectedType={selectedType} />
       </div>

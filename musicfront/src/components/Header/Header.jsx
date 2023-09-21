@@ -66,6 +66,9 @@ export function Header() {
           <li>
             <Link to="/board">커뮤니티</Link>
           </li>
+          <li>
+            <Link to="/board">굿즈</Link>
+          </li>
         </ul>
       </nav> 
       <Search />
