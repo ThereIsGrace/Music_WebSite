@@ -6,6 +6,7 @@ import {useRecoilState} from "recoil";
 import {addressAtom, imageListAtom, postTitleAtom, postContentAtom} from "./postAtoms";
 import {useNavigate} from "react-router-dom";
 import { idAtom } from "@/pages/Register/atoms/inputValueAtoms";
+import axios from "axios";
 
 export function PlaceSearchBox() {
   const navigate = useNavigate(); //변수 할당시켜서 사용
@@ -43,8 +44,15 @@ export function PlaceSearchBox() {
 
         console.log("데이터베이스에 업로드할 데이터: ", uploadData);
 
-        // ~upload 로직~
-        moveToAnotherPage("/");
+        axios.post('http://localhost:8094/api/board/write', uploadData)
+        .then(res => {
+          console.log('res', res)
+        })
+        .catch(error => {
+          console.log('fkfjkfkf')
+          console.log('error', error)
+        })
+        //moveToAnotherPage("/");
       } catch (e) {
         console.error("Error adding document: ", e);
       }

@@ -23,14 +23,17 @@ public class Board {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long b_id;
 
-    @Column(nullable = false, length = 100)
+    @Column(length = 100)
     private String title;
 
-    @Column(nullable = false, columnDefinition = "TEXT")
+    @Column(columnDefinition = "TEXT")
     private String content;
 
-    @Column(nullable = false)
+    @Column
     private String writer;
+
+    @Column
+    private String image_url;
 
 //    @ManyToOne
 //    @JoinColumn(name="writer")
