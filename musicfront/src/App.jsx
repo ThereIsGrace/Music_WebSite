@@ -2,6 +2,7 @@ import {Routes, Route} from "react-router-dom";
 import {Home, Login, ProductDetail, Register, Mypage, Post, PopularSong, Board, BoardDetail, SearchResult, SongDetail, RecentSong, AlbumDetail, ArtistDetail} from "@/pages";
 import 'bootstrap/dist/css/bootstrap.min.css';
 import Test from "./pages/test";
+import WriteThing from "./pages/QuillEditor/WriteThing";
 function App() {
   return (
     <div className="App">
@@ -21,6 +22,7 @@ function App() {
         <Route path="/artist/:id" element={<ArtistDetail />} />
         <Route path="/recent" element={<RecentSong />} />
         <Route path="/test" element={<Test></Test>}></Route>
+        <Route path="/write" element={<WriteThing></WriteThing>}></Route>
       </Routes>
     </div>
   );
