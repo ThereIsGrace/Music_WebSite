@@ -19,7 +19,7 @@ export function PlaceSearchBox() {
   // const [postcodePopup, setPostcodePopup] = useRecoilState(postcodePopupAtom);
   const [address] = useRecoilState(addressAtom);
   // const [images, setImages] = useRecoilState(imagesAtom);
-  const [imageList] = useRecoilState(imageListAtom);
+  const [imageList, setImageList] = useRecoilState(imageListAtom);
   const [postTitle] = useRecoilState(postTitleAtom);
   const [postContent] = useRecoilState(postContentAtom);
   const [id] = useRecoilState(idAtom);
@@ -33,6 +33,10 @@ export function PlaceSearchBox() {
   const handlePostSubmit = async () => {
     if (imageList.length > 0) {
       const uploadImageUrl = imageList[0];
+      imageList.map(function(a, i){
+        setImageList(a);
+      })
+      console.log(imageList);
       try {
         const uploadData = {
           description: postContent,
@@ -43,13 +47,12 @@ export function PlaceSearchBox() {
         };
 
         console.log("데이터베이스에 업로드할 데이터: ", uploadData);
-
+        console.log("이미지리스트: " + imageList);
         axios.post('http://localhost:8094/api/board/write', uploadData)
         .then(res => {
           console.log('res', res)
         })
         .catch(error => {
-          console.log('fkfjkfkf')
           console.log('error', error)
         })
         //moveToAnotherPage("/");

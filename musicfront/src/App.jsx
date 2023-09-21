@@ -1,6 +1,7 @@
 import {Routes, Route} from "react-router-dom";
 import {Home, Login, ProductDetail, Register, Mypage, Post, PopularSong, Board, BoardDetail, SearchResult, SongDetail, RecentSong, AlbumDetail, ArtistDetail} from "@/pages";
 import 'bootstrap/dist/css/bootstrap.min.css';
+import Test from "./pages/test";
 function App() {
   return (
     <div className="App">
@@ -19,6 +20,7 @@ function App() {
         <Route path="/albumDetail/:id" element={<AlbumDetail />} />
         <Route path="/artist/:id" element={<ArtistDetail />} />
         <Route path="/recent" element={<RecentSong />} />
+        <Route path="/test" element={<Test></Test>}></Route>
       </Routes>
     </div>
   );
