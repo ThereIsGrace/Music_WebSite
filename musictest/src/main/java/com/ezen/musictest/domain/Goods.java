@@ -2,9 +2,12 @@ package com.ezen.musictest.domain;
 
 
 import lombok.Data;
+import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.DynamicInsert;
+import org.hibernate.annotations.UpdateTimestamp;
 
 import javax.persistence.*;
+import java.time.LocalDateTime;
 import java.util.Date;
 
 @DynamicInsert
@@ -16,25 +19,25 @@ public class Goods {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long goodsNo;
 
-    @Column(nullable = false, length = 100)
-    private String category;
 
-    @Column(nullable = false, length = 100)
+    @Column(length = 100)
     private String pname;
 
-    @Column(nullable = false, length = 10)
-    private int sellPrice;
+    @Column(length = 10)
+    private int price;
 
-    @Column()
-    private Date regDate;
+    @Column(length = 10)
+    private int quantity;
 
-    @Column()
-    private Date updateDate;
+    @CreationTimestamp
+    private LocalDateTime regDate;
+
+    @UpdateTimestamp
+    private LocalDateTime updateDate;
 
     private String content;
 
-    @Column(length = 200)
-    private String imagepath;
-
+    @Column(name="imageUrl", length = 200)
+    private String imageUrl;
 
 }

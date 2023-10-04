@@ -44,7 +44,7 @@ public class GoodsConroller {
 
         goodsService.saveGoods(goods);
 
-        if(goods.getImagepath() != null)
+        if(goods.getImageUrl() != null)
             fileUpload(goods,uploadFile);
 
     }
@@ -86,7 +86,7 @@ public class GoodsConroller {
                 File saveFile = new File(uploadPath, uploadFileName); // c:upload/main/{상품 번호 폴더}/파일 이름으로 최종 경로 생성
                 multipartFile.transferTo(saveFile); // 파일을 최종 경로로 이동
 
-                detail.setImagepath("/" + uploadFileName);
+                detail.setImageUrl("/" + uploadFileName);
 
                 goodsService.updateFilePath(detail);
                 // 만일 이미지 타입이라면 섬네일을 생성하도록 한다.

@@ -15,6 +15,8 @@ public class GoodsService {
     @Autowired
     private GoodsRepository goodsRepository;
 
+    // 상품 등록
+    public void 상품등록(Goods goods) {goodsRepository.save(goods);}
     //게시물 리스트
     public List<Goods> getGoodsList(){
         return goodsRepository.findAll();
