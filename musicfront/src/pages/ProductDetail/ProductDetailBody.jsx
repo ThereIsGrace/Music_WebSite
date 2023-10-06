@@ -2,23 +2,26 @@ import {Image} from "@/components";
 import styled from "styled-components";
 import {Link} from "react-router-dom";
 import {UseProductList} from "@/components";
-import {ProductMap} from "@/pages/ProductDetail";
+
+
 
 export function ProductDetailBody(props) {
+  document.getElementsByClassName('descriptionDescription').innerHTML = "홍길동";
+  
+
   return (
     <StyledProductDetail>
       <section className="productImg">
         <Link to="/">
-          <Image className="mainImg" src={props.prod.imgUrl} alt="상품 이미지"></Image>
+          <Image className="mainImg" src={props.prod.imageUrl} alt="상품 이미지"></Image>
         </Link>
       </section>
       <section className="userInfo">
         <div className="userInfoContainer">
           <div className="userInfoImgContainer">
-            <Image className="userImg" src={props.prod.profileImageURL} alt="프로필 사진" />
           </div>
           <div className="spanContainer">
-            <span className="userId">{props.prod.name}</span>
+            <span className="userId">{props.prod.pname}</span>
             <span className="userLocation">{props.prod.location}</span>
           </div>
         </div>
@@ -26,19 +29,26 @@ export function ProductDetailBody(props) {
       <hr />
       <section className="productDescription">
         <span className="titleDescription">{props.prod.title} </span>
-        <span className="priceDescription">{props.prod.price.toLocaleString(navigator.language)}벨 </span>
-        <span className="descriptionDescription">{props.prod.description} </span>
+        <span className="priceDescription">{props.prod.price}원 </span>
+
       </section>
       <hr />
+      <section className="a"> 
+        <span className="descriptionDescription">
+          <div dangerouslySetInnerHTML={{ __html: props.prod.content }} ></div>
+        </span>
+      </section>
+
       <section className="popularProduct">
         <div className="textContainer">
           <span>인기상품</span>
           <Link to="/PopularProduct">더 구경하기</Link>
+          
         </div>
         <UseProductList count={6} excludeId={props.prod.id} />
-        <ProductMap address={props.prod.location} />
       </section>
     </StyledProductDetail>
+
   );
 }
 
@@ -85,6 +95,9 @@ const StyledProductDetail = styled.div`
     object-fit: cover;
   }
 
+  & .a {
+    text-align: center;
+  }
   & .spanContainer {
     line-height: 20px;
   }
@@ -194,10 +207,4 @@ const StyledProductDetail = styled.div`
     font-weight: 600;
   }
 
-  & .map {
-    width: 100%;
-    height: 200px;
-    margin: 50px 0 30px;
-    background: black;
-  }
 `;

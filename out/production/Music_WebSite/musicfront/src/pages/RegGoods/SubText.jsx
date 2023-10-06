@@ -83,7 +83,7 @@ export function SubText() {
       formats={formats}
       placeholder={'상품의 서브 이미지들을 업로드해주세요!'}
       theme="snow"
-      style={{width: "1000px", height: "500px"}}
+      style={{width: "1038px", height: "500px", margin: "auto"}}
       onChange={setPostContent}
     />
   );

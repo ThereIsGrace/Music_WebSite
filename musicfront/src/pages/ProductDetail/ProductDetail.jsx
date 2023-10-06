@@ -3,12 +3,13 @@ import {useParams} from "react-router-dom";
 import {UseProductDetail} from "@/pages/ProductDetail";
 import {Helmet} from "react-helmet-async";
 
+
 export function ProductDetail() {
   const {id} = useParams();
   return (
     <div className="ProductDetail">
       <Helmet>
-        <title>(곡이름-백요청으로 값을 받아 해결)</title>
+        <title>굿즈</title>
         <meta name="description" content="뮤직 커뮤니티 사이트" />
         <meta name="keywords" content="음악, 커뮤니티, DJ, TURN THE TABLE" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -21,7 +22,7 @@ export function ProductDetail() {
         <meta property="og:description" content="뮤직 커뮤니티 사이트" />
       </Helmet>
       <Header />
-      <UseProductDetail id={id} />
+      <UseProductDetail id={id}/>
       <Footer />
     </div>
   );

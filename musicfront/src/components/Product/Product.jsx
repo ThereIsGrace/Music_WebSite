@@ -8,9 +8,9 @@ export function Product(props) {
   return (
     <StyledProductContainer>
       <Link to={`/productDetail/${props.prod.id}`}>
-        <Image src={props.prod.imgUrl} alt="상품 이미지"></Image>
+        <Image src={props.prod.imageUrl} alt="상품 이미지"></Image>
       </Link>
-      <span className="title">{props.prod.title}</span>
+      <span className="title">{props.prod.pname}</span>
       <span className="price">{props.prod.price.toLocaleString(navigator.language)}벨</span>
       <span className="location">{props.prod.location}</span>
     </StyledProductContainer>

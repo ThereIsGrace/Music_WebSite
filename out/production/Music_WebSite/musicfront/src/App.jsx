@@ -22,7 +22,8 @@ function App() {
         <Route path="/albumDetail/:id" element={<AlbumDetail />} />
         <Route path="/artist/:id" element={<ArtistDetail />} />
         <Route path="/recent" element={<RecentSong />} />
-        <Route path="/test" element={<RegGoods></RegGoods>}></Route>
+        <Route path="/test" element={<RegGoods></RegGoods>}/>
+        <Route path="/productDetail" element={<ProductDetail></ProductDetail>}></Route>
       </Routes>
     </div>
   );

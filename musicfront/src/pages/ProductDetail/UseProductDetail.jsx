@@ -7,11 +7,13 @@ export function UseProductDetail(props) {
   if (isLoading) {
     return <div role="alert">로딩 중...</div>;
   }
-  const product = productsState.find((p) => p.id === props.id);
-
+  const product = productsState.find((p) => p.id === props.goodsNo);
+  
   return (
-    <div className="imgContainer">
-      <ProductDetailBody prod={product} />
+    <div>
+      <div className="imgContainer">
+        <ProductDetailBody prod={product} />
+      </div>
     </div>
   );
 }

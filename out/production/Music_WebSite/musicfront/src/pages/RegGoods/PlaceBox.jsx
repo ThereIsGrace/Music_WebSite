@@ -115,8 +115,9 @@ export function PlaceBox() {
 
 const SubmitProcessStyle = styled.div`
   display: flex;
-  justify-content: space-between;
-  margin-top: 40px;
+  justify-content: center;
+  margin-top: 60px;
+  
 
   & .PlaceSearchInputBox {
     position: relative;

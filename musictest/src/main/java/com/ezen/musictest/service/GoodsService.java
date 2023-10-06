@@ -17,6 +17,10 @@ public class GoodsService {
 
     // 상품 등록
     public void 상품등록(Goods goods) {goodsRepository.save(goods);}
+
+    public List<Goods> 상품불러오기(){
+        return goodsRepository.findAll();
+    }
     //게시물 리스트
     public List<Goods> getGoodsList(){
         return goodsRepository.findAll();

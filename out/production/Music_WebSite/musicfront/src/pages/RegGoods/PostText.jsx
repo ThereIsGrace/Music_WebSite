@@ -31,7 +31,7 @@ export function PostText(){
                 />
             </InputGroup>
             <div style={{display: 'flex'}}>
-            <InputGroup size="lg" className="mb-3">
+            <InputGroup size="lg" className="mb-3" style={{padding:'10px'}}>
             <InputGroup.Text id="inputGroup-sizing-lg">가격</InputGroup.Text>
                 <Form.Control
             aria-label="Large"
@@ -40,7 +40,7 @@ export function PostText(){
                 />
             </InputGroup>
 
-            <InputGroup size="lg" className="mb-3">
+            <InputGroup size="lg" className="mb-3" style={{padding:'10px'}}>
             <InputGroup.Text id="inputGroup-sizing-lg">수량</InputGroup.Text>
                 <Form.Control
             aria-label="Large"
