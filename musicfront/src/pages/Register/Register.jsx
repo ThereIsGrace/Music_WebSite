@@ -43,6 +43,8 @@ export function Register() {
   const [modalText, setModalText] = useRecoilState(modalTextAtom);
 
   async function handleCheckRegister() {
+    console.log('profileImage잇는 거 확인할게');
+    console.log(profileImage);
     switch (true) {
       case email === "" || emailVisible === true:
         setModal(true);
@@ -91,12 +93,16 @@ export function Register() {
   }
 
   async function registerUser() {
+    console.log('rpdfsdfsjf');
+    console.log(profileImageURL);
+    console.log('111111111');
+
     let body = {
       username: username,
       password: password,
       email: email,
       mobile: mobile,
-      name: name 
+      name: name
     }
     
     try {
@@ -109,11 +115,16 @@ export function Register() {
   }
 
   async function addUserCollection(body) {
-    axios.post('/register', body)
+    const formData = new FormData();
+    formData.append('file', profileImage);
+    formData.append('contentsData', new Blob([JSON.stringify(body)], { type: "application/json"}));
+    axios.post('/register', formData)
     .then((response) => {
       if (response.data === 'success'){
         setModal(true);
         setModalText('회원가입에 성공했습니다.');
+      }else{
+        console.log('???SDfdfsd');
       }
     })
     .catch(function (error) {

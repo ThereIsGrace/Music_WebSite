@@ -78,25 +78,6 @@ export function PlaceBox() {
     }
   };
 
-  // const handlePostcodePopup = () => {
-  //   if (!postcodePopup) {
-  //     const script = document.createElement("script");
-  //     script.src = "https://t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js";
-  //     script.onload = () => {
-  //       const newPostcodePopup = new window.daum.Postcode({
-  //         oncomplete: (data) => {
-  //           setAddress(data.address);
-  //           setPostcodePopup(null);
-  //         },
-  //       });
-  //       newPostcodePopup.open();
-  //       setPostcodePopup(newPostcodePopup);
-  //     };
-  //     document.head.appendChild(script);
-  //   } else {
-  //     postcodePopup.open();
-  //   }
-  // };
 
   return (
     <SubmitProcessStyle>

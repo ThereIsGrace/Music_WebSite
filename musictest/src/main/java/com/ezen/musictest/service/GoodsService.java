@@ -5,6 +5,8 @@ import com.ezen.musictest.domain.Goods;
 import com.ezen.musictest.repository.BoardRepository;
 import com.ezen.musictest.repository.GoodsRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -21,6 +23,8 @@ public class GoodsService {
     public List<Goods> 상품불러오기(){
         return goodsRepository.findAll();
     }
+
+    public Page<Goods> 상품홈(Pageable pageable) {return goodsRepository.굿즈페이지(pageable);}
     //게시물 리스트
     public List<Goods> getGoodsList(){
         return goodsRepository.findAll();

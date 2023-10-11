@@ -13,7 +13,7 @@ export function useProducts(excludeId, limitCount = 99) {
   const [customData, setCustomData] = useState('')
   useEffect(() => {
       axios.get('/api/goods/list')
-          .then(response => {console.log(response.data); setProductsState(response.data); console.log('???Dfsdfsdfjkl'+productsState)})
+          .then(response => {console.log(response.data); setProductsState(response.data);})
           .catch(error => console.log(error));
   }, []);
 

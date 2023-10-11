@@ -3,6 +3,7 @@ package com.ezen.musictest.controller;
 import com.ezen.musictest.config.auth.PrincipalDetails;
 import com.ezen.musictest.domain.User;
 import com.ezen.musictest.dto.LoginRequestDto;
+import com.ezen.musictest.dto.UserRequestDto;
 import com.ezen.musictest.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.annotation.Secured;
@@ -14,6 +15,12 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.multipart.MultipartHttpServletRequest;
+
+import java.io.File;
+import java.sql.SQLOutput;
+import java.util.Base64;
 
 @RestController
 public class IndexController {
@@ -90,13 +97,32 @@ public class IndexController {
 
 
     @PostMapping("/register")
-    public String join(@RequestBody User user) {
-        System.out.println(user);
+    public String join(@RequestPart(value="contentsData") UserRequestDto user, @RequestParam(value="file") MultipartFile file) {
+//        System.out.println(user);
+//        user.setRole("ROLE_USER");
+//        String rawPassword = user.getPassword();
+//        String encPassword = bCryptPasswordEncoder.encode(rawPassword);
+//        user.setPassword(encPassword);
+//        userRepository.save(user);   //회원가입 잘됨. 비밀번호: 1234 => 시큐리티로 로그인을 할 수 없음. 이유는 패스워드가 암호화가 안 되었기 때문!!
+
+//        System.out.println(file);
+
         user.setRole("ROLE_USER");
         String rawPassword = user.getPassword();
         String encPassword = bCryptPasswordEncoder.encode(rawPassword);
         user.setPassword(encPassword);
-        userRepository.save(user);   //회원가입 잘됨. 비밀번호: 1234 => 시큐리티로 로그인을 할 수 없음. 이유는 패스워드가 암호화가 안 되었기 때문!!
+
+        String uploadPath = "D://test-image";
+        String fileName = file.getOriginalFilename();
+
+        File file2 = new File(uploadPath, fileName);
+        try{
+            file.transferTo(file2);
+        }catch(Exception e){
+            System.out.println("error file transfer");
+        }
+
+
         return "success";
     }
 

@@ -24,6 +24,7 @@ export function Login() {
       console.log('로그인 시작하려함');
       axios.post('/login', data)
       .then((response) => {
+        console.log('로그인 성공');
         const {accessToken} = response.data;
 
         axios.defaults.headers.common["Authorization"] = `Bearer ${accessToken}`;
@@ -49,7 +50,6 @@ export function Login() {
       }).catch((error) => {
         console.log(error);
       });
-      console.log("로그인 성공!");
       //movePage("/");
     } catch (error) {
       console.log(error.message);

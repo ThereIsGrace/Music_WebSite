@@ -34,7 +34,7 @@ export function RegisterForm() {
 
   const [modal, setModal] = useRecoilState(modalAtom);
   const [modalText, setModalText] = useRecoilState(modalTextAtom);
-
+  const [a, setA] = useState("");
   function emailValidation(email){
     const emailRegex = /^([\w.%+-]+)@([\w-]+\.)+([\w]{2,})$/i;
     let warningMessage = '';
@@ -151,33 +151,37 @@ export function RegisterForm() {
   });
   }
 
-
   useEffect(() => {
+    console.log('useEffect실행됬음');
     // 이미지 업로드 로직
     function uploadFile() {
       // const name = new Date().getTime() + profileImage.name;
       // state 값으로 이미지 값 받을 준비 
-      const setProfileImage = (fileBlob)=>{
-        console.log('setProfileImage실행됨');
+      const setProfileImageAfter = (file)=>{
+
         const reader = new FileReader();   // file, Blob 객체를 핸들링하는데 사용
         // File, Blob 객체를 사용해 특정 파일을 읽어들여 js에서 파일에 접근할 수 있게 도와줌
-        reader.readAsDataUrl(fileBlob);  // File 혹은 Blob을 읽은 뒤 base64로 인코딩한 문자열을 
+        reader.readAsDataURL(file);  // File 혹은 Blob을 읽은 뒤 base64로 인코딩한 문자열을 
         // FileReader 인스턴스의 result라는 속성에 달아줌 
-        return new Promise((resolve) => {
-          reader.onload = () => {
-            // FileReader가 성공적으로 파일을 읽어들였을 때 트리거 되는 이벤트 핸들러
-            // 이 내부에 원하는 로직을 넣어주면 되는데 이 경우 setRecoilState로 img 값을 받으면 된다. 
-            setProfileImage(fileBlob);
-            setProfileImageURL(reader.result);
-            resolve();
-          };
-        });
+         return new Promise((resolve) => {
+    
+            reader.onload = () => {
+        //   //   // FileReader가 성공적으로 파일을 읽어들였을 때 트리거 되는 이벤트 핸들러
+        //   //   // 이 내부에 원하는 로직을 넣어주면 되는데 이 경우 setRecoilState로 img 값을 받으면 된다. 
+            
+              setProfileImageURL(reader.result);
+              resolve();
+           };
+         });
+      }
+      //
+      if (profileImage && (profileImage.type === 'image/png' || profileImage.type === 'image/jpeg' || profileImage.type === 'image/jpg')){
+        setProfileImageAfter(profileImage);
       }
     }
     profileImage && uploadFile();
   }, [profileImage]);
 
-  setProfileImage();
   useEffect(() => {
     emailValidation(email);
   });
@@ -199,9 +203,11 @@ export function RegisterForm() {
   });
 
   // 이미지 확인용(콘솔)
-  useEffect(() => {
-    console.log('실행될 때 해야함');
-  }, [profileImage])
+  // useEffect(() => {
+  //   // console.log('실행될 때 해야함');
+  //   // console.log(profileImage);
+  //   // console.log('1111111');
+  // }, [profileImage])
 
   return(
     <StyledSection className="registerTop">
@@ -230,8 +236,8 @@ export function RegisterForm() {
           <Heading3 className="registerHeading">
             <Label className="registerLabel">프로필 사진<sup>*</sup></Label>
           </Heading3>
-          <input type="file" onChange={(e) => setProfileImage(e.target.files[0])} />
-          <img src={profileImage}/> 
+          <input type="file" onChange={(e) => { setProfileImage(e.target.files[0])}} />
+          <img src={profileImageURL} style={{"width": "100px"}}/> 
         </div>
       </Form>
   </StyledSection>

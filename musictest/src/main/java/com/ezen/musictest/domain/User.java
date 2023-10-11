@@ -25,6 +25,7 @@ public class User {
     private String mobile;
     private String name;
     private String role;  //ROLE_USER, ROLE_ADMIN
+    private String profileImage;
 
     // 일반 로그인인지 OAuth 로그인인지 확실히 알 수 잇기 위해 provider 추가
     private String provider;
