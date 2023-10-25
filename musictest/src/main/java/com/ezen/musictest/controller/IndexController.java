@@ -108,11 +108,15 @@ public class IndexController {
 //        System.out.println(file);
 
         user.setRole("ROLE_USER");
+        System.out.println("username" + user.getUsername());
+        System.out.println("name" + user.getName());
         String rawPassword = user.getPassword();
         String encPassword = bCryptPasswordEncoder.encode(rawPassword);
         user.setPassword(encPassword);
 
-        String uploadPath = "D://test-image";
+
+
+        String uploadPath = "D://test-image/";
         String fileName = file.getOriginalFilename();
 
         File file2 = new File(uploadPath, fileName);
@@ -121,6 +125,17 @@ public class IndexController {
         }catch(Exception e){
             System.out.println("error file transfer");
         }
+
+        User user1 = User.builder()
+                .role("ROLE_USER")
+                .email(user.getEmail())
+                .password(encPassword)
+                .username(user.getUsername())
+                .name(user.getName())
+                .profileImage(uploadPath + fileName)
+                .build();
+
+        userRepository.save(user1);
 
 
         return "success";
