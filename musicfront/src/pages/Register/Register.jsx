@@ -12,6 +12,11 @@ import { RegisterForm, RegisterTerms, RegisterModal } from '@/pages/Register'
 import { Header, Footer, Heading2, Button } from '@/components'
 import { useState } from 'react';
 import axios from "axios";
+import { SERVER_URL } from "@/constants";
+import {storage} from "./../../firebase/app";
+import {ref, uploadBytes, getDownloadURL} from "firebase/storage";
+import {v4} from "uuid";  
+import { Store } from './../Home/Store';
 
 
 export function Register() {
@@ -43,8 +48,6 @@ export function Register() {
   const [modalText, setModalText] = useRecoilState(modalTextAtom);
 
   async function handleCheckRegister() {
-    console.log('profileImage잇는 거 확인할게');
-    console.log(profileImage);
     switch (true) {
       case email === "" || emailVisible === true:
         setModal(true);
@@ -93,9 +96,6 @@ export function Register() {
   }
 
   async function registerUser() {
-    console.log('rpdfsdfsjf');
-    console.log(profileImageURL);
-    console.log('111111111');
 
     let body = {
       username: username,
@@ -107,8 +107,6 @@ export function Register() {
     
     try {
       addUserCollection(body)
-      //navigate("/");
-      //setModal(true);
     } catch(error) {
       console.log(error.message);
     }
@@ -116,24 +114,44 @@ export function Register() {
 
   async function addUserCollection(body) {
     const formData = new FormData();
-    formData.append('file', profileImage);
-    formData.append('contentsData', new Blob([JSON.stringify(body)], { type: "application/json"}));
-    axios.post('/register', formData)
-    .then((response) => {
-      if (response.data === 'success'){
-        setModal(true);
-        setModalText('회원가입에 성공했습니다.');
-      }else{
-        console.log('???SDfdfsd');
-      }
-    })
-    .catch(function (error) {
-      
-      console.log("Error",error);
-    })
+    try{
+      const storageRef = ref(
+        storage,
+        `profile/${Date.now()}`+profileImage.name
+      );
+      await uploadBytes(storageRef, profileImage).then((snapshot) => {
+        getDownloadURL(snapshot.ref).then((url) => {
+          formData.append('name', name);
+          formData.append('username', username);
+          formData.append('year', birthday);
+          console.log('bbbbb'+birthday);
+          formData.append('email', email);
+          formData.append('mobile', mobile);
+          formData.append('password', password);
+          formData.append('profileImage', url);
+          setProfileImageURL(url);
+          console.log(formData);
 
-
-
+          axios.post(SERVER_URL + 'register', formData, {
+            'Content-Type': 'multipart/form-data'
+          })
+          .then((response) => {
+            if (response.data.code === 1){
+              setModal(true);
+              setModalText('회원가입에 성공했습니다. 로그인 하시겠습니까?');
+            }else{
+              console.log('회원가입에 오류가 생겼습니다.');
+            }
+          })
+          .catch(function (error) {
+            
+            console.log("Error",error);
+          })
+        })
+      })
+    }catch(error){
+      console.log('error');
+    }
   }
 
   return(
@@ -141,11 +159,11 @@ export function Register() {
       <Helmet>
         <title>회원가입</title>
         <meta name="description" content="뮤직 커뮤니티 사이트" />
-        <meta name="keywords" content="음악, 커뮤니티, DJ, TURN THE TABLE" />
+        <meta name="keywords" content="음악, 커뮤니티, 굿즈" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-        <meta property="og:site_name" content="DJ-UP" />
+        <meta property="og:site_name" content="MusicCat" />
         <meta property="og:locale" content="ko-KR" />
-        <meta property="og:title" content="DJ-UP! 회원가입" />
+        <meta property="og:title" content="MusicCat! 회원가입" />
         <meta property="og:url" content="" />
         <meta property="og:type" content="website" />
         <meta property="og:image" content="" />
@@ -163,7 +181,7 @@ export function Register() {
       </StyledMain>
       {
         modal &&
-        <RegisterModal onClick={()=>{setModal(false); console.log(modal); if(vaildReg){navigate("/login"); window.location.reload();}}}>
+        <RegisterModal onClick={()=>{setModal(false); console.log(modal); if(vaildReg){ navigate("/login");}}}>
           {modalText}
         </RegisterModal>
       }

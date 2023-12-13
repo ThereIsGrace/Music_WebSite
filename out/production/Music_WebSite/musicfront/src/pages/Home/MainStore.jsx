@@ -23,6 +23,7 @@ export function MainStore() {
 
 const StyledStore = styled.div`
   margin-bottom: 80px;
+  background-color: black;
 
   & .inner {
     margin: 65px auto 85px;

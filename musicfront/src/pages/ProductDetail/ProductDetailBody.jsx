@@ -1,210 +1,273 @@
 import {Image} from "@/components";
 import styled from "styled-components";
-import {Link} from "react-router-dom";
-import {UseProductList} from "@/components";
+import {useNavigate} from "react-router-dom";
+import { useEffect, useState } from "react";
+import { BsPlus } from "react-icons/bs";
+import { BiMinus } from "react-icons/bi";
+import { Review } from "./Review";
+import { SERVER_URL } from "@/constants";
+import axiosInstance from "@/axios_interceptor/axios_interceptor";
 
 
+import { Cookies } from "react-cookie";
+import { LoginModal } from "@/components/Modal/LoginModal";
+import { CountModal } from "@/components/Modal/CountModal";
+import { CartModal } from "@/components/Modal/CartModal";
+import StarRating from "./StarRating";
 
-export function ProductDetailBody(props) {
-  document.getElementsByClassName('descriptionDescription').innerHTML = "홍길동";
+export function ProductDetailBody({product, user, reviewListEight, pname, reviewListMain, userThumbs, getReviewListMain, setReviewListMain}) {
+  const price = product.price;
+  const [quantity, setQuantity] = useState(1);
+  const [totalPrice, setTotalPrice] = useState(price);
+  const [totalPiece, setTotalPiece] = useState(1);
+  const [countModalOpen, setCountModalOpen] = useState(false);
+  const [loginModalOpen, setLoginModalOpen] = useState(false);
+  const [cartModalOpen, setCartModalOpen] = useState(false);
+
+  useEffect(()=>{
+    setTotalPrice(product.price);
+  },[product.price]);
+
+  const quantityUp = () => {
+    if (quantity >= 10){
+      setCountModalOpen(true);
+      return;
+    }
+    setQuantity(quantity => quantity + 1);
+    setTotalPrice(totalPrice => (quantity + 1)* product.price);
+    setTotalPiece(totalPiece => totalPiece + 1);
+  }
+
+  useEffect(()=> {},[loginModalOpen]);
+  useEffect(()=>{},[countModalOpen]);
+
+  const quantityDown = () => {
+    if (quantity <= 1){
+      setCountModalOpen(true);
+      return;
+    }
+    setQuantity(quantity => quantity - 1);
+    setTotalPrice(totalPrice => (quantity - 1)* product.price);
+    setTotalPiece(totalPiece => totalPiece - 1);
+  }
+
+  const addCart = () => {
+    const cookies = new Cookies();
+    if(!cookies.get('ILOGIN')){
+      setLoginModalOpen(true);
+      return;
+    }
+    
+    
+    const pathname = window.location.pathname;
+    const goodsNo = pathname.replace('/productDetail/', '');
+
+    const data = {
+      user: user,
+      goodsNo: goodsNo
+    }
+    console.log(data);
+    console.log(quantity, 'quantity');
+    axiosInstance.get(SERVER_URL + 'cart/add?goodsNo=' + goodsNo + '&quantity=' + quantity)
+     .then(res => setCartModalOpen(true))
+     .catch();
+  }
+
+  useEffect(()=>{},[cartModalOpen])
   
 
+
   return (
-    <StyledProductDetail>
-      <section className="productImg">
-        <Link to="/">
-          <Image className="mainImg" src={props.prod.imageUrl} alt="상품 이미지"></Image>
-        </Link>
-      </section>
-      <section className="userInfo">
-        <div className="userInfoContainer">
-          <div className="userInfoImgContainer">
+    <>
+      <ProductInfo>
+        <div className="productTop">
+          <div className="productImage">
+            <Image className="mainImg" src={product.imageUrl} alt="상품 이미지"></Image>
           </div>
-          <div className="spanContainer">
-            <span className="userId">{props.prod.pname}</span>
-            <span className="userLocation">{props.prod.location}</span>
+          <div className="productSide rightSide">
+            <h3 className="productName name">{product.pname}</h3>
+            <p className="productPrice">{product.price} won</p>
+            <p className="productSub">{product.description}</p>
+            <StarRating count={product.count} reviewNumber={product.reviewNumber}/>
+            { countModalOpen && <CountModal setModalOpen={setCountModalOpen}/>} 
+            { cartModalOpen && <CartModal setModalOpen={setCartModalOpen}/>}
+            <div className="divCenter">
+              <button className="qtyButton1" onClick={quantityUp}><BsPlus></BsPlus></button>
+              <input min="1" id="qty" name="qty" className="productQuantity" value={quantity}></input>
+              <button className="qtyButton2" onClick={quantityDown}><BiMinus></BiMinus></button>
+            </div>
+
+            <div className="total">
+              <div className="totalPrice">
+                <span>Total Price</span>
+                <span>{totalPrice}원</span>
+              </div>
+              <div className="totalPrice">
+                <span>Total Item</span>
+                <span>{totalPiece} 개</span>
+              </div>
+            </div>
+            <div className="buttons">
+              <button onClick={addCart}>add cart</button>
+              <button onClick={addCart}>order</button>
+            </div>
+            {loginModalOpen && <LoginModal setModalOpen={setLoginModalOpen}/>}
           </div>
         </div>
-      </section>
-      <hr />
-      <section className="productDescription">
-        <span className="titleDescription">{props.prod.title} </span>
-        <span className="priceDescription">{props.prod.price}원 </span>
+        <div className="test">
+      <div className="sub-image-url">
+        <img src={product.subImageUrl}></img>
+      </div>
+    </div>
+    <Review reviewListEight={reviewListEight} pname={pname} setReviewListMain={setReviewListMain} reviewListMain={reviewListMain} userThumbs={userThumbs} getReviewListMain={getReviewListMain}></Review> 
+    </ProductInfo>
+    </>
 
-      </section>
-      <hr />
-      <section className="a"> 
-        <span className="descriptionDescription">
-          <div dangerouslySetInnerHTML={{ __html: props.prod.content }} ></div>
-        </span>
-      </section>
-
-      <section className="popularProduct">
-        <div className="textContainer">
-          <span>인기상품</span>
-          <Link to="/PopularProduct">더 구경하기</Link>
-          
-        </div>
-        <UseProductList count={6} excludeId={props.prod.id} />
-      </section>
-    </StyledProductDetail>
 
   );
 }
 
-const StyledProductDetail = styled.div`
-  & hr {
-    width: 678px;
-    border: 1px solid #eaebee;
+const ProductInfo = styled.div`
+  & * {
+    box-sizing: border-box;
   }
 
-  & .productContainer {
-    display: grid;
-    grid-template-rows: repeat(2, 1fr);
-    grid-template-columns: repeat(3, 1fr);
-    gap: 14px;
-    justify-items: center;
-    margin-right: 0;
-  }
+  max-width: 1096px;
+  width: 100%;
+  height: 100%;
+  margin: 0px auto;
+  padding: 160px 50px 60px;
 
-  & .productImg {
-    margin: 64px auto 0 auto;
-    width: 678px;
-    height: 564px;
-  }
-
-  & .userInfoContainer {
-    display: flex;
-    width: 678px;
-    height: 60px;
-    margin: 24px auto;
-    align-items: center;
-  }
-
-  & .userInfoImgContainer {
-    width: 40px;
-    height: 40px;
-    border-radius: 100%;
-    overflow: hidden;
-    margin-right: 8px;
-  }
-
-  & .userImg {
-    width: 100%;
-    height: 100%;
+  & .mainImg {
+    width: 400px;
+    height: 400px;
+    border-radius: 8px;
     object-fit: cover;
   }
 
-  & .a {
-    text-align: center;
-  }
-  & .spanContainer {
-    line-height: 20px;
-  }
-
-  & .spanContainer span {
-    display: block;
-  }
-
-  & .userId {
-    font-style: normal;
-    font-weight: 600;
-    font-size: 15px;
-    color: #212529;
-  }
-
-  & .userLocation {
-    font-style: normal;
-    font-weight: 400;
-    font-size: 13px;
-    color: #212529;
-  }
-
-  & .productDescription {
-    width: 678px;
-    height: 84px;
-    margin: 36px auto;
-  }
-
-  & .mainImg {
-    width: 678px;
-    height: 564px;
-    margin-bottom: 25px;
-    border-radius: 8px;
-  }
-
-  & .titleDescription {
-    font-style: normal;
-    font-weight: 600;
-    font-size: 20px;
-    line-height: 24px;
-  }
-
-  & .priceDescription {
-    display: block;
-    font-style: normal;
-    color: #212529;
-    font-weight: 700;
-    font-size: 15px;
-    line-height: 30px;
-  }
-
-  & .descriptionDescription {
-    font-style: normal;
-    font-weight: 400;
-    font-size: 17px;
-    line-height: 30px;
-    display: -webkit-box;
-    -webkit-line-clamp: 2;
-    -webkit-box-orient: vertical;
-    text-overflow: ellipsis;
-    overflow: hidden;
-  }
-
-  & .interestDescription {
-    display: block;
-    font-style: normal;
-    margin-top: 3px;
-    font-size: 12px;
-    line-height: 3 px;
-    color: #868e96;
-  }
-
-  & .popularProduct {
-    width: 678px;
-    height: 100%;
-    margin: 0 auto;
-  }
-
-  & .textContainer {
+  & .text {
     display: flex;
-    width: 678px;
-    margin: 0 auto;
-    justify-content: space-between;
+    justify-content: center;
   }
 
-  & .textContainer span,
-  a {
-    margin: 36px 0 0 0;
+  & .test img {
+    max-width: 100%;
+    max-height: 100%;
   }
 
-  & .textContainer span {
-    font-style: normal;
-    font-weight: 600;
+  & .myT img{
+    width: 100%;
+  }
+
+  & .divCenter {
+    display: flex;
+    align-items: center;
+  }
+
+  & .qtyButton1 {
+    width: 30px;
+    height: 30px;
+    border-top-left-radius: 2px;
+    border-bottom-left-radius: 2px;
+    border: 1px solid rgb(85, 85, 85);
+  }
+
+  & .qtyButton2 {
+    width: 30px;
+    height: 30px;
+    border-top-right-radius: 2px;
+    border-bottom-right-radius: 2px;
+    border: 1px solid rgb(85, 85, 85);
+  }
+
+  & .sub-image-url{
+    margin: auto;
+    display: flex;
+    justify-content: center;
+    margin-bottom: 100px;
+
+    & img {
+      width: 1056px;
+    }
+  }
+
+
+
+
+
+  & .productTop {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 20px;
+  }
+
+  & .productImage {
+    object-fit: cover;
+    aspect-ratio: 1 / 1;
+  }
+
+  & .rightSide {
+    color: rgb(34, 34, 34);
+  }
+
+  & .productName {
+    font-size: 2.5rem;
+    font-weight: 700;
+  }
+
+  & .productPrice {
+    margin: 20px 0px 40px;
     font-size: 18px;
-    line-height: 26px;
+    font-weight: bold;
   }
 
-  & .textContainer a {
-    font-style: normal;
-    font-weight: 400;
-    font-size: 15px;
-    line-height: 21px;
-    color: #ff8a3d;
+  & .productSub {
+    color: rgb(85, 85, 85);
   }
 
-  & a:hover {
-    font-weight: 600;
+  & .productQuantity {
+    width: 40px;
+    margin: 30px 0px;
+    height: 30px;
+    color: rgb(85, 85, 85);
   }
 
+  & input[type="number" i]{
+    writing-mode: horizontal-tb !important;
+    padding-block: 1px;
+
+    padding-inline: 2px;
+  }
+
+  & .total {
+    padding-top: 30px;
+    border-top: 1px solid rgb(196, 196, 196);
+  }
+
+  & .totalPrice {
+    display: flex;
+    -webkit-box-pack: justify;
+    justify-content: space-between;
+    margin-bottom: 15px;
+    color: rgb(85, 85, 85);
+  }
+
+  & .buttons {
+    display: grid;
+    gap: 10px;
+    grid-template-columns: repeat(2, 1fr);
+    margin-top: 50px;
+    text-transform: uppercase;
+  }
+
+  & .buttons button {
+    all: unset;
+    text-align: center;
+    cursor: pointer;
+    color: rgb(255, 255, 255);
+    background-color: rgb(85, 85, 85);
+    padding: 12px 30px;
+    border-radius: 10px;
+
+  }
 `;

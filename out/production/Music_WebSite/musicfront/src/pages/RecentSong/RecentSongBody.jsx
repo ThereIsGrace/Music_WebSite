@@ -6,7 +6,7 @@ export const RecentSongBody = () => {
     <StyledProduct>
       <div className="inner">
         <Heading2>최신곡</Heading2>
-        <UseRecentSongList />
+        <UseRecentSongList color={'black'}/>
       </div>
     </StyledProduct>
   );

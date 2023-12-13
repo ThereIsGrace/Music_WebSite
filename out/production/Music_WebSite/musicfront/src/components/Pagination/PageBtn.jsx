@@ -8,6 +8,8 @@ export const PageBtn = (props) => {
   const [page, setPage] = useRecoilState(pageAtom);
 
   const prev = () => {
+    const newPage = Math.floor(page/5) * 5 + 1;
+    console.log('newPage가 뭘까?' + newPage);
     setPage(page - 1);
   };
 

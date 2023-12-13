@@ -3,64 +3,46 @@ import raccoonIcon from "@/assets/Mypage/너굴.png";
 import user from "@/assets/Mypage/user.png";
 import yellowbubble from "@/assets/Mypage/yellowbubble.svg";
 import styled from "styled-components/macro";
+import { Link } from "react-router-dom";
+import { Image } from "@/components";
+import exclamationMark from "@/assets/Logo/exclamationmark.png"
+export function Compliment({boardList}) {
 
-export function Compliment() {
+
   return (
     <SectionCompliment>
       <div className="ListTitle">
-        <span>매너 칭찬</span>
+        <span>내가 쓴 게시물</span>
       </div>
       <div>
-        <img src={raccoon} alt="너굴이미지"></img>
+      <img src={raccoon} />
         <ul>
           <p>
-            받은 매너 칭찬
+            게시물
             <img src={raccoonIcon} alt="너굴아이콘" />
           </p>
-          <li>
-            <span>응답이 빨라요</span>
-            <span>
-              <img src={user} alt="유저 이미지" className="userIcon" />
-              12
-            </span>
-          </li>
-          <li>
-            <span>시간약속을 잘 지켜요</span>
-            <span>
-              <img src={user} alt="유저 이미지" className="userIcon" />
-              10
-            </span>
-          </li>
-          <li>
-            <span>친절하고 매너가 좋아요</span>
-            <span>
-              <img src={user} alt="유저 이미지" className="userIcon" />8
-            </span>
-          </li>
-          <li>
-            <span>제가 있는 곳까지 와서 거래했어요</span>
-            <span>
-              <img src={user} alt="유저 이미지" className="userIcon" />6
-            </span>
-          </li>
-          <li>
-            <span>좋은 상품을 저렴하게 판매해요</span>
-            <span>
-              <img src={user} alt="유저 이미지" className="userIcon" />3
-            </span>
-          </li>
-          <li>
-            <span>상품상태가 설명한 것과 똑같아요</span>
-            <span>
-              <img src={user} alt="유저 이미지" className="userIcon" />2
-            </span>
-          </li>
-          <li>
-            <span>상품설명이 자세해요</span>
-            <span>
-              <img src={user} alt="유저 이미지" className="userIcon" />0
-            </span>
-          </li>
+          {boardList.map((board, index) => 
+          <>
+            <li>
+              <Link to={`/board/${board.b_id}`} style={{color: 'black'}}>
+                <span>{board.title}</span>
+              </Link>
+              <span>
+                <img src={user} alt="유저 이미지" className="userIcon" />
+                {board.replyList.length}
+              </span>
+            </li>
+          </>)}
+          {
+            Object.keys(boardList).length === 0 &&
+            <>
+              <Void>
+                <Image src={exclamationMark} alt='댓글 없음 이미지'/>
+                <p className='void-text' style={{textAlign: 'center'}}>아직 게시물이 없습니다.</p>
+                <p className='void-text' style={{textAlign: 'center', marginTop: '0px'}}>새로운 게시글을 만들어보세요.</p>
+              </Void>
+            </>
+          }
         </ul>
       </div>
     </SectionCompliment>
@@ -69,6 +51,7 @@ export function Compliment() {
 
 const SectionCompliment = styled.div`
   margin-top: 60px;
+  margin-bottom: 30px;
 
   .ListTitle {
     width: 396px;
@@ -85,7 +68,7 @@ const SectionCompliment = styled.div`
   }
 
   & div ul {
-    width: 316px;
+    width: 315px;
     height: 340px;
     background-image: url(${yellowbubble});
     background-repeat: no-repeat;
@@ -127,3 +110,17 @@ const SectionCompliment = styled.div`
     border: 0;
   }
 `;
+
+const Void = styled.div`
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  & img {
+    width: 30px;
+    margin: 0 auto;
+  }
+
+  & .void-text {
+    margin: 24px auto 12px;
+  }
+`

@@ -31,7 +31,17 @@ dependencies {
 	implementation 'jakarta.xml.bind:jakarta.xml.bind-api:2.3.2'
 	implementation 'com.auth0:java-jwt:4.2.2'
 	implementation 'org.springframework.boot:spring-boot-starter-data-rest'
-	implementation 'io.jsonwebtoken:jjwt:0.9.1'
+	//implementation 'io.jsonwebtoken:jjwt:0.9.1'
+	implementation 'io.jsonwebtoken:jjwt-api:0.11.2'
+	implementation 'io.jsonwebtoken:jjwt-jackson:0.11.2'
+	runtimeOnly 'io.jsonwebtoken:jjwt-impl:0.11.2'
+	// https://mvnrepository.com/artifact/org.bouncycastle/bcprov-jdk15on
+	implementation group: 'org.bouncycastle', name: 'bcprov-jdk15on', version: '1.65.01'
+	// https://mvnrepository.com/artifact/com.fasterxml.jackson.core/jackson-databind
+	implementation 'com.fasterxml.jackson.core:jackson-databind:2.15.2'
+	// https://mvnrepository.com/artifact/com.nimbusds/nimbus-jose-jwt
+	implementation group: 'com.nimbusds', name: 'nimbus-jose-jwt', version: '9.31'
+
 	implementation 'org.thymeleaf.extras:thymeleaf-extras-springsecurity5'
 	compileOnly 'org.projectlombok:lombok'
 	developmentOnly 'org.springframework.boot:spring-boot-devtools'

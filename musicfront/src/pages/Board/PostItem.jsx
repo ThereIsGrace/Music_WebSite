@@ -7,24 +7,19 @@ export function PostItem(props) {
   return (
     <PostItemBlock>
       <h2>
-        {/* sb 컨트롤러 만들어서 연결하기 */}
-        <Link to={`/board/${props.record.b_id}`}>{props.record.title}</Link>
+        <Link to={`/board/${props.record.b_id}`}>{props.record.title} [{props.record.replyList.length}]</Link>
+        <SubInfo username={props.record.user.username} publishedDate={props.record.updatedate}></SubInfo>
       </h2>
-      <SubInfo username={props.record.writer} publishedDate={new Date(props.record.updatedate)} />
-      {/* <p>{props.record.content}</p> */}
     </PostItemBlock>
   );
 }
 
 const PostItemBlock = styled.div`
-  padding-top: 1.5rem;
-  padding-bottom: 1rem;
-  /* 맨 위 포스트는 padding-top 없음 */
-  &:first-child {
-    padding-top: 0;
-  }
-  & + & {
-    border-top: 1px solid ${palette.gray[2]};
+  padding-top: 1.3rem;
+  padding-bottom: 0.9rem;
+
+  &{
+    border-bottom: 1px solid ${palette.gray[2]};
   }
 
   h2 {
@@ -44,3 +39,4 @@ const PostItemBlock = styled.div`
     margin-top: 2rem;
   }
 `;
+

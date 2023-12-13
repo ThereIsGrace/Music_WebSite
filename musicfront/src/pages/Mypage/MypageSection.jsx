@@ -1,15 +1,16 @@
 import {SectionProfileInfo, MannerTemperature, SectionInfoCount, Compliment, MypageReview} from "@/pages/Mypage/";
 import styled from "styled-components/macro";
 
-export function Section() {
+export function Section(props) {
+  const user = props.user;
+  const boardList = props.boardList;
   return (
     <MypageSection>
       <h1>프로필</h1>
-      <SectionProfileInfo></SectionProfileInfo>
-      <MannerTemperature></MannerTemperature>
+      <SectionProfileInfo user={user}></SectionProfileInfo>
       <SectionInfoCount></SectionInfoCount>
       <div className="SectionItemReview">
-        <Compliment></Compliment>
+        <Compliment boardList={boardList}></Compliment>
         <MypageReview></MypageReview>
       </div>
     </MypageSection>
@@ -22,7 +23,7 @@ const MypageSection = styled.div`
 
   & > h1 {
     font-size: 18px;
-    color: #6c816d;
+    color: rgb(85, 85, 85);
     font-weight: 600;
     border-bottom: 1px solid #dcdee3;
     padding-bottom: 16px;

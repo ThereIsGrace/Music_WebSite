@@ -9,54 +9,30 @@ import naverblog from "@/assets/Home/naverblog.png";
 export function Footer() {
   return (
     <StyledFooter>
-      <hr />
       <div className="sectionContainer">
-        <section className="container">
-          <section>
-            <div>
-              <span tabIndex={0}>
-                <b>대표</b> 정재은, 조예찬
-              </span>
-              <span> | </span>
-              <span tabIndex={0}>
-                <b>사업자 번호</b> 232-47-08081
-              </span>
-            </div>
-            <div>
-              <span tabIndex={0}>
-                <b>EZEN컴퓨터아카데미 신고번호</b> 2023-0808-1349
-              </span>
-            </div>
-            <address>
-              <div>
-                <span tabIndex={0}>
-                  <b>주소</b> 경기도 안산시 상록구 광덕1로 375 KR 강우빌딩 5층
-                </span>
-              </div>
-              <span tabIndex={0}>
-                <b>전화</b> 1577-1577
-              </span>
-              <span> | </span>
-              <span tabIndex={0}>
-                <b>고객문의</b> music@djupmusic.com
-              </span>
-            </address>
-          </section>
-          <section className="aContainer">
-            <Link to={"#"}>제휴 문의</Link>
-            <Link to={"#"}>광고 문의</Link>
-            <Link to={"#"}>PR 문의</Link>
-            <Link to={"#"}>IR 문의</Link>
-          </section>
-          <section className="aContainer">
-            <Link to={"#"}>이용약관</Link>
-            <Link to={"#"} className="unique">
-              개인정보처리방침
-            </Link>
-            <Link to={"#"}>위치기반서비스 이용약관</Link>
-            <Link to={"#"}>이용자보호 비전과 계획</Link>
-          </section>
-        </section>
+        <div className="section-all">
+        <div className="company-name">
+          <span className="bu">주식회사 뮤직캣(MusicCat)</span>
+        </div>
+        <div className="business-represent">
+          <span className="bu">대표이사: 정재은</span>
+        </div>
+        <div className="github-address">
+          <b>개발자 깃허브 주소</b>
+          <span className="bu">깃허브 주소 넣기</span>
+        </div>
+        <div className="my-email">
+          <span className="bu">개발자 이메일: universe2879@gmail.com</span>
+        </div>
+        <div className="rights">
+          <span>ⓒ 2023. all rights reserved by Jeong Jaeeun</span>
+        </div>
+        <div className="purpose">
+          본 웹사이트는 포트폴리오용으로 만들어진 웹사이트입니다.
+        </div>
+
+        </div>
+
         <section className="container">
           <Link to={"#"}>
             <Image src={facebook} alt="페이스북" />
@@ -77,52 +53,37 @@ export function Footer() {
 }
 
 const StyledFooter = styled.footer`
-  background-color: white;
+  background-color: rgb(250, 250, 250);
   width: 100%;
   margin: 0 auto;
-  padding-bottom: 100px;
+  color: rgb(51,51,51);
+  bottom: 0;
 
-  & hr {
-    border: 1px solid #eaebee;
+
+  & .company-name {
+    font-weight: 600;
+    margin-bottom: 30px;
   }
 
-  & .sectionContainer {
-    position: relative;
-    justify-content: space-between;
-    width: 768px;
-    margin: 6px auto;
-    display: flex;
-    padding-top: 60px;
+
+  & .section-all {
+    padding: 50px 50px 20px 50px;
+    color: rgb(51,51,51);
+    width: 1096px;
+    margin: 0 auto;
+    
   }
 
-  & span {
-    color: #868b94;
-    font-size: 13.008px;
-  }
-
-  & b {
-    font-weight: 700;
-    font-size: 13.008px;
-  }
-
-  & a {
-    margin: 0 14px;
-    text-decoration: none;
-    margin-left: 0;
-    color: #868b94;
-    font-weight: 700;
-    font-size: 13.008px;
-  }
-
-  & .unique {
-    color: rgb(77, 81, 89);
+  & .my-email {
+    margin-bottom: 20px;
   }
 
   & .container {
-    float: left;
-  }
-
-  & .aContainer {
-    margin-top: 20px;
+    width: 1096px;
+    padding: 0 50px;
+    display: flex;
+    gap: 20px;
+    justify-content: center;
+    padding-bottom: 50px;
   }
 `;

@@ -21,7 +21,7 @@ const buttonStyle = css`
   min-width: 10px;
   width: 110px;
   text-align: center;
-  background: ${palette.blue[0]};
+  background: rgb(85, 85, 85);
   &:hover {
     background: ${palette.gray[6]};
   }
@@ -38,7 +38,7 @@ const buttonStyle = css`
   ${(props) =>
     props.blue &&
     css`
-      background: ${palette.blue[2]};
+      background: rgb(85, 85, 85);
       &:hover {
         background: ${palette.blue[1]};
       }

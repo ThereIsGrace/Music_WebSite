@@ -6,3 +6,6 @@ export * from "@/pages/Home/Store";
 export * from "@/pages/Home/UseStoreList";
 export * from "@/pages/Home/UseStores";
 export * from "@/pages/Home/UseStoresType";
+export * from "@/pages/Home/CardExample";
+export * from "@/pages/Home/GoodsSlide";
+export * from "@/pages/Home/CustomSlide";

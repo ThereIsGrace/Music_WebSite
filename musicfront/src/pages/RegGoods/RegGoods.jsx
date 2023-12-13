@@ -2,7 +2,6 @@ import {Header, Footer} from "@/components";
 import {Helmet} from "react-helmet-async";
 import styled from "styled-components/macro";
 import { RegGoodsSection } from "./RegGoodsSection";
-import { PostText } from ".";
 
 export function RegGoods(){
     return(
@@ -28,6 +27,5 @@ export function RegGoods(){
 }
 
 const Wrap = styled.div`
-    width: 1056px;
     margin: 120px auto 0 auto;
 `;

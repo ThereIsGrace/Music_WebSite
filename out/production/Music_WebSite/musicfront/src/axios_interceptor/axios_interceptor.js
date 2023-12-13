@@ -1,62 +1,69 @@
 import axios from "axios";
 import { SERVER_URL } from "../constants";
 import { getCookie, setCookie } from "@/utils/cookies";
+import { getConfigFileParsingDiagnostics } from "typescript";
+import { Navigate, useNavigate } from 'react-router-dom';
 
-const access_token = getCookie('accessToken');
-const refresh_token = getCookie('refreshToken');
+import { useState } from "react";
+import { atom, useRecoilState, useRecoilValue } from "recoil";
+import { authorizationAtom } from "@/pages/Login/loginAtom";
+import { accessTokenState } from "./access";
+import { Cookies } from "react-cookie";
+
 
 const axiosInstance = axios.create({
     baseURL: SERVER_URL,
-    headers: {
-        "content-type": "application/json;charset=UTF-8",
-        accept: "application/json"
-    },
+    timeout: 1000,
     withCredentials: true
 });
-
-axiosInstance.interceptors.request.use(function(config) {
-    console.log('request sent');
-  config.headers["Authorization"] = access_token;
-  config.headers["Refresh-Token"] = refresh_token;
-
-    // config.headers["Authorization"] = access_token;
-    // config.headers["Reflash"] = refresh_token;
-
-    return config;
+const config = '';
+axiosInstance.interceptors.request.use(async (config) => {
+  config.headers.Authorization = `Bearer ${accessTokenState.getAccessToken()}`;
+  config.headers['Content-Type'] = 'application/json';
+  if (config.method === 'get') {
+    config.timeout = 12000;
+}
+  return config;
 })
 
+
 axiosInstance.interceptors.response.use(
+    
     function (response) {
+      // 200대 response를 받아 응답 데이터를 가공하는 작업
+      const cookies = new Cookies();
+      const Ilogin = cookies.get('ILOGIN');
+      if (!Ilogin){
+        console.log('로그인 상태 아님');
+      }
       return response;
     },
-    async function (err) {
-      if (err.response && err.response.data.status === "403 FORBIDDEN") {
-        try {
-          // 기존에 쿠키에 저장된 refresh token을 가져옴
-          // refresh token만 가지고 access token 발급을 요청할 수 있도록 백엔드 팀원분들에게 요청 후 api를 설정함
-          const refreshToken = await getCookie("refresh_token");
-          axios.defaults.headers.common["refresh-token"] = refreshToken;
-          // 토큰을 다시 발급 받는 api 호출 함수 
-          refreshAccessToken();
-        } catch (err) {
-          console.log("error", err.response);
-          window.location.href = "/";
+    async function (error) {
+      // console.error(error, '에러 발생');
+      const {
+        config,
+        response: {status},
+      } = error;
+      
+      const cookies = new Cookies();
+      if (status === 403 || status === 401  || status === 400 || status === 500){  
+        if (cookies.get("ILOGIN") === 'Y'){
+          const originalRequest = config;
+          await axios.get(SERVER_URL + 'silent-refresh').then(res => { 
+            accessTokenState.setAccessToken(res.data.accessToken);
+            axios.defaults.Authorization = `Bearer ${accessTokenState.getAccessToken()}`;
+          }).catch(err => window.location.href = '/login');
+          return axiosInstance(originalRequest);
+        }else {
+          window.location.href = '/login';
         }
-        return Promise.reject(err);
+      }else {
+        window.location.href = '/login';
       }
-      return Promise.reject(err);
+      return Promise.reject(error);
     }
   );
   
-  const refreshAccessToken = async () => {
-    const response = await axios.post("http://localhost:8094/reissue");
-      // response를 받고 header부분에 token을 받아서 쿠키에 담기 
-    const access_token = response.headers["authorization"];
-    setCookie("access_token", access_token); 
-      // 화면에 바로 반영이 안돼서 강제적으로 reload 시킴 
-    window.location.reload();
-  };
-
 
 export default axiosInstance;
 

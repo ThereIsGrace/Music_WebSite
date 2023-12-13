@@ -1,71 +1,70 @@
-import styled, { createGlobalStyle } from "styled-components/macro";
+import styled from "styled-components/macro";
 import {Button, LinkButton, LoginModal} from "@/pages/Login/index";
-import {Form, Input, Label, Header, Footer, Heading2} from "@/components/index";
+import {Form, Input, Label, Header, Footer, Heading2, checkCurrentUserStateAtom} from "@/components/index";
 import {useNavigate} from "react-router-dom";
-import {useState} from "react";
+import {useEffect, useState} from "react";
 import {Helmet} from "react-helmet-async";
 import axios from "axios";
-import { setCookie } from "@/utils/cookies";
+import kakaoButton from "@/assets/Logo/kakao-login.png";
+import naverButton from "@/assets/Logo/naver-login.png"
+import googleButton from "@/assets/Logo/google-login.png"
+import { SERVER_URL } from "@/constants";
+import axiosInstance from "@/axios_interceptor/axios_interceptor";
+import { useRecoilState } from "recoil";
+import { authorizationAtom, loggedInAtom } from "./loginAtom";
+import { accessTokenState } from "@/axios_interceptor/access";
+import { Cookies } from "react-cookie";
+import { LoginFailureModal } from "@/components/Modal/LoginFailureModal";
 
 export function Login() {
+  const [checkCurrentUserState, setCheckCurrentUserState] = useRecoilState(checkCurrentUserStateAtom);
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [loggedIn, setLoggedIn] = useRecoilState(loggedInAtom);
+  const [modalOpen, setModalOpen] = useState(false);
   const movePage = useNavigate();
-
-
+  
+  
   const login = async () => {
     try {
       let data = {
-        "username": username,
-        "password": password
-      };
-      console.log(data);
-      console.log('로그인 시작하려함');
-      axios.post('/login', data)
-      .then((response) => {
-        console.log('로그인 성공');
-        const {accessToken} = response.data;
+        username: username,
+        password: password
+      }
 
-        axios.defaults.headers.common["Authorization"] = `Bearer ${accessToken}`;
-        console.log('hello2222');
-        if(response.status === 200){
-          console.log('hello');
-          let jwtToken = response.headers.get("Authorization");
-          let refreshToken = response.headers.get("refreshToken");
-          console.log(jwtToken);
-          // 보안을 위해 accessToken과 refreshToken을 쿠키에 저장한다. 
-          setCookie('accessToken', jwtToken, {
-            path: "/",
-            secure: true,
-            sameSite:"none"
-          })
-          setCookie('refreshToken', refreshToken, {
-            path: "/",
-            secure: true,
-            sameSite:"none"
-          })
-          onSilentRefresh();
-        }
-      }).catch((error) => {
+      console.log(data);
+      axios.post(SERVER_URL + 'login', data)
+      .then(onLoginSuccess)
+      .catch((error) => {
         console.log(error);
+        setModalOpen(true);
       });
-      //movePage("/");
     } catch (error) {
       console.log(error.message);
       console.log("회원 정보가 존재하지 않습니다.");
-      setIsModalOpen(true);
+      setModalOpen(true);
     }
   };
 
-  const closeModal = () => {
-    setIsModalOpen(false);
-  };
 
-  const onSilentRefresh = () => {
-    console.log('silentRefresh시작');
-    
-}
+  const onLoginSuccess = response => {
+    const accessToken = response.data;
+    accessTokenState.setAccessToken(accessToken);
+    const cookies = new Cookies();
+    cookies.set('ILOGIN', 'Y');
+    setLoggedIn(true);
+    setCheckCurrentUserState(true);
+    movePage("/");
+  }
+
+  useEffect(() =>{}, [modalOpen]);
+
+
+  const socialLogin = (provider) => {
+    window.location.href = SERVER_URL + 'auth/authorize/' + provider;
+  }
+
   return (
     <>
       <Helmet>
@@ -111,13 +110,18 @@ export function Login() {
         <Button type="button" onClick={login}>
           로그인
         </Button>
+        <div className="social-login-buttons">
+          <img src={kakaoButton} onClick={() => socialLogin('kakao')} ></img>
+          <img src={naverButton} onClick={() => socialLogin('naver')} ></img>
+          <img src={googleButton} onClick={() => socialLogin('google')} ></img>
+        </div>
+
         <LinkButton to="/register">회원가입</LinkButton>
-        {isModalOpen && (
-          <LoginModal isOpen={isModalOpen} onClose={closeModal}>
-            아이디와 비밀번호를 확인해주세요.
-          </LoginModal>
-        )}
+
       </StyledMain>
+      {modalOpen && (
+          <LoginFailureModal setModalOpen={setModalOpen}/>
+        )}
       <Footer />
     </>
   );
@@ -129,6 +133,21 @@ const StyledMain = styled.main`
   flex-direction: column;
   align-items: center;
   justify-content: center;
+
+  & Button {
+    background-color: red;
+  }
+
+  & .social-login-buttons {
+    width: 200px;
+    display: flex;
+    justify-content: space-between;
+    margin-top: 20px;
+
+    & img {
+      width: 50px;
+    }
+  }
 
   & .header {
     padding: 40px;
@@ -162,3 +181,6 @@ const StyledMain = styled.main`
     margin-bottom: 12px;
   }
 `;
+
+
+

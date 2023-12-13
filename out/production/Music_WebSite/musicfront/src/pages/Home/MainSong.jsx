@@ -1,25 +1,39 @@
 import styled from "styled-components";
 import {Link} from "react-router-dom";
 import {Heading2, UseRecentSongList} from "@/components";
+import bg from "@/assets/background/bg.png";
+import { Paging } from "./Paging";
+import { useEffect } from "react";
+import { recentPageNumAtom, totalSongAtom } from "./homeAtoms";
+import { useRecoilState, useRecoilValue } from "recoil";
 
 export function MainSong() {
+  const songCount = useRecoilValue(totalSongAtom);
+  const [recentPageNum, setRecentPageNum] = useRecoilState(recentPageNumAtom); 
+  const recentSongCount = useRecoilValue(totalSongAtom);
+  useEffect(()=>{
+    setRecentPageNum(1);
+  }, []);
   return (
     <StyledProduct>
       <div className="inner">
-        <Heading2>최신 발매</Heading2>
-        <UseRecentSongList count={8} />
-        <Link to="/recent">
-          <span className="recent">최신 곡 더 보기</span>
-        </Link>
+        <Heading2>최신 음악</Heading2>
+        <p className="count">전체음악수 {recentSongCount}</p>
+        <UseRecentSongList color={'white'}/>
+        <Paging />
       </div>
     </StyledProduct>
   );
 }
 
 const StyledProduct = styled.div`
+background-image: url(${bg});
+padding-top: 30px;
+padding-bottom: 30px;
+
   & .inner {
     margin: 65px auto 85px;
-    width: 1056px;
+    width: 70%;
   }
 
   & h2 {
@@ -29,14 +43,20 @@ const StyledProduct = styled.div`
     line-height: 54px;
     align-items: center;
     text-align: center;
-    color: #212529;
+    color: white;
+  }
+
+  & .count {
+    font-size: 15px;
+    color: white;
+    float: right;
   }
 
   & .productContainer {
     margin-top: 85px;
     display: grid;
     grid-template-rows: repeat(2, 1fr);
-    grid-template-columns: repeat(4, 1fr);
+    grid-template-columns: repeat(5, 1fr);
     gap: 55px;
     justify-items: center;
   }
@@ -50,6 +70,6 @@ const StyledProduct = styled.div`
     line-height: 24px;
     letter-spacing: -0.3px;
     text-decoration-line: underline;
-    color: #212529;
+    color: white;
   }
 `;

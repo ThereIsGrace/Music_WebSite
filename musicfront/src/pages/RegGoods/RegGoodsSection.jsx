@@ -11,7 +11,6 @@ export function RegGoodsSection(){
             <h1>상품 등록</h1>
             <PostImage />
             <PostText />
-            <SubText />
             <PlaceBox />
         </Section>
     )
@@ -19,11 +18,13 @@ export function RegGoodsSection(){
 
 const Section = styled.div`
     margin-bottom: 80px;
+    width: 1056px;
+    margin: 0 auto;
 
 
     & > h1 {
-        font-size: 18px;
-        color: #2980b9;
+        font-size: 25px;
+        color: rgb(85, 85, 85);
         font-weight: 600;
         border-bottom: 1px solid #dcdee3;
         padding-bottom: 16px;

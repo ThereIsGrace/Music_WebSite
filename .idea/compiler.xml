@@ -10,5 +10,10 @@
         <module name="musictest.main" />
       </profile>
     </annotationProcessing>
+    <bytecodeTargetLevel>
+      <module name="music" target="11" />
+      <module name="music.main" target="11" />
+      <module name="music.test" target="11" />
+    </bytecodeTargetLevel>
   </component>
 </project>

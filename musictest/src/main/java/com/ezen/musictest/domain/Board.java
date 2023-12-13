@@ -1,15 +1,14 @@
 package com.ezen.musictest.domain;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import lombok.*;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Entity
 @Getter
@@ -17,6 +16,7 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 @NoArgsConstructor
 @EntityListeners(AuditingEntityListener.class)
+@Data
 public class Board {
 
     @Id
@@ -29,15 +29,11 @@ public class Board {
     @Column(columnDefinition = "TEXT")
     private String content;
 
-    @Column
-    private String writer;
+    @ManyToOne(fetch = FetchType.EAGER)
+    private User user;
 
     @Column
     private String image_url;
-
-//    @ManyToOne
-//    @JoinColumn(name="writer")
-//    private Member member;
 
     @CreatedDate
     @Column(name = "regidate", updatable = false)
@@ -46,4 +42,11 @@ public class Board {
     @LastModifiedDate
     @Column(name = "updatedate")
     private LocalDateTime updatedate;
+
+
+    @OrderBy("regidate DESC")
+    @OneToMany(mappedBy = "board", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Reply> replyList;
+
+    private int hits;
 }

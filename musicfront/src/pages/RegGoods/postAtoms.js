@@ -53,3 +53,39 @@ export const postContentAtom = atom({
   key: "postContentAtom",
   default: "",
 });
+
+/* 메인 이미지 */
+export const mainImageAtom = atom({
+  key: "mainImageAtom",
+  default: ""
+});
+
+/* 서브 이미지 */
+export const subImageAtom = atom({
+  key: "subImageAtom",
+  default: ""
+});
+
+/* 메인 이미지 url */
+export const mainImageUrlAtom = atom({
+  key: "mainImageUrlAtom",
+  default: ""
+});
+
+/* 서브 이미지 url */
+export const subImageUrlAtom = atom({
+  key: "subImageUrlAtom",
+  default: ""
+});
+
+/* 타입 */
+export const typeAtom = atom({
+  key: "typeAtom",
+  default: ""
+});
+
+/* 상품 설명 */
+export const descriptionAtom = atom({
+  key: "descriptionAtom",
+  default: ""
+});

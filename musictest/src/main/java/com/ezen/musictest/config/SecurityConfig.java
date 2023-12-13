@@ -2,111 +2,180 @@ package com.ezen.musictest.config;
 
 
 import com.ezen.musictest.config.auth.PrincipalDetailsService;
-import com.ezen.musictest.config.jwt.JwtAuthenticationFilter;
-import com.ezen.musictest.config.jwt.JwtAuthorizationFilter;
-import com.ezen.musictest.config.jwt.OAuthSuccessHandler;
-import com.ezen.musictest.config.oauth.PrincipalOauth2UserService;
-import com.ezen.musictest.repository.UserRepository;
+import com.ezen.musictest.config.handler.CustomAuthenticationFailureHandler;
+import com.ezen.musictest.config.jwt.*;
+import com.ezen.musictest.config.jwt.handler.CustomAuthenticationSuccessHandler;
+import com.ezen.musictest.config.jwt.handler.OAuthSuccessHandler;
+import com.ezen.musictest.domain.Role;
+import com.ezen.musictest.global.oauth2.service.CustomOAuth2UserService;
+import com.ezen.musictest.service.UserService;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+
+import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.AuthenticationProvider;
+import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
-import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
+import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.security.oauth2.client.userinfo.OAuth2UserRequest;
-import org.springframework.security.oauth2.client.userinfo.OAuth2UserService;
-import org.springframework.security.oauth2.core.user.OAuth2User;
+import org.springframework.security.oauth2.client.web.OAuth2LoginAuthenticationFilter;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.AuthenticationFailureHandler;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
 import org.springframework.security.web.authentication.Http403ForbiddenEntryPoint;
-import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
-import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 
+@Slf4j
 @Configuration
-@EnableWebSecurity  // 시큐리티 활성화 -> 기본 스프링 필터체인에 등록
-public class SecurityConfig implements WebMvcConfigurer {
+@EnableWebSecurity
+public class SecurityConfig extends WebSecurityConfigurerAdapter{
 
-    private String connectPath = "/upload/**";
-
-    private String resourcePath = "file:///C:/upload/";
-
-    @Autowired
-    private UserRepository userRepository;
 
 
     @Autowired
     private PrincipalDetailsService principalDetailsService;
 
     @Autowired
-    private PrincipalOauth2UserService PrincipalOauth2UserService;
+    private CustomOAuth2UserService customOAuth2UserService;
+    @Bean
+    public AuthenticationProvider authenticationProvider() {
+        return new JwtAuthenticationProvider(principalDetailsService, bCryptPasswordEncoder());
+    }
+    @Bean
+    public AuthenticationManager authenticationManager(HttpSecurity http) throws Exception {
+        AuthenticationManagerBuilder authenticationManagerBuilder =
+                http.getSharedObject(AuthenticationManagerBuilder.class);
+        authenticationManagerBuilder.authenticationProvider(authenticationProvider());
+        return authenticationManagerBuilder.build();
+        //return super.authenticationManager();
+    }
+    @Autowired
+    private JwtTokenProvider tokenProvider;
+
+
+
 
     @Autowired
-    private CorsConfig corsConfig;
+    private OAuthSuccessHandler oAuthSuccessHandler;
 
-//    public OAuthSuccessHandler oAuthSuccessHandler;
+    @Autowired
+    private UserService userService;
 
-    /*
-     * Oauth 인증 성공 핸들러
-     * */
-    @Bean
-    public OAuthSuccessHandler oAuth2AuthenticationSuccessHandler() {
-        return new OAuthSuccessHandler(principalDetailsService);
-    }
 
     @Override
-    public void addResourceHandlers(ResourceHandlerRegistry registry) {
-        registry.addResourceHandler(connectPath).addResourceLocations(resourcePath); //외부이미지 경로
+    public void configure(WebSecurity web) throws Exception {
+        web.ignoring().antMatchers("/logout","/product/**", "/boardlist/**");  // Spring Security 적용 제외 경로
     }
 
+//    @Bean
+//    public SecurityFilterChain filterChain(HttpSecurity http) throws Exception{
+//        AuthenticationManager authenticationManager = authenticationManager(http);
+//        http
+//                .addFilter(getJwtAuthenticationFilter(authenticationManager))
+//                .addFilterBefore(getJwtAuthorizationFilter(authenticationManager), UsernamePasswordAuthenticationFilter.class);
+//        http.addFilterAfter(new ExceptionHandlingFilter(), JwtAuthorizationFilter.class);
+//        return http.build();
+//    }
 
 
-    @Bean
-    SecurityFilterChain filterChain(HttpSecurity http) throws Exception{
-        http
-                .csrf().disable()
-                .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+    @Override
+    protected void configure(HttpSecurity http) throws Exception {
+        AuthenticationManager authenticationManager = authenticationManager(http);
+
+
+        http.cors()
                 .and()
+                .csrf()
+                .disable()
                 .formLogin().disable()
                 .httpBasic().disable()
-                .apply(new MyCustomDsl())
+                .sessionManagement()
+                .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 .and()
-                .authorizeRequests(authorize -> authorize.antMatchers("/api/v1/user/**")
-                        .access("hasRole('ROLE_USER') or hasRole('ROLE_MANAGER') or hasRole('ROLE_ADMIN')")
-                        .antMatchers("/api/v1/manager/**")
-                        .access("hasRole('ROLE_MANAGER') or hasRole('ROLE_ADMIN')")
-                        .antMatchers("/api/v1/admin")
-                        .access("hasRole('ROLE_ADMIN')")
-                        .anyRequest().permitAll())
-                  .oauth2Login()
-                  .redirectionEndpoint()
-                  .baseUri("/login/oauth2/code/*")
+//                .authenticationManager(authenticationManager)
+                .authorizeRequests()
+                .antMatchers("/","/login/**", "/register/**", "/auth/**","/api/goods/write","/silent-refresh", "/payment/**", "/reviewlist/**").permitAll()
+                .antMatchers("/admin/**").hasRole("ADMIN")
+                .anyRequest().authenticated()
                 .and()
-                .userInfoEndpoint()
-                .userService(PrincipalOauth2UserService)
+                .addFilter(getJwtAuthenticationFilter(authenticationManager))
+                .addFilterBefore(getJwtAuthorizationFilter(authenticationManager), UsernamePasswordAuthenticationFilter.class)
+                .oauth2Login()
+                .redirectionEndpoint()
+                .baseUri("/login/oauth2/code/*")
                 .and()
                 .authorizationEndpoint()
                 .baseUri("/auth/authorize")
-                 .and()
-                 .successHandler(oAuth2AuthenticationSuccessHandler())
-                 .and()
-                 .exceptionHandling()
-                 .authenticationEntryPoint(new Http403ForbiddenEntryPoint());
+                .and()
+                .userInfoEndpoint()
+                .userService(customOAuth2UserService)
+                .and()
+                .successHandler(oAuthSuccessHandler)
+                .and()
+                .exceptionHandling()
+                .authenticationEntryPoint(new Http403ForbiddenEntryPoint());
 
-         return http.build();
+        http.logout().logoutUrl("/user/logout").logoutRequestMatcher(new AntPathRequestMatcher("/user/logout"))
+                            .logoutSuccessHandler((request, response, authentication) -> {
+                                log.info("로그아웃을 성공적으로 했습니다.");
+                                response.setStatus(200);
+        }).deleteCookies("refresh-token", "ILOGIN").and().csrf().disable();
+
+        http.addFilterAfter(new ExceptionHandlingFilter(), JwtAuthorizationFilter.class);
+
 
     }
 
-    public class MyCustomDsl extends AbstractHttpConfigurer<MyCustomDsl, HttpSecurity>{
-        @Override
-        public void configure(HttpSecurity http) throws Exception {
-            AuthenticationManager authenticationManager = http.getSharedObject(AuthenticationManager.class);
-            http
-                    .addFilter(corsConfig.corsFilter())
-                    .addFilter(new JwtAuthenticationFilter(authenticationManager,principalDetailsService))
-                    .addFilter(new JwtAuthorizationFilter(authenticationManager, userRepository,principalDetailsService));
+    @Configuration(proxyBeanMethods = false)
+    public class MyFilterConfiguration {
+
+        @Bean
+        public FilterRegistrationBean<JwtAuthorizationFilter> registration(JwtAuthorizationFilter filter) {
+            FilterRegistrationBean<JwtAuthorizationFilter> registration = new FilterRegistrationBean<>(filter);
+            registration.setEnabled(false);
+            return registration;
         }
+
+    }
+
+
+
+    @Bean
+    public JwtAuthenticationFilter getJwtAuthenticationFilter(AuthenticationManager authenticationManager) throws Exception{
+        JwtAuthenticationFilter filter = new JwtAuthenticationFilter(authenticationManager, tokenProvider, userService);
+        filter.setAuthenticationManager(authenticationManager);
+        filter.setAuthenticationFailureHandler(authenticationFailureHandler());
+        filter.setAuthenticationSuccessHandler(authenticationSuccessHandler());
+        return filter;
+    }
+
+    @Bean
+    public AuthenticationFailureHandler authenticationFailureHandler(){
+        return new CustomAuthenticationFailureHandler();
+    }
+
+    @Bean
+    public AuthenticationSuccessHandler authenticationSuccessHandler(){
+        return new CustomAuthenticationSuccessHandler();
+    }
+
+    @Bean
+    public JwtAuthorizationFilter getJwtAuthorizationFilter(AuthenticationManager authenticationManager) throws Exception{
+        JwtAuthorizationFilter filter = new JwtAuthorizationFilter(authenticationManager,
+                userService, principalDetailsService, tokenProvider);
+        return filter;
+    }
+
+    @Bean
+    public BCryptPasswordEncoder bCryptPasswordEncoder(){
+        return new BCryptPasswordEncoder();
     }
 }

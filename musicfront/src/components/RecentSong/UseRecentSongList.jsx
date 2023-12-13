@@ -2,13 +2,16 @@ import React, {useEffect} from "react";
 import {Image, useRecentSongs} from "@/components";
 import raccoon from "@/assets/Logo/raccoon.gif";
 import styled from "styled-components";
-import {useRecoilState} from "recoil";
+import {useRecoilState, useRecoilValue} from "recoil";
 import {showLoadingAtom} from "@/components/_atom/aboutRendering";
 import {RecentSong} from "./RecentSong";
+import { recentPageNumAtom, totalSongAtom } from "@/pages/Home/homeAtoms";
 
 export function UseRecentSongList(props) {
+  const color = props.color;
   const {isLoadingState, songsState} = useRecentSongs(props.count);
   const [showLoading, setShowLoading] = useRecoilState(showLoadingAtom);
+
 
   useEffect(() => {
     const timer = setTimeout(() => {
@@ -20,7 +23,7 @@ export function UseRecentSongList(props) {
   if (isLoadingState || showLoading) {
     return (
       <StyledLoadingImgContainer role="alert">
-        <Image src={raccoon} alt="로딩로딩로딩" />
+        <Image src={raccoon} alt="로딩" />
       </StyledLoadingImgContainer>
     );
   }
@@ -28,7 +31,7 @@ export function UseRecentSongList(props) {
   return (
     <div className="productContainer">
       {songsState.map((song, index) => (
-        <RecentSong key={index} song={song} />
+        <RecentSong key={index} song={song} color={color}/>
       ))}
     </div>
   );

@@ -1,6 +1,23 @@
+import axiosInstance from "@/axios_interceptor/axios_interceptor";
+import { SERVER_URL } from "@/constants";
+import { useEffect, useState } from "react";
 import styled from "styled-components/macro";
 
 export function SectionInfoCount() {
+  const [subInfo, setSubInfo] = useState({});
+  const getSubInfo = () => {
+    console.log('subInfo 실행됨');
+    axiosInstance.get(SERVER_URL + 'user/subInfo')
+    .then(res => setSubInfo(res.data))
+    .catch(err => console.log(err));
+  }
+
+  useEffect(()=>{
+    getSubInfo();
+  },[]);
+
+  useEffect(()=>{},[subInfo])
+
   return (
     <InfoCount>
       <div className="ListTitle">
@@ -8,20 +25,20 @@ export function SectionInfoCount() {
       </div>
       <ul className="InfoCountListItem">
         <li>
-          <p>내 구매 수</p>
-          <p className="InfoCountNum">4</p>
+          <p>구매건수</p>
+          <p className="InfoCountNum">{subInfo.orderCount}</p>
         </li>
         <li>
-          <p>내 판매 수</p>
-          <p className="InfoCountNum">9</p>
+          <p>장바구니</p>
+          <p className="InfoCountNum">{subInfo.cartCount}</p>
         </li>
         <li>
-          <p>내 관심 수</p>
-          <p className="InfoCountNum">24</p>
+          <p>게시글 수</p>
+          <p className="InfoCountNum">{subInfo.boardCount}</p>
         </li>
         <li>
-          <p>내 채팅 수</p>
-          <p className="InfoCountNum">9</p>
+          <p>댓글 수</p>
+          <p className="InfoCountNum">{subInfo.replyCount}</p>
         </li>
       </ul>
     </InfoCount>

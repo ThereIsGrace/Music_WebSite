@@ -1,12 +1,12 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { useRecoilState } from 'recoil';
 import { emailAtom, idAtom, passwordAtom, passwordConfirmAtom, nameAtom, mobileAtom, birthdayAtom, profileImageAtom, profileImageURLAtom, currentUserAtom } from './atoms/inputValueAtoms';
 import { emailVisibleAtom, passwordVisibleAtom, passwordConfirmVisibleAtom, nameVisibleAtom, mobileVisibleAtom, modalAtom, modalTextAtom } from './atoms/checkInputValueAtom';
 import { nameWarningAtom, emailWarningAtom, passwordWarningAtom, passwordConfirmWarningAtom, mobileWarningAtom } from './atoms/inputWarningAtoms';
-import styled from 'styled-components'
+import styled from 'styled-components/macro'
 import {RegisterFormInput} from "@/pages/Register"
 import {Form, Button, Label, Heading3} from "@/components";
-import { SERVER_URL } from '@/constants';
+import { call } from '@/ApiService';
 
 export function RegisterForm() {
 
@@ -34,7 +34,7 @@ export function RegisterForm() {
 
   const [modal, setModal] = useRecoilState(modalAtom);
   const [modalText, setModalText] = useRecoilState(modalTextAtom);
-  const [a, setA] = useState("");
+
   function emailValidation(email){
     const emailRegex = /^([\w.%+-]+)@([\w-]+\.)+([\w]{2,})$/i;
     let warningMessage = '';
@@ -110,71 +110,81 @@ export function RegisterForm() {
       setMobileVisible(true);
       return;
     }
-
     setMobile(mobile);
   }
 
   function handleBirthdayValue(e) {
     setBirthday(e.target.value);
-    console.log(birthday);
   }
 
   function checkExistingUser() {
-    // 백에 이메일 확인 요청 로직 
-    fetch(SERVER_URL + "checkUseremail?email=" + email)
-    .then((response) => response.json())
-    .then((json) => {console.log('결과값:'+json);
-      if(json === true){
+    // 백엔드 서버에 이메일 확인 요청 로직 
+    call("register/checkUserEmail?email=" + email, "GET")
+    .then(data => {console.log('이메일 검증 결과값:' + data.message); 
+      if(data.code === -1){
         setModal(true);
         setModalText("이미 가입된 회원입니다.");
         setEmail(null);
+        setEmail('');
+      }else if(data.code === 2){
+        setModal(true);
+        setModalText("이메일은 공백일 수 없습니다.");
       }else{
         setModal(true);
         setModalText("사용할 수 있는 이메일입니다.");
       }
   });
+  }  
+  const handleEmailChange = (event) => {
+    const newEmail = event.target.value;
+    setEmail(newEmail);
   }
 
+  const handleUsernameChange = (event) => {
+    const newUsername = event.target.value;
+    setUsername(newUsername);
+  } 
+
   function checkExistingUserId() {
-    // 백에 아이디 확인 요청 로직
-    fetch(SERVER_URL + "checkUsername?username=" + username)
-    .then((response) => response.json())
-    .then((json) => {console.log('결과값:'+json);
-      if(json === true){
-        setModal(true);
-        setModalText("사용할 수 없는 아이디입니다.");
-        setUsername(null);
-      }else{
-        setModal(true);
-        setModalText("사용할 수 있는 아이디입니다.")
-      }
-  });
+    // 아이디에 아무것도 입력 안했을 경우 회원가입이 되지 않도록 막는다. 
+    if (!username){
+      console.log('아이디에 아무 값을 입력하지 않았습니다.');
+      setModal(true);
+      setModalText("아이디를 입력하지 않으셨습니다.");
+    }else{
+          // 백엔드 서버에 아이디 확인 요청 로직
+      call("register/checkUsername?username=" + username, "GET")
+      .then((data) => {console.log('유저네임 검증 결과값:'+ data.message);
+        if(data.code === -1){
+          setModal(true);
+          setModalText("사용할 수 없는 아이디입니다.");
+          setUsername('');
+        }else if(data.code === 2){
+          setModal(true);
+          setModalText("아이디는 공백일 수 없습니다.");
+        }else{
+          setModal(true);
+          setModalText("사용할 수 있는 아이디입니다.")
+        }
+      });
+    }
   }
 
   useEffect(() => {
-    console.log('useEffect실행됬음');
-    // 이미지 업로드 로직
+    // 이미지 미리보기 로직
     function uploadFile() {
-      // const name = new Date().getTime() + profileImage.name;
-      // state 값으로 이미지 값 받을 준비 
       const setProfileImageAfter = (file)=>{
+        const reader = new FileReader();   
+        reader.readAsDataURL(file);
 
-        const reader = new FileReader();   // file, Blob 객체를 핸들링하는데 사용
-        // File, Blob 객체를 사용해 특정 파일을 읽어들여 js에서 파일에 접근할 수 있게 도와줌
-        reader.readAsDataURL(file);  // File 혹은 Blob을 읽은 뒤 base64로 인코딩한 문자열을 
-        // FileReader 인스턴스의 result라는 속성에 달아줌 
-         return new Promise((resolve) => {
-    
-            reader.onload = () => {
-        //   //   // FileReader가 성공적으로 파일을 읽어들였을 때 트리거 되는 이벤트 핸들러
-        //   //   // 이 내부에 원하는 로직을 넣어주면 되는데 이 경우 setRecoilState로 img 값을 받으면 된다. 
-            
+        return new Promise((resolve) => {
+          reader.onload = () => {
               setProfileImageURL(reader.result);
               resolve();
            };
          });
       }
-      //
+      
       if (profileImage && (profileImage.type === 'image/png' || profileImage.type === 'image/jpeg' || profileImage.type === 'image/jpg')){
         setProfileImageAfter(profileImage);
       }
@@ -202,21 +212,16 @@ export function RegisterForm() {
     mobileValidation(mobile);
   });
 
-  // 이미지 확인용(콘솔)
-  // useEffect(() => {
-  //   // console.log('실행될 때 해야함');
-  //   // console.log(profileImage);
-  //   // console.log('1111111');
-  // }, [profileImage])
+
 
   return(
     <StyledSection className="registerTop">
       <Form className="registerForm" legend="회원가입">
-        <RegisterFormInput label="이메일" name="email" type="email" placeholder="예시) frontendo@saja.com" onChange={(e) => {setEmail(e.target.value);}}>
+        <RegisterFormInput label="이메일" name="email" type="email" placeholder="예시) ezen@software.com" onChange={handleEmailChange} value={email}>
           <Button className="registerButtonShort" onClick={checkExistingUser}>중복확인</Button>
           <span className={emailVisible === true ? "registerWarning showWarning" : "registerWarning"}>{emailWarning}</span>
         </RegisterFormInput>
-        <RegisterFormInput label="아이디" name="username" type="text" placeholder="아이디를 입력해주세요" onChange={(e) => {setUsername(e.target.value);}}>
+        <RegisterFormInput label="아이디" name="username" type="text" placeholder="아이디를 입력해주세요" onChange={handleUsernameChange} value={username}>
           <Button className="registerButtonShort" onClick={checkExistingUserId}>중복확인</Button>
         </RegisterFormInput>
         <RegisterFormInput label="비밀번호" name="password" type="password" placeholder="비밀번호를 입력해주세요" onChange={(e)=>{setPassword(e.target.value);}}>

@@ -7,7 +7,7 @@ export const boardAtom = atom({
 
 export const pageNumAtom = atom({
   key: "pageNumAtom",
-  default: 0,
+  default: 1,
 });
 
 export const totalItemCountAtom = atom({

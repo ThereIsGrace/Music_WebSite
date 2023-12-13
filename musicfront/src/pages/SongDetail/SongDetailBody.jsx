@@ -6,6 +6,7 @@ import StyledLoadingImgContainer from "@/assets/Styles/StyledLoadingImgContainer
 import {useRecoilState} from "recoil";
 import {songNameAtom} from "..";
 import {Link} from "react-router-dom";
+import axios from "axios";
 
 export const SongDetailBody = () => {
   const [songId, setSongId] = useState("");
@@ -13,6 +14,46 @@ export const SongDetailBody = () => {
   const [songDetail, setSongDetail] = useState(null);
   const [coin, setCoin] = useState(false);
   const [, setSongName] = useRecoilState(songNameAtom);
+  let youtubeAPI = 'https://www.googleapis.com/youtube/v3/search?';
+  const [videoId, setVideoId] = useState('');
+
+
+
+
+  const getYoutubeData = () => {
+    if (songDetail && Object.keys(songDetail).length !== 0){
+      let data = {
+        q:`${songDetail.name} ${songDetail.artistList[0].name}`,
+        part:"snippet",
+        key:"AIzaSyAtCMtXRsdu5WfzX8-9uQN6CHRmJKLRYUw",
+          type:"video",
+          maxResults:1,
+          regionCode:"KR"
+      }
+      const headers = {
+        "Content-Type": `application/json;charset=UTF-8`,
+        'Access-Control-Allow-Origin' : 'https://localhost:3000',
+        'Access-Control-Allow-Credentials': true,
+        
+      }
+      let uri = '';
+      const makeUri = () => {
+        data.q=encodeURI(data.q);
+        for(var option in data){
+          youtubeAPI+=option+"="+data[option]+"&";
+        }
+        uri = youtubeAPI.substr(0, youtubeAPI.length-1);
+      }
+      makeUri();
+      
+
+      axios.get(uri, {
+        withCredentials: false
+      })
+      .then(res => {console.log(res.data.items[0].id.videoId); setVideoId(res.data.items[0].id.videoId); console.log('videoId', res.data)})
+      .catch()
+    }
+  }
 
   const fetchData = async () => {
     const res = await fetch(trackAPI);
@@ -29,6 +70,7 @@ export const SongDetailBody = () => {
   const getSongDetail = async () => {
     try {
       const result = await fetchData();
+      console.log(result.data.artistList[0].name, '확인');
       setSongDetail(result.data);
     } catch (err) {
       console.error(err);
@@ -48,6 +90,14 @@ export const SongDetailBody = () => {
     }, 1000);
     console.log(songDetail);
   }, [coin]);
+
+  useEffect(() => {
+    getYoutubeData();
+  },[coin]);
+
+  useEffect(() => {
+    console.log('videoId', videoId);
+  }, [videoId]);
 
   if (songDetail === null || songDetail === undefined) {
     return (
@@ -144,6 +194,15 @@ export const SongDetailBody = () => {
           </dl>
         </div>
         <div className="lyrics">{songDetail.lyrics}</div>
+        {videoId && <iframe
+            id="ytplayer"
+            type="text/html"
+            width="720"
+            height="405"
+            src={`https://www.youtube.com/embed/${videoId}`}
+            frameborder="0"
+            allowfullscreen="allowfullscreen">
+        </iframe>}
       </div>
     </StyledSongDetail>
   );

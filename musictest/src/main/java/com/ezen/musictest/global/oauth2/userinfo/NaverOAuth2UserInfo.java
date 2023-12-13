@@ -1,0 +1,69 @@
+package com.ezen.musictest.global.oauth2.userinfo;
+
+import java.util.Map;
+
+public class NaverOAuth2UserInfo extends OAuth2UserInfo{
+    public NaverOAuth2UserInfo(Map<String, Object> attributes) {
+        super(attributes);
+    }
+
+    @Override
+    public String getId() {
+        Map<String, Object> response = (Map<String, Object>) attributes.get("response");
+
+        if (response == null) {
+            return null;
+        }
+
+        return (String) response.get("id");
+    }
+
+    @Override
+    public String getNickname() {
+        Map<String, Object> response = (Map<String, Object>) attributes.get("response");
+
+        if (response == null) {
+            return null;
+        }
+
+        return (String) response.get("nickname");
+    }
+
+    @Override
+    public String getEmail() {
+        Map<String, Object> response = (Map<String, Object>) attributes.get("response");
+
+        if (response == null){
+            return null;
+        }
+
+        return (String) response.get("email");
+    }
+
+    @Override
+    public String getImageUrl() {
+        Map<String, Object> response = (Map<String, Object>) attributes.get("response");
+
+        if (response == null) {
+            return null;
+        }
+
+        return (String) response.get("profile_image");
+    }
+
+    @Override
+    public String getMobile() {
+        Map<String, Object> response = (Map<String, Object>) attributes.get("response");
+
+        String mobile = (String) response.get("mobile");
+        String mobile2 = mobile.replace("-","");
+        return mobile2;
+    }
+
+    @Override
+    public String getYear() {
+        return null;
+    }
+
+
+}

@@ -7,6 +7,7 @@ export function Heading1({children, ...rest}) {
 }
 
 const StyledHeading1 = styled.h1`
-  font-size: 28px;
+  text-align: center;
+  font-size: 32px;
   font-weight: 600;
 `

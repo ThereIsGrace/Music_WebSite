@@ -4,35 +4,45 @@ import user02 from "@/assets/Mypage/미첼.png";
 import user03 from "@/assets/Mypage/쭈니.png";
 import user04 from "@/assets/Mypage/유네찌.png";
 import styled from "styled-components/macro";
+import { useEffect, useState } from "react";
+import axiosInstance from "@/axios_interceptor/axios_interceptor";
+import { SERVER_URL } from "@/constants";
+import { Image } from "@/components";
+import exclamationMark from "@/assets/Logo/exclamationmark.png";
 
 export function MypageReview() {
+  const [replyList, setReplyList] = useState([]);
+  const userReply = () => {
+    axiosInstance.get(SERVER_URL + 'my/reply')
+    .then(res => {console.log(res, '짱구'); setReplyList(res.data.data)})
+    .catch(err => console.log(err));
+  }
+  useEffect(()=>{
+    userReply();
+  },[])
   return (
     <BuyReview>
       <div className="ListTitle">
-        <span>구매 후기</span>
+        <span>나에게 달린 댓글들</span>
       </div>
       <div>
         <ul className="reviewList">
-          <li>
-            <img src={user01} alt="유저 이미지" className="userImage"></img>
-            <span className="reviewBubble">거래 감사합니다~~!</span>
-          </li>
-          <li>
-            <img src={user02} alt="유저 이미지" className="userImage"></img>
-            <span className="reviewBubble">수고하세용</span>
-          </li>
-          <li>
-            <img src={user03} alt="유저 이미지" className="userImage"></img>
-            <span className="reviewBubble">와주셔서 감사합니당</span>
-          </li>
-          <li>
-            <img src={user04} alt="유저 이미지" className="userImage"></img>
-            <span className="reviewBubble">잘쓰겠습니다!</span>
-          </li>
-          <li>
-            <img src={user01} alt="유저 이미지" className="userImage"></img>
-            <span className="reviewBubble">감사합니다~~~!</span>
-          </li>
+          {replyList.map((reply, index) => 
+            <li>
+              <img src={reply.user.profileImage} alt="유저 이미지" className="userImage"></img>
+              <span className="reviewBubble">{reply.content}</span>
+            </li>
+          )}
+          {
+            Object.keys(replyList).length === 0 &&
+            <>
+              <Void style={{marginTop: '90px'}}>
+                <Image src={exclamationMark} alt='댓글 없음 이미지'/>
+                <p className='void-text' style={{textAlign: 'center'}}>게시물에 달린 댓글이 없습니다.</p>
+                <p className='void-text' style={{textAlign: 'center', marginTop: '0px'}}>새로운 게시글을 만들어보세요.</p>
+              </Void>
+            </>
+          }
         </ul>
       </div>
     </BuyReview>
@@ -55,6 +65,7 @@ const BuyReview = styled.div`
 
   & div ul {
     padding-top: 16px;
+    /* margin-top: 90px; */
   }
 
   & div ul li {
@@ -77,3 +88,19 @@ const BuyReview = styled.div`
     line-height: 50px;
   }
 `;
+
+const Void = styled.div`
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  color: #6c816d;
+  font-weight: 600;
+  & img {
+    width: 30px;
+    margin: 0 auto;
+  }
+
+  & .void-text {
+    margin: 24px auto 12px;
+  }
+`

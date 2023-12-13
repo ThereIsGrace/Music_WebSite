@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useRef } from "react";
 import styled from "styled-components";
 import {Image} from "@/components";
 import BannerImg from "@/assets/Home/mainBanner1.png";
@@ -8,14 +8,16 @@ import NewPants from "@/assets/Home/aa.jpeg"
 import BannerImg2 from "@/assets/Home/mainBanner2.png";
 import BannerImg3 from "@/assets/Home/mainBanner3.png";
 import BannerImg4 from "@/assets/Home/mainBanner4.png";
-import {Swiper, SwiperSlide} from "swiper/react";
-import {Autoplay} from "swiper";
-import "swiper/css";
+import MusicMovie from "@/assets/video/musicmovie.mp4";
 import { Button, Container } from "react-bootstrap";
 import {useNavigate} from "react-router-dom";
 
 export function MainBanner() {
   const navigate = useNavigate();
+  const videoRef = useRef();
+  const setPlayBackRate = () => {
+    videoRef.current.playBackRate = 0.5;
+  }
 
   const popularBtn = (e) => {
     e.preventDefault();
@@ -24,39 +26,95 @@ export function MainBanner() {
 
   return (
     <StyledBanner>
-      <Swiper modules={[Autoplay]} autoplay={({speed: 1000}, {disableOnInteraction: false})} loop={true}>
-        <SwiperSlide>
-          <Container className="main-container">
-            <div className="text-container">
-              <h1 style={{margin: '100px'}}>The Best Music Website!!</h1>
-              <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vivamus ut sagittis nisl, 
-                eu elementum quam. Proin molestie justo a arcu sollicitudin, a aliquam nisi dictum. Integer sit amet pellentesque turpis. Nullam iaculis egestas viverra. Vivamus sagittis sapien blandit mi suscipit, 
-                eget varius nibh finibus. Sed elementum euismod ex. In et arcu tincidunt, cursus est et, rhoncus leo.</p>
-                <Button variant="light">Light</Button>{' '}
-            </div>
-            <div className="logo-image">
-              <a href="/#" onClick={popularBtn}>
-                <Image src={MusicCat} alt="" style={{width: '300px'}}/>
-              </a>
-            </div>
-          </Container>
-        </SwiperSlide>
-        <SwiperSlide>
-            <Image src={NewPants} alt=""/>
-        </SwiperSlide>
-        <SwiperSlide>
-          <Image src={SleepingMusic} alt="" />
-        </SwiperSlide>
-      </Swiper>
+      <div className="banner-box">
+        <div className="banner-video">
+          <video
+            muted
+            autoPlay
+            loop
+            ref={videoRef}
+            onCanPlay={() => setPlayBackRate()}
+          >
+          <source src={MusicMovie} type="video/mp4">
+          </source>
+          </video> 
+        </div>
+        <div className="banner-text">
+          <h1 className="text-center color-white font-big">music makes people one</h1>        
+          <h2 className="text-center color-white font-semibold">The best music website MusicCat</h2>
+        </div>
+      </div>
+
+
+
+      
+
     </StyledBanner>
   );
 }
 
+
+
 const StyledBanner = styled.div`
-  background: linear-gradient(#4997dc, #4261c0);
-  /* width: clamp(1040px, 100%, 1920px); */
-  margin-top: 50px;
+  // 웹페이지에 여백 없이 만들기
+  padding: 0px; 
+  margin: 0px;
+  background-color: black;
   
+  & .banner-box{
+    width: 100%;
+    height: 550px;
+    overflow: hidden;
+    margin: 0px auto;
+    position: relative;
+  }
+  
+  & video {
+    width: 100%;
+    object-fit: cover;
+    object-position: center;
+    animation: animate 13s infinite;
+  }
+
+  & .banner-text {
+    position: absolute;
+    top: 40%;
+    width: 100%;
+    left: auto;
+  }
+
+  & .banner-text:hover {
+    opacity: 0.3;
+    filter: blur(10px);
+    -webkit-filter: blur(10px);
+  }
+
+  & .banner-text p {
+    margin-top: -24px;
+    text-align: center;
+    font-size: 48px;
+    font-weight: 700;
+    color: #ffffff;
+    text-transform: uppercase;
+  }
+
+  & .color-white {
+    color: white;
+  }
+  & .font-semibold {
+    font-size: 40px;
+    font-weight: 600;
+  }
+  & .font-big {
+    font-size: 60px;
+    font-weight: 700;
+    text-transform: uppercase;
+    text-shadow: rgb(82, 82, 91) 1px 1px 0px;
+    margin-bottom: 30px;
+  }
+  & .text-center {
+    text-align: center;
+  }
 
   & .main-container {
     max-width: 1000px;
@@ -64,34 +122,17 @@ const StyledBanner = styled.div`
     height: 450px;
   }
 
-  & .text-container {
-    color: white;
-    font-size: 20px;
+  @keyframes animate {
+    
+    0% {
+      opacity: 0;
+    }
+
+    100% {
+      opacity: 1;
+    }
+    
   }
 
-  & .swiper {
-    width: 100%;
-    height: 100%;
-  }
 
-  & .text-container {
-    float: left;
-    align-items: middle;
-    text-align: center;
-  }
-
-  & .swiper-slide {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-  }
-
-  & img {
-    display: block;
-    width: 100%;
-    height: 100%;
-    max-height: 450px;
-    object-fit: cover;
-    object-position: center;
-  }
 `;

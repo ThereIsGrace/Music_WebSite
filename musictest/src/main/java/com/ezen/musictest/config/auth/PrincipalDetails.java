@@ -1,30 +1,29 @@
 package com.ezen.musictest.config.auth;
 
 import com.ezen.musictest.domain.User;
-import lombok.Data;
-import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.oauth2.core.user.DefaultOAuth2User;
 import org.springframework.security.oauth2.core.user.OAuth2User;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 import java.util.Map;
 
-@Data
-@RequiredArgsConstructor
+@Slf4j
 public class PrincipalDetails implements UserDetails, OAuth2User {
 
-    private User user;     //콤포지션
+    private User user;
     private Map<String, Object> attributes;
 
-    // 일반 로그인
-    public PrincipalDetails(User user) {
+    public PrincipalDetails(User user){
         this.user = user;
     }
 
-    // OAuth 로그인
-    public PrincipalDetails(User user, Map<String, Object> attributes) {
+    public PrincipalDetails(User user, Map<String, Object> attributes){
         this.user = user;
         this.attributes = attributes;
     }
@@ -34,19 +33,16 @@ public class PrincipalDetails implements UserDetails, OAuth2User {
         return attributes;
     }
 
-    // 해당 User의 권한을 리턴하는 곳!!
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        Collection<GrantedAuthority> collect = new ArrayList<>();
-        collect.add(new GrantedAuthority() {
-            @Override
-            public String getAuthority() {
-                return user.getRole();
-            }
-        });
-        return collect;
+        Collection<GrantedAuthority> authorities = new ArrayList<>();
+        authorities.add(new SimpleGrantedAuthority(user.getRole().getKey()));
+        return authorities;
     }
 
+    public User getUser(){
+        return user;
+    }
     @Override
     public String getPassword() {
         return user.getPassword();
@@ -74,13 +70,11 @@ public class PrincipalDetails implements UserDetails, OAuth2User {
 
     @Override
     public boolean isEnabled() {
-
-        // 현재시간 - 로그인시간 => 1년을 초과하면 return false
         return true;
     }
 
     @Override
     public String getName() {
-        return null;
+        return user.getUsername();
     }
 }

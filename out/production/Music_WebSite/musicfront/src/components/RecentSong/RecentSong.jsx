@@ -5,20 +5,20 @@ import {Image} from "@/components";
 
 export function RecentSong(props) {
   const song = props.song;
-  console.log(song);
+  const color = props.color;
   return (
     <StyledProductContainer>
       <Link to={`/songDetail/${song.id}`}>
         <Image src={song.album.imgList[2].url} alt="앨범 이미지"></Image>
       </Link>
       <Link to={`/songDetail/${song.id}`}>
-        <span className="title">{song.name}</span>
+        <span className="title" style={{color: `${color}`}}>{song.name}</span>
       </Link>
       <Link to={`/artist/${song.representationArtist.id}`}>
-        <span className="artist">{song.representationArtist.name}</span>
+        <span className="artist" style={{color: `${color}`}}>{song.representationArtist.name}</span>
       </Link>
       <Link to={`/albumDetail/${song.album.id}`}>
-        <span className="album">{song.album.title}</span>
+        <span className="album"  style={{color: `${color}`}}>{song.album.title}</span>
       </Link>
     </StyledProductContainer>
   );
@@ -49,7 +49,6 @@ const StyledProductContainer = styled.div`
     font-weight: 700;
     font-size: 16px;
     line-height: 24px;
-    color: #212529;
     display: -webkit-box;
     -webkit-line-clamp: 1;
     -webkit-box-orient: vertical;
@@ -61,7 +60,6 @@ const StyledProductContainer = styled.div`
   & .artist {
     display: block;
     font-style: normal;
-    color: #212529;
     margin-top: 3px;
     font-weight: 500;
     font-size: 15px;
@@ -71,7 +69,6 @@ const StyledProductContainer = styled.div`
   & .album {
     display: block;
     font-style: normal;
-    color: #212529;
     margin-top: 3px;
     font-size: 13px;
     line-height: 20px;
@@ -83,6 +80,5 @@ const StyledProductContainer = styled.div`
     margin-top: 3px;
     font-size: 12px;
     line-height: 14px;
-    color: #868e96;
   }
 `;

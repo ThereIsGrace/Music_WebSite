@@ -1,20 +1,11 @@
 package com.ezen.musictest.api.controller;
 
 import com.ezen.musictest.domain.Goods;
-import com.ezen.musictest.dto.TestDto;
+import com.ezen.musictest.dto.FilterRequestDto;
+import com.ezen.musictest.dto.GoodsDto;
 import com.ezen.musictest.service.GoodsService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.web.PageableDefault;
-import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
-
-import java.util.Collections;
-import java.util.List;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 public class GoodsApiController {
@@ -22,31 +13,37 @@ public class GoodsApiController {
     @Autowired
     private GoodsService goodsService;
 
-    @PostMapping("/api/goods/write")
-    public void goodsRegister(@RequestBody Goods goods){
-        goodsService.상품등록(goods);
+
+    @PostMapping("/admin/goods/write")
+    public Goods goodsRegister(@RequestBody GoodsDto goodsDto){
+        Goods goods = Goods.builder().pname(goodsDto.getPname()).price(goodsDto.getPrice()).description(goodsDto.getDescription()).imageUrl(goodsDto.getImageUrl()).type(goodsDto.getType())
+                        .subImageUrl(goodsDto.getSubImageUrl()).quantity(goodsDto.getQuantity()).build();
+        return goodsService.상품등록(goods);
     }
 
-    @GetMapping("/api/goods/list")
-    public List<Goods> goodsList(){
-        System.out.println("상품리스트 호출");
-        return goodsService.상품불러오기();
+    @GetMapping("/product/list")
+    public Iterable<Goods> goodsList(@RequestParam(required = false, defaultValue = "0", value="page") int pageNo,
+                                 @RequestParam(required = false, defaultValue = "reg_date", value="criteria") String criteria){
+        System.out.println("상품리스트 호출" + pageNo);
+        return goodsService.getGoodsList(pageNo, criteria);
     }
 
-    @GetMapping("/api/goods/home")
-    public TestDto goodsHome(Model model, @PageableDefault(size = 3) Pageable pageable){
-        System.out.println("상품 메인 호출");
-        Page<Goods> pages = goodsService.상품홈(pageable);
-        int nowPage = pages.getPageable().getPageNumber() + 1;
-        int startPage = Math.max(nowPage, 1);
-        int endPage = Math.min(nowPage+9, pages.getTotalPages());
+    @GetMapping("/product/detail/{id}")
+    public Goods goodsDetail(@PathVariable Long id){
+        System.out.println("상품 상세페이지 호출 상품 번호 : " + id);
+        Goods goods = goodsService.getGoodsDetail(id);
+        return goods;
+    }
 
-        TestDto testDto = TestDto.builder().pageNum(nowPage).goods(pages).build();
+    @PostMapping("/product/findFilter")
+    public Iterable<Goods> goodsListByCriteria(@RequestParam(required = false, defaultValue = "0", value="page") int pageNo,
+                                               @RequestBody(required = false)FilterRequestDto filterRequestDto){
+        System.out.println("pageNum: " + pageNo);
+        return goodsService.getGoodsListByFilter(pageNo, filterRequestDto);
+    }
 
-        System.out.println("nowPages" + nowPage);
-        System.out.println("startPage" + startPage);
-        System.out.println("endPage" + endPage);
-        return testDto;
-
+    @GetMapping("/product/best")
+    public Iterable<Goods> goodsBest(){
+        return goodsService.getBestGoods();
     }
 }

@@ -6,7 +6,8 @@ import {uidAtom} from "../Register/atoms/uidAtom";
 import {useRecoilState} from "recoil";
 import styled from "styled-components/macro";
 
-export function SectionProfileInfo() {
+export function SectionProfileInfo(props) {
+  const user = props.user;
   const [uid, setUid] = useRecoilState(uidAtom);
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
@@ -41,7 +42,7 @@ export function SectionProfileInfo() {
   return (
     <ProfileInfoTop>
       <div className="InfoProfileImg">
-        <img src={profileImageURL} alt="프로필 이미지"></img>
+        <img src={user.profileImage} alt="프로필 이미지"></img>
       </div>
       <div className="UserInfoList">
         <ul>
@@ -60,19 +61,19 @@ export function SectionProfileInfo() {
         </ul>
         <ul>
           <li>
-            <span>{name}</span>
+            <span>{user.name}</span>
             <Link to="/">
-              <span className="ProfileNum">#1817221</span>
+              <span className="ProfileNum">#{user.id}</span>
             </Link>
           </li>
           <li>
-            <span>{email}</span>
+            <span>{user.email}</span>
           </li>
           <li>
-            <span>{mobile}</span>
+            <span>{user.mobile}</span>
           </li>
           <li>
-            <span>{birthday}</span>
+            <span>{user.year}</span>
           </li>
         </ul>
       </div>

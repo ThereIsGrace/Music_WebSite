@@ -7,69 +7,71 @@ import {ReactComponent as Tag} from "@/assets/Mypage/tag.svg";
 import {ReactComponent as Gear} from "@/assets/Mypage/gear.svg";
 import {ReactComponent as Envelope} from "@/assets/Mypage/envelope.svg";
 import styled from "styled-components/macro";
+import { uidAtom } from "../Register/atoms/uidAtom";
+import { useRecoilValue } from "recoil";
 
 export function SidebarBottom() {
+  const uid = useRecoilValue(uidAtom);
   return (
     <SidebarList>
       <div className="menuTitle">My Page</div>
       <ul className="listTop">
-        <Link to="/">
+        <Link to="/myPage">
           <li>
             <Person className="listIcon" />
             <span>내정보</span>
           </li>
         </Link>
-        <Link to="/">
-          <li>
-            <Buy className="listIcon" />
-            <span>구매 내역</span>
-          </li>
-        </Link>
-        <Link to="/">
-          <li>
-            <Receipt className="listIcon" />
-            <span>판매 내역</span>
-          </li>
-        </Link>
-        <Link to="/">
-          <li>
-            <Heart className="listIcon" />
-            <span>관심 목록</span>
-          </li>
-        </Link>
-        <Link to="/">
+        {
+          uid !== 'admin' &&
+          <>
+            <Link to="/cart">
+              <li>
+                <Buy className="listIcon" />
+                <span>장바구니</span>
+              </li>
+            </Link>
+            <Link to="/orderList">
+              <li>
+                <Receipt className="listIcon" />
+                <span>주문 내역</span>
+              </li>
+            </Link>
+          </>
+        }
+      </ul>
+      {
+        uid === 'admin' &&
+        <>
+              <ul className="listBottom">
+        <Link to="/register/goods">
           <li>
             <Tag className="listIcon" />
-            <span>알림 키워드 설정</span>
+            <span>상품 등록</span>
           </li>
         </Link>
-      </ul>
-      <ul className="listBottom">
-        <Link to="/">
-          <li>
-            <Gear className="listIcon" />
-            <span>내 프로필 수정</span>
-          </li>
-        </Link>
-        <Link to="/">
+        <Link to="/info/write">
           <li>
             <Envelope className="listIcon" />
-            <span>친구 초대</span>
+            <span>공지 등록</span>
           </li>
         </Link>
       </ul>
+        </>
+      }
     </SidebarList>
   );
 }
 
 const SidebarList = styled.div`
-  height: 340px;
+  height: 240px;
   background-color: #fbfafa;
   border-radius: 0 0 12px 12px;
+  
 
   & .menuTitle {
     height: 40px;
-    background-color: #6c816d;
+    background-color: rgb(85, 85, 85);
     color: #fff;
     line-height: 40px;
     padding-left: 18px;

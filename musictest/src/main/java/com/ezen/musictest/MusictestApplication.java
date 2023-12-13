@@ -1,7 +1,11 @@
 package com.ezen.musictest;
 
+
 import com.ezen.musictest.domain.Board;
+import com.ezen.musictest.domain.Role;
+import com.ezen.musictest.domain.User;
 import com.ezen.musictest.repository.BoardRepository;
+import org.bouncycastle.jce.provider.BouncyCastleProvider;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,122 +16,31 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
+import java.net.http.HttpClient;
+import java.security.Security;
+import java.util.ArrayList;
 import java.util.Arrays;
-
+import java.util.List;
+import javax.net.ssl.SSLContext;
+import javax.net.ssl.TrustManager;
+import javax.net.ssl.X509TrustManager;
+import java.security.SecureRandom;
+import java.security.cert.CertificateException;
+import java.security.cert.X509Certificate;
 @EnableJpaAuditing
 @SpringBootApplication
 public class MusictestApplication implements CommandLineRunner {
 
-	@Bean
-	public BCryptPasswordEncoder encodePwd() {
-		return new BCryptPasswordEncoder();
-	}
 	private static final Logger logger =
 			LoggerFactory.getLogger(MusictestApplication.class);
 
-	@Autowired
-	private BoardRepository boardRepository;
-
-	//mock 데이터
 	@Override
 	public void run(String... args) throws Exception {
-	/*	Board board1
-				= new Board().builder()
-				.title("title1")
-				.content("<h3>contentcontentcontentcontentcontentcontent</h3>")
-				.writer("test01")
-				.build();
 
-		Board board2
-				= new Board().builder()
-				.title("title2")
-				.content("<h3>contentcontentcontentcontentcontentcontent</h3>")
-				.writer("test02")
-				.build();
-
-		Board board3
-				= new Board().builder()
-				.title("title3")
-				.content("<h3>contentcontentcontentcontentcontentcontent</h3>")
-				.writer("test02")
-				.build();
-
-		Board board4
-				= new Board().builder()
-				.title("title4")
-				.content("<h3>contentcontentcontentcontentcontentcontent</h3>")
-				.writer("test03")
-				.build();
-
-		Board board5
-				= new Board().builder()
-				.title("title5")
-				.content("<h3>contentcontentcontentcontentcontentcontent</h3>")
-				.writer("test04")
-				.build();
-
-		Board board6
-				= new Board().builder()
-				.title("title5")
-				.content("<h3>contentcontentcontentcontentcontentcontent</h3>")
-				.writer("test04")
-				.build();
-
-		Board board7
-				= new Board().builder()
-				.title("title5")
-				.content("<h3>contentcontentcontentcontentcontentcontent</h3>")
-				.writer("test04")
-				.build();
-
-		Board board8
-				= new Board().builder()
-				.title("title5")
-				.content("<h3>contentcontentcontentcontentcontentcontent</h3>")
-				.writer("test04")
-				.build();
-
-		Board board9
-				= new Board().builder()
-				.title("title5")
-				.content("<h3>contentcontentcontentcontentcontentcontent</h3>")
-				.writer("test04")
-				.build();
-
-		Board board10
-				= new Board().builder()
-				.title("title5")
-				.content("<h3>contentcontentcontentcontentcontentcontent</h3>")
-				.writer("test04")
-				.build();
-
-		Board board11
-				= new Board().builder()
-				.title("title5")
-				.content("<h3>contentcontentcontentcontentcontentcontent</h3>")
-				.writer("test04")
-				.build();
-
-		Board board12
-				= new Board().builder()
-				.title("title5")
-				.content("<h3>contentcontentcontentcontentcontentcontent</h3>")
-				.writer("test04")
-				.build();
-
-
-		boardRepository.saveAll(Arrays.asList(
-				board1, board2, board3, board4, board5,
-				board6, board7, board8, bo ard9, board10,
-				board11, board12
-		));
-
-		for(Board board : boardRepository.findAll()){
-			logger.info("title: " + board.getTitle());
-		}*/
 	}
 
 	public static void main(String[] args) {
+		Security.addProvider(new BouncyCastleProvider());
 		SpringApplication.run(MusictestApplication.class, args);
 	}
 }

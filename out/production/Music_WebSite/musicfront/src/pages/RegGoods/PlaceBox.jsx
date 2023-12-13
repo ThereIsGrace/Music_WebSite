@@ -2,13 +2,16 @@ import styled from "styled-components/macro";
 import {Button} from "@/components/Button/Button";
 // import {Input} from "@/components/Input/Input";
 // import {ReactComponent as RightArrow} from "@/assets/Post/right.svg";
-import {useRecoilState} from "recoil";
-import {addressAtom, imageListAtom, postTitleAtom, postContentAtom, pnameAtom, priceAtom, quantityAtom} from "./postAtoms";
+import {useRecoilState, useRecoilValue} from "recoil";
+import {addressAtom, imageListAtom, postTitleAtom, postContentAtom, pnameAtom, priceAtom, quantityAtom, mainImageUrlAtom, subImageUrlAtom, typeAtom, descriptionAtom} from "./postAtoms";
 import {useNavigate} from "react-router-dom";
 import { idAtom } from "@/pages/Register/atoms/inputValueAtoms";
 import axios from "axios";
 import { useState } from "react";
 import { MyModal } from "@/components";
+import axiosInstance from "@/axios_interceptor/axios_interceptor";
+import { SERVER_URL } from "@/constants";
+import { RegGoodsModal } from "@/components/Modal/RegGoodsModal";
 
 export function PlaceBox() {
   const navigate = useNavigate(); //변수 할당시켜서 사용
@@ -30,6 +33,10 @@ export function PlaceBox() {
   const [id] = useRecoilState(idAtom);
   const moveToAnotherPage = useNavigate();
   const [modalOpen, setModalOpen] = useState(false);
+  const mainImageUrl = useRecoilValue(mainImageUrlAtom);
+  const subImageUrl = useRecoilValue(subImageUrlAtom);
+  const type = useRecoilValue(typeAtom);
+  const description = useRecoilValue(descriptionAtom);
 
   const showModal = () => {
     setModalOpen(true);
@@ -41,47 +48,34 @@ export function PlaceBox() {
   };
 
   const handlePostSubmit = async () => {
-    console.log('???');
-    console.log('포스트콘텐트 아톰'+postContent);
-    if (imageList.length > 0) {
-      const uploadImageUrl = imageList[0];
-      console.log('업로드할 이미지:' + uploadImageUrl);
-    //   imageList.map(function(a, i){
-    //     setImageList(a);
-    //   })
-      try {
-        const uploadData = {
-          content: postContent,
-          imageUrl: uploadImageUrl,
-          price: price,
-          pname: pname,
-          quantity: quantity
-        };
+    const uploadData = {
+      type: type,
+      imageUrl: mainImageUrl,
+      subImageUrl: subImageUrl,
+      price: price,
+      pname: pname,
+      quantity: quantity,
+      description: description
+    };
 
-        console.log("데이터베이스에 업로드할 데이터: ", uploadData);
-        console.log("이미지리스트: " + imageList);
-        axios.post('http://localhost:8094/api/goods/write', uploadData)
-        .then(res => {
-          console.log('res', res);
-          console.log('성공');
-          showModal();
-          window.scrollTo(0, 0);
-          
-        })
-        .catch(error => {
-          console.log('error', error)
-        })
+    console.log("데이터베이스에 업로드할 데이터: ", uploadData);
+    axiosInstance.post(SERVER_URL + 'admin/goods/write', uploadData)
+    .then(res => {
+      console.log('res', res);
+      console.log('성공');
+      showModal();
+      })
+      .catch(error => {
+        console.log('error', error)
+      })
         //moveToAnotherPage("/");
-      } catch (e) {
-        console.error("Error adding document: ", e);
-      }
-    }
-  };
+    };
+  
 
 
   return (
     <SubmitProcessStyle>
-      {modalOpen && <MyModal setModalOpen={setModalOpen}/>}
+      {modalOpen && <RegGoodsModal setModalOpen={setModalOpen}/>}
       <div className="UploadBtnBox">
         <Button className="CancleBtn" onClick={onClickBtn}>
           취소
@@ -98,6 +92,7 @@ const SubmitProcessStyle = styled.div`
   display: flex;
   justify-content: center;
   margin-top: 60px;
+  margin-bottom: 50px;
   
 
   & .PlaceSearchInputBox {

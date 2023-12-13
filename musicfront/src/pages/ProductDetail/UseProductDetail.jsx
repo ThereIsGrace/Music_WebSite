@@ -1,19 +1,19 @@
 import React from "react";
 import {useProducts} from "@/components";
 import {ProductDetailBody} from "@/pages/ProductDetail/ProductDetailBody";
+import styled from "styled-components";
 
-export function UseProductDetail(props) {
-  const {isLoading, productsState} = useProducts();
-  if (isLoading) {
-    return <div role="alert">로딩 중...</div>;
-  }
-  const product = productsState.find((p) => p.id === props.goodsNo);
-  
+export function UseProductDetail({product, user, reviewListEight,pname, setReviewList, reviewListMain, userThumbs, getReviewListMain, setReviewListMain}) {
+  // const { product } = props;
+  //const { user } = props.user;
   return (
-    <div>
+    <Container>
       <div className="imgContainer">
-        <ProductDetailBody prod={product} />
+        <ProductDetailBody product={product} user={user} reviewListEight={reviewListEight} setReviewListMain={setReviewListMain} reviewListMain={reviewListMain} setReviewList={setReviewList} pname={pname} userThumbs={userThumbs} getReviewListMain={getReviewListMain}/>
       </div>
-    </div>
+    </Container>
   );
 }
+
+const Container = styled.div`
+`

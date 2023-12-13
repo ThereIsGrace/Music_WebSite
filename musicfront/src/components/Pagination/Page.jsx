@@ -20,7 +20,7 @@ export const Page = ({lastPage}) => {
 };
 
 const PaginationBlock = styled.div`
-  width: 320px;
+  width: 300px;
   margin: 0 auto;
   display: flex;
   justify-content: space-between;

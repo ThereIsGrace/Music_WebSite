@@ -6,37 +6,25 @@ import {uidAtom} from "../Register/atoms/uidAtom";
 import {useRecoilState} from "recoil";
 import styled from "styled-components/macro";
 
-export function SidebarTop() {
+export function SidebarTop(props) {
+  const user = props.user;
   const [uid, setUid] = useRecoilState(uidAtom);
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [profileImageURL, setProfileImageURL] = useState("");
   const [docSnap, setDocSnap] = useState(null);
+  console.log(user + 'user');
+  console.log('2222222');
+  console.log(user.name);
+  console.log('3333333');
+  console.log('profileImage', user.profileImage);
 
-  useEffect(() => {
-    async function getUserDataFromFirebase() {
-      if (!uid) return;
-      console.log(uid);
-      const docRef = doc(db, "users", uid);
-      const docSnap = await getDoc(docRef);
-
-      if (docSnap.exists()) {
-        setName(docSnap.data().name);
-        setEmail(docSnap.data().email);
-        setProfileImageURL(docSnap.data().profileImageURL);
-      } else {
-        console.log("유저 정보를 찾지 못했습니다.");
-      }
-    }
-
-    getUserDataFromFirebase();
-  }, [uid]);
   return (
     <MypageSide>
       <div className="profile">
-        <img src={profileImageURL} alt="프로필 이미지"></img>
-        <p className="profileName">{name}</p>
-        <p className="profileNum">{email}</p>
+        <img src={user.profileImage} alt="프로필 이미지"></img>
+        <p className="profileName">{user.name}</p>
+        <p className="profileNum">{user.email}</p>
       </div>
       <SidebarBottom></SidebarBottom>
     </MypageSide>
@@ -51,7 +39,7 @@ const MypageSide = styled.div`
 
   & .profile {
     height: 220px;
-    border: 1px solid #6c816d;
+    border: 1px solid rgb(85, 85, 85);
     background-color: #fff;
     border-radius: 12px 12px 0 0;
     text-align: center;
@@ -66,7 +54,7 @@ const MypageSide = styled.div`
 
   & .profile .profileName {
     margin-top: 16px;
-    color: #6c816d;
+    color: rgb(85, 85, 85);
     font-size: 16px;
     font-weight: 600;
   }
