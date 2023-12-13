@@ -23,7 +23,7 @@ spring:
     driver-class-name: org.mariadb.jdbc.Driver
     url: jdbc:mariadb://localhost:3306/music?useSSL=false&serverTimezone=UTC&useLegacyDatetimeCode=false&allowPublicKeyRetrieval=true
     username: root
-    password: 12345
+    password: 12341234
   # JPA 설정
   jpa:
     generate-ddl: true
