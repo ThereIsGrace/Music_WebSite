@@ -1,12 +1,12 @@
 #tomcat port
 server:
   port: 8094
-  ssl:
-    enabled: true
-    key-store: realkey.p12
-    key-store-password: 123456  # KeyStore 파일의 암호
-    key-store-type: PKCS12  # KeyStore 파일의 유형 (PKCS12 또는 JKS)
-    key-alias: realkey  # KeyStore에 포함된 키의 별칭
+#  ssl:
+#    enabled: true
+#    key-store: realkey.p12
+#    key-store-password: 123456  # KeyStore 파일의 암호
+#    key-store-type: PKCS12  # KeyStore 파일의 유형 (PKCS12 또는 JKS)
+#    key-alias: realkey  # KeyStore에 포함된 키의 별칭
 
 kakao:
   pay:
@@ -21,7 +21,7 @@ spring:
   # DB 정보
   datasource:
     driver-class-name: org.mariadb.jdbc.Driver
-    url: jdbc:mariadb://musiccatdb.crx35wrrgnyb.ap-northeast-2.rds.amazonaws.com:3306/musiccatdb
+    url: jdbc:mariadb://mariadb.crx35wrrgnyb.ap-northeast-2.rds.amazonaws.com:3306/music
     username: root
     password: 12341234
   # JPA 설정

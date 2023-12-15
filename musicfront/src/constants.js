@@ -1,1 +1,1 @@
-export const SERVER_URL = "https://localhost:8094/";
+export const SERVER_URL = "https://musiccat.shop/";

@@ -55,6 +55,7 @@ public class UserApiController {
 
     @GetMapping("/")
     public String healthCheck(){
+        System.out.println("잘 실행되는 중");
         return "This service is up and running";
     }
 

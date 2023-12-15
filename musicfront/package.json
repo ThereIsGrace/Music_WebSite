@@ -56,9 +56,9 @@
     "react-error-overlay": "6.0.9",
     "babel-plugin-styled-components": "1.13.3"
   },
-  "proxy": "http://localhost:8094",
+  "proxy": "https://musiccat.shop",
   "scripts": {
-    "start": "set HTTPS=true&&set SSL_CRT_FILE=D:/test/cert.pem&&set SSL_KEY_FILE=D:/test/key.pem&&craco start",
+    "start": "craco start",
     "build": "craco build",
     "test": "craco test",
     "eject": "craco eject"
